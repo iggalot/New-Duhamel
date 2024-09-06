@@ -1,0 +1,4 @@
+res://scripts/GameManager.cs
+res://scripts/PlayerController.cs
+res://scenes/game_manager.tscn
+res://scenes/player_controller.tscn
