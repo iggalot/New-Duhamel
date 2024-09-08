@@ -1,4 +1,6 @@
 AnimationPlayer
+Label
+ColorRect
 Camera2D
 CollisionShape2D
 CharacterBody2D
