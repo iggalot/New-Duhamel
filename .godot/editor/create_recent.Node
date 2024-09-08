@@ -1,10 +1,11 @@
+Node
 AnimationPlayer
+AnimatedSprite2D
+Sprite2D
+CollisionShape2D
+CharacterBody2D
 Label
 ColorRect
 Camera2D
-CollisionShape2D
-CharacterBody2D
 Node2D
 TileMapLayer
-AnimatedSprite2D
-Sprite2D

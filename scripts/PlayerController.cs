@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using static StateMachine;
 
 public partial class PlayerController : CharacterBody2D
 {
@@ -8,10 +9,13 @@ public partial class PlayerController : CharacterBody2D
     private float friction = 0.25f;
     private float acceleration = 0.3f;
 
+    // Node getters and setter
     private AnimatedSprite2D animatedSprite;
     private AnimationPlayer animationPlayer;  // for a graphical animation of the character
     private AnimationPlayer playerMessageWindowAnimationPlayer; // for a graphical animation of the player message window
     private ColorRect playerMessageWindow;
+
+
     private float animationTimer = 2.0f;
     private float animationTimerMax = 2.0f;
     private float playerMessageAnimationTimer = 2.0f;
@@ -165,8 +169,5 @@ public partial class PlayerController : CharacterBody2D
             playerMessageWindowAnimationPlayer.Play("message_window_popup");
             playerMessageAnimationTimer = playerMessageAnimationTimerMax;
         }
-
-
     }
-
 }

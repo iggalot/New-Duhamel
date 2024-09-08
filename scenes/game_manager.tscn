@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=4 uid="uid://dp18l5ry5wfro"]
+[gd_scene load_steps=11 format=4 uid="uid://dp18l5ry5wfro"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.cs" id="1_ibax6"]
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="2_shk4y"]
 [ext_resource type="PackedScene" uid="uid://f6mkwo1dmc0e" path="res://scenes/player_controller.tscn" id="3_fybfh"]
+[ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://scenes/monster_controller.tscn" id="4_elk2r"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsq5f"]
 texture = ExtResource("2_shk4y")
@@ -111,7 +112,7 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 241
 sources/1 = SubResource("TileSetAtlasSource_ukvse")
 
-[node name="Node2D" type="Node2D"]
+[node name="GameManager" type="Node2D"]
 script = ExtResource("1_ibax6")
 
 [node name="TileMapLayerContainer" type="Node2D" parent="."]
@@ -149,3 +150,7 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="PlayerController" parent="." instance=ExtResource("3_fybfh")]
+position = Vector2(461, 197)
+
+[node name="MonsterController" parent="." instance=ExtResource("4_elk2r")]
+position = Vector2(716, 333)
