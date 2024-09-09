@@ -12,6 +12,9 @@ public partial class MonsterController : CharacterBody2D
     [Export] public bool ShouldChasePlayer { get; set; } = false;
 	[Export] public bool ShouldSleep { get; set; } = false;
 	[Export] public bool ShouldAttack { get; set; } = false;
+	[Export] public bool IsDead { get; set; } = false;
+	[Export] public bool ShouldSearch { get; set; } = false;
+	[Export] public bool ShouldStop { get; set; } = false;
 
 
     public override void _PhysicsProcess(double delta)
@@ -39,13 +42,15 @@ public partial class MonsterController : CharacterBody2D
 
 	public void processMonsterAction(float delta, Vector2? player_pos)
 	{
-		// if the player is dead let's sleep
+		// if the player is dead let's stop
 		if(player_pos == null)
 		{
 			ShouldFlee = false;
             ShouldChasePlayer = false;
-            ShouldSleep = true;
+			ShouldSleep = false;
             ShouldAttack = false;
+			ShouldStop = true;
+			ShouldSearch = false;
 			return;
         }
         else
@@ -60,34 +65,42 @@ public partial class MonsterController : CharacterBody2D
                 ShouldChasePlayer = false;
                 ShouldSleep = false;
                 ShouldAttack = false;
+				ShouldStop = false;
+                ShouldSearch = false;
             } 
 			// lets attack
-			else if (distance < 200)
+			else if (distance < 150)
 			{
                 ShouldFlee = false;
                 ShouldChasePlayer = false;
                 ShouldSleep = false;
                 ShouldAttack = true;
-			}
+                ShouldStop = false;
+                ShouldSearch = false;
+            }
 			// let's chase the player
-            else if (distance < 300)
+            else if (distance < 200)
 			{
 				{
                     ShouldFlee = false;
                     ShouldChasePlayer = true;
                     ShouldSleep = false;
                     ShouldAttack = false;
-				}
+                    ShouldStop = false;
+                    ShouldSearch = false;
+                }
 
             }
-			// otherwise nothing to do so lets sleep
+			// otherwise nothing to do so lets start searching again
 			else
 			{
                 ShouldFlee = false;
                 ShouldChasePlayer = false;
                 ShouldSleep = true;
                 ShouldAttack = false;
-			}
+                ShouldStop = false;
+                ShouldSearch = true;
+            }
 
         }
 	}
@@ -117,8 +130,8 @@ public partial class MonsterController : CharacterBody2D
 	{
         PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
 		Vector2 direction = playerController.GlobalPosition - this.GlobalPosition;
-		Vector2 unit_direction = direction.Normalized();
-        Velocity = unit_direction * Speed;
+		Vector2 unit_vec = direction.Normalized();
+        Velocity = unit_vec * Speed;
 
         GD.Print("I'm chasing the player");
 	}
@@ -133,7 +146,28 @@ public partial class MonsterController : CharacterBody2D
 	{
         PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
         Vector2 direction = playerController.GlobalPosition - this.GlobalPosition;
-        Vector2 unit_direction = direction.Normalized();
+        Vector2 unit_vec = direction.Normalized();
+        Velocity = unit_vec * (Speed);
         GD.Print("I'm attacking");
 	}
+
+    public void Dead()
+    {
+		GD.Print("I'm dead");
+    }
+
+    public void Stop()
+    {
+		GD.Print("I'm stopped");
+        Velocity = new Vector2(0, 0);
+    }
+
+    public void Search()
+    {
+        PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        RandomNumberGenerator rng = new RandomNumberGenerator();
+        Vector2 unit_vec = (new Vector2(rng.RandfRange(-1, 1), rng.RandfRange(-1, 1))).Normalized();
+        Velocity = unit_vec * (Speed * 0.25f);
+        GD.Print("I'm searching");
+    }
 }

@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=25 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
 [ext_resource type="Script" path="res://scripts/states/MonsterStateMachine.cs" id="3_b7rl3"]
+[ext_resource type="Texture2D" uid="uid://nchetx006578" path="res://resources/graphics/duhamel_reaction_sprites.png" id="4_44mec"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wkq2h"]
 atlas = ExtResource("1_ee25i")
@@ -20,23 +21,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0v7yi"]
-size = Vector2(127, 128)
-
-[sub_resource type="Animation" id="Animation_wpsxs"]
-resource_name = "chase"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.933333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 1.5708]
-}
+size = Vector2(32.5, 35.5)
 
 [sub_resource type="Animation" id="Animation_vawfg"]
 length = 0.001
@@ -76,18 +61,6 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("AnimatedSprite2D:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_710rf"]
 resource_name = "attack"
@@ -103,6 +76,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(0, 0), Vector2(0, -60), Vector2(0, 0), Vector2(0, -60), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wpsxs"]
+resource_name = "chase"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.933333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.5708]
 }
 
 [sub_resource type="Animation" id="Animation_l1kdn"]
@@ -124,18 +113,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_xojj2"]
 resource_name = "turn"
 loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.466667, 0.933333),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(4, 4), Vector2(1, 1)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_iqchk"]
 _data = {
@@ -146,14 +123,137 @@ _data = {
 "turn": SubResource("Animation_xojj2")
 }
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_w0u7d"]
+atlas = ExtResource("4_44mec")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wdwm0"]
+atlas = ExtResource("4_44mec")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ng3tm"]
+atlas = ExtResource("4_44mec")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djmdd"]
+atlas = ExtResource("4_44mec")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7t6kw"]
+atlas = ExtResource("4_44mec")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrsot"]
+atlas = ExtResource("4_44mec")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqp6f"]
+atlas = ExtResource("4_44mec")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l373r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w0u7d")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wdwm0")
+}],
+"loop": true,
+"name": &"chase",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ng3tm")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djmdd")
+}],
+"loop": true,
+"name": &"flee",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7t6kw")
+}],
+"loop": true,
+"name": &"search",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrsot")
+}],
+"loop": true,
+"name": &"sleep",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqp6f")
+}],
+"loop": true,
+"name": &"stop",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_bxugq"]
+resource_name = "MoveStatusSprite"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.966667),
+"transitions": PackedFloat32Array(1, 0.233258),
+"update": 0,
+"values": [Vector2(0, -20), Vector2(0, -40)]
+}
+
+[sub_resource type="Animation" id="Animation_svl4o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, -42)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fpkdq"]
+_data = {
+"MoveStatusSprite": SubResource("Animation_bxugq"),
+"RESET": SubResource("Animation_svl4o")
+}
+
 [node name="MonsterController" type="CharacterBody2D"]
 script = ExtResource("1_kntck")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.296875, 0.289063)
 sprite_frames = SubResource("SpriteFrames_ahm24")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, -1)
 shape = SubResource("RectangleShape2D_0v7yi")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -163,3 +263,15 @@ libraries = {
 
 [node name="MonsterStateMachine" type="Node" parent="."]
 script = ExtResource("3_b7rl3")
+
+[node name="StatusAnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-1, -42)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_l373r")
+animation = &"chase"
+
+[node name="StatusAnimationPlayer" type="AnimationPlayer" parent="StatusAnimatedSprite2D"]
+libraries = {
+"": SubResource("AnimationLibrary_fpkdq")
+}

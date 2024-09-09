@@ -5,10 +5,12 @@ public partial class MonsterStateMachine : StateMachine
 {
     public override void _Ready()
     {
+        AddState("idle");
         AddState("sleep");
         AddState("chase");
         AddState("attack");
-        AddState("turn");
+        AddState("flee");
+        AddState("search");
         SetState("sleep");
         return;
     }   
@@ -23,11 +25,6 @@ public partial class MonsterStateMachine : StateMachine
 
         MonsterController parent = Parent as MonsterController;
 
-        if(State != "attack" && parent.ShouldFlee is true)
-        {
-            parent.Flee();
-        }
-
         if (State == "chase")
         {
             parent.ChasePlayer();
@@ -38,9 +35,16 @@ public partial class MonsterStateMachine : StateMachine
         } else if (State == "flee")
         {
             parent.Flee();
-        } else
+        } else if (State == "sleep")
         {
             parent.Sleep();
+        } else if (State == "search")
+        {
+            parent.Search();
+        }
+        else
+        {
+            parent.Stop();
         }
 
         // Do other parent state stuff here
@@ -83,7 +87,13 @@ public partial class MonsterStateMachine : StateMachine
             case "flee":
                 if(parent.ShouldFlee is false)
                 {
-                    return "sleep";
+                    return "stop";
+                }
+                break;
+            case "stop":
+                if(parent.ShouldStop is true)
+                {
+                    return "search";
                 }
                 break;
             default:
@@ -101,6 +111,11 @@ public partial class MonsterStateMachine : StateMachine
     public override void EnterState(string new_state, string old_state)
     {
         MonsterController parent = Parent as MonsterController;
+        GD.Print("my parent is: " + parent.Name);
+
+        // animation
+        AnimatedSprite2D statusSprite = parent.GetNode<AnimatedSprite2D>("StatusAnimatedSprite2D") as AnimatedSprite2D;
+        AnimationPlayer statusAnimationPlayer = parent.GetNode<AnimationPlayer>("StatusAnimatedSprite2D/StatusAnimationPlayer") as AnimationPlayer; 
         AnimationPlayer animationPlayer = parent.GetNode<AnimationPlayer>("AnimationPlayer") as AnimationPlayer;
 
         switch (new_state)
@@ -108,29 +123,55 @@ public partial class MonsterStateMachine : StateMachine
             case "sleep":
                 {
                     // play sleep animation here
+                    statusSprite.Play("sleep");
                     animationPlayer.Play("sleep");
                     break;
                 }
             case "chase":
                 {
                     // play chase animation here
+                    statusSprite.Play("chase");
                     animationPlayer.Play("chase");
                     break;
                 }
 
             case "attack":
                 {
+                    statusSprite.Play("attack");
                     animationPlayer.Play("attack");
                     break;
                 }
             case "flee":
                 {
-                    animationPlayer.Play("turn");
+                    statusSprite.Play("flee");
+                    animationPlayer.Play("flee");
+                    break;
+                }
+            case "dead":
+                {
+                    statusSprite.Play("dead");
+                    animationPlayer.Play("dead");
+                    break;
+                }
+            case "search":
+                {
+                    statusSprite.Play("search");
+                    animationPlayer.Play("search");
+                    break;
+                }
+            case "stop":
+                {
+                    statusSprite.Play("stop");
+                    animationPlayer.Play("stop");
                     break;
                 }
             default:
+                statusSprite.Play("search");
+                animationPlayer.Play("RESET");
                 break;
         }
+
+        statusAnimationPlayer.Play("MoveStatusSprite");
         return;
     }
 
