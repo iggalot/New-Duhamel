@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=29 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
@@ -111,16 +111,28 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_xojj2"]
-resource_name = "turn"
+resource_name = "flee"
 loop_mode = 1
+
+[sub_resource type="Animation" id="Animation_wjkbr"]
+resource_name = "idle"
+
+[sub_resource type="Animation" id="Animation_amxnl"]
+resource_name = "search"
+
+[sub_resource type="Animation" id="Animation_gah3h"]
+resource_name = "dead"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_iqchk"]
 _data = {
 "RESET": SubResource("Animation_vawfg"),
 "attack": SubResource("Animation_710rf"),
 "chase": SubResource("Animation_wpsxs"),
-"sleep": SubResource("Animation_l1kdn"),
-"turn": SubResource("Animation_xojj2")
+"dead": SubResource("Animation_gah3h"),
+"flee": SubResource("Animation_xojj2"),
+"idle": SubResource("Animation_wjkbr"),
+"search": SubResource("Animation_amxnl"),
+"sleep": SubResource("Animation_l1kdn")
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w0u7d"]
@@ -138,6 +150,10 @@ region = Rect2(144, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_djmdd"]
 atlas = ExtResource("4_44mec")
 region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxhep"]
+atlas = ExtResource("4_44mec")
+region = Rect2(112, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7t6kw"]
 atlas = ExtResource("4_44mec")
@@ -183,6 +199,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"flee",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxhep")
+}],
+"loop": true,
+"name": &"idle",
 "speed": 5.0
 }, {
 "frames": [{
@@ -269,7 +293,7 @@ texture_filter = 1
 position = Vector2(-1, -42)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_l373r")
-animation = &"chase"
+animation = &"attack"
 
 [node name="StatusAnimationPlayer" type="AnimationPlayer" parent="StatusAnimatedSprite2D"]
 libraries = {

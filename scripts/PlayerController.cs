@@ -22,7 +22,7 @@ public partial class PlayerController : CharacterBody2D
     private float playerMessageAnimationTimerMax = 2.0f;
 
 
-    private bool isDead = false;
+    public bool IsDead = false;
     private bool DeathAnimationHasPlayed = false;
     private bool DeathMessagePopupHasPlayed = false;
     private bool IsGameOver = false;
@@ -32,7 +32,7 @@ public partial class PlayerController : CharacterBody2D
         if (Input.IsActionJustPressed("dead"))
         {
             // Set isDead to true to test death animation and gamve over cycle
-            isDead = true;
+            IsDead = true;
         }
     }
 
@@ -60,7 +60,7 @@ public partial class PlayerController : CharacterBody2D
             playerMessageAnimationTimer -= (float)delta;
         }
         // is the player dead?  Show the animation then end the game
-        if (isDead)
+        if (IsDead)
         {
             // play the death animation for the character
             if (DeathAnimationHasPlayed is false)

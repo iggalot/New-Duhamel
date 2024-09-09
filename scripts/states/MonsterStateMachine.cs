@@ -7,11 +7,11 @@ public partial class MonsterStateMachine : StateMachine
     {
         AddState("idle");
         AddState("sleep");
+        AddState("search");
         AddState("chase");
         AddState("attack");
         AddState("flee");
-        AddState("search");
-        SetState("sleep");
+        SetState("idle");
         return;
     }   
 
@@ -25,9 +25,27 @@ public partial class MonsterStateMachine : StateMachine
 
         MonsterController parent = Parent as MonsterController;
 
-        if (State == "chase")
+        if (State == "search")
         {
-            parent.ChasePlayer();
+            parent.Search();
+        } else if (State == "idle")
+        {
+            if(parent.IsAlerted is true){
+                parent.Search();
+            } 
+            else
+            {
+                parent.Idle();
+            }
+        }
+        else if (State == "sleep")
+        {
+            parent.Sleep();
+        }
+
+        else if (State == "walk")
+        {
+            parent.Walk();
         }
         else if (State == "attack")
         {
@@ -35,12 +53,10 @@ public partial class MonsterStateMachine : StateMachine
         } else if (State == "flee")
         {
             parent.Flee();
-        } else if (State == "sleep")
+        } 
+        else if (State == "chase")
         {
-            parent.Sleep();
-        } else if (State == "search")
-        {
-            parent.Search();
+            parent.ChasePlayer();
         }
         else
         {
@@ -61,41 +77,110 @@ public partial class MonsterStateMachine : StateMachine
     {
         MonsterController parent = Parent as MonsterController;
 
+        if (parent.ShouldFlee is true)
+        {
+            return "flee";
+        }
+
         switch (State)
         {
             case "sleep":
-                if (parent.ShouldChasePlayer is true)
+                if (parent.IsAlerted is true)
                 {
-                    return "chase";
-                }
-                break;
-            case "chase":
-                if (parent.ShouldSleep is true)
+                    return "idle";
+                } else
                 {
                     return "sleep";
-                } else if (parent.ShouldAttack is true)
+                }
+            case "idle":
+
+                if (parent.IsAlerted is true)
+                {
+                    return "search";
+                } else if (parent.IsAlerted is false && parent.ShouldSleep is true) {
+                    return "sleep";
+                } else
+                {
+                    return "idle";
+                }
+            case "search":
+                if (parent.IsAlerted is true)
+                {
+                    if(parent.IsInAttackRange is true)
+                    {
+                        return "attack";
+                    }
+                    else if (parent.IsInChaseRange is true)
+                    {
+                        return "chase";
+                    }
+                    else
+                    {
+                        return "search";
+                    }
+                } else
+                {
+                    return "idle";
+                }
+            case "chase":
+                {
+                    if (parent.IsInChaseRange is true)
+                    {
+                        if (parent.IsInAttackRange is true)
+                        {
+                            return "attack";
+                        } else
+                        {
+                            return "chase";
+                        }
+                    } else
+                    {
+                        return "search";
+                    }
+                }
+            case "attack":
+                {
+                    if (parent.ShouldAttack is true)
+                    {
+                        if (parent.IsInAttackRange is true)
+                        {
+                            return "attack";
+                        }
+                        else
+                        {
+                            if (parent.IsInChaseRange is false)
+                            {
+                                return "search";
+                            }
+                            else if (parent.IsInChaseRange is true)
+                            {
+                                return "chase";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return "idle";
+                    }
+                    break;
+                }
+
+            case "flee":
+                if (parent.IsInAttackRange is true)
                 {
                     return "attack";
                 }
-                break;
-            case "attack":
-                if (parent.ShouldAttack is false)
+                else if (parent.IsInChaseRange is true)
                 {
-                    return "sleep";
-                }
-                break;
-            case "flee":
-                if(parent.ShouldFlee is false)
-                {
-                    return "stop";
-                }
-                break;
-            case "stop":
-                if(parent.ShouldStop is true)
-                {
+                    return "chase";
+                } 
+                else if (parent.IsInSearchRange is true)
+                { 
                     return "search";
+                } else
+                {
+                    return "idle";
                 }
-                break;
             default:
                 break;
         }
@@ -111,66 +196,78 @@ public partial class MonsterStateMachine : StateMachine
     public override void EnterState(string new_state, string old_state)
     {
         MonsterController parent = Parent as MonsterController;
-        GD.Print("my parent is: " + parent.Name);
 
         // animation
         AnimatedSprite2D statusSprite = parent.GetNode<AnimatedSprite2D>("StatusAnimatedSprite2D") as AnimatedSprite2D;
         AnimationPlayer statusAnimationPlayer = parent.GetNode<AnimationPlayer>("StatusAnimatedSprite2D/StatusAnimationPlayer") as AnimationPlayer; 
         AnimationPlayer animationPlayer = parent.GetNode<AnimationPlayer>("AnimationPlayer") as AnimationPlayer;
 
-        switch (new_state)
-        {
-            case "sleep":
-                {
-                    // play sleep animation here
-                    statusSprite.Play("sleep");
-                    animationPlayer.Play("sleep");
-                    break;
-                }
-            case "chase":
-                {
-                    // play chase animation here
-                    statusSprite.Play("chase");
-                    animationPlayer.Play("chase");
-                    break;
-                }
+        // end our current animations and reset them to original
+        animationPlayer.Stop();
+        animationPlayer.Play("RESET");
+        statusAnimationPlayer.Stop();
+        statusAnimationPlayer.Play("RESET");
 
-            case "attack":
-                {
-                    statusSprite.Play("attack");
-                    animationPlayer.Play("attack");
-                    break;
-                }
-            case "flee":
-                {
-                    statusSprite.Play("flee");
-                    animationPlayer.Play("flee");
-                    break;
-                }
-            case "dead":
-                {
-                    statusSprite.Play("dead");
-                    animationPlayer.Play("dead");
-                    break;
-                }
-            case "search":
-                {
-                    statusSprite.Play("search");
-                    animationPlayer.Play("search");
-                    break;
-                }
-            case "stop":
-                {
-                    statusSprite.Play("stop");
-                    animationPlayer.Play("stop");
-                    break;
-                }
-            default:
-                statusSprite.Play("search");
-                animationPlayer.Play("RESET");
-                break;
-        }
+        //switch (new_state)
+        //{
+        //    case "idle":
+        //        {
+        //            statusSprite.Play("idle");
+        //            break;
+        //        }
+        //    case "sleep":
+        //        {
+        //            // play sleep animation here
+        //            statusSprite.Play("sleep");
+        //            animationPlayer.Play("sleep");
+        //            break;
+        //        }
+        //    case "chase":
+        //        {
+        //            // play chase animation here
+        //            statusSprite.Play("chase");
+        //            animationPlayer.Play("chase");
+        //            break;
+        //        }
 
+        //    case "attack":
+        //        {
+        //            statusSprite.Play("attack");
+        //            animationPlayer.Play("attack");
+        //            break;
+        //        }
+        //    case "flee":
+        //        {
+        //            statusSprite.Play("flee");
+        //            animationPlayer.Play("flee");
+        //            break;
+        //        }
+        //    case "dead":
+        //        {
+        //            statusSprite.Play("dead");
+        //            animationPlayer.Play("dead");
+        //            break;
+        //        }
+        //    case "search":
+        //        {
+        //            statusSprite.Play("search");
+        //            animationPlayer.Play("search");
+        //            break;
+        //        }
+        //    case "stop":
+        //        {
+        //            statusSprite.Play("stop");
+        //            animationPlayer.Play("stop");
+        //            break;
+        //        }
+        //    default:
+        //        statusSprite.Play("search");
+        //        animationPlayer.Play("search");
+        //        break;
+        //}
+
+        animationPlayer.Play(new_state);
+        statusSprite.Play(new_state);
         statusAnimationPlayer.Play("MoveStatusSprite");
         return;
     }

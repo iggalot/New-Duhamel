@@ -5,32 +5,84 @@ using static StateMachine;
 
 public partial class MonsterController : CharacterBody2D
 {
-	public const float Speed = 100.0f;
+    private const float MAX_CHASE_TIMER_DRATION = 5.0f;
+    private const float MAX_SEARCH_TIMER_DURATION = 10.0f;
+
+
+    private const float MIN_ATTACK_DISTANCE = 50.0f;
+    private const float MIN_CHASE_DISTANCE = 125.0f;
+    private const float MIN_SEARCH_DISTANCE = 225.0f;
+
+    private const float MAX_DEFAULT_DISTANCE = 100000.0f;
+
+
+    public const float Speed = 50.0f;
 	public const float JumpVelocity = -400.0f;
 
-	[Export] public bool ShouldFlee { get; set; } = false;
+    [Export] public float HitPoints { get; set; } = 100;
+    public float MaxHitPoints { get; set; } = 100;
+
+    private float ChaseTimer { get; set; } = MAX_CHASE_TIMER_DRATION;
+    private float ChaseTimerMax { get; set; } = MAX_CHASE_TIMER_DRATION;
+    private float AttackTimer { get; set; } = MAX_SEARCH_TIMER_DURATION;
+    private float AttackTimerMax { get; set; } = MAX_SEARCH_TIMER_DURATION;
+
+
+    private float AIDecisionTimer { get; set; } = 5.0f;
+    private float AIDecisionTimerMax { get; set; } = 5.0f;
+
+
+    [Export] public bool IsAlerted { get; set; } = false;
+    [Export] public bool IsInAttackRange { get; set; } = false;
+    [Export] public bool IsInChaseRange { get; set; } = false;
+    [Export] public bool IsInSearchRange { get; set; } = false;
+    [Export] public bool IsDead { get; set; } = false;
+
+
+
+    [Export] public bool ShouldFlee { get; set; } = false;
     [Export] public bool ShouldChasePlayer { get; set; } = false;
 	[Export] public bool ShouldSleep { get; set; } = false;
 	[Export] public bool ShouldAttack { get; set; } = false;
-	[Export] public bool IsDead { get; set; } = false;
 	[Export] public bool ShouldSearch { get; set; } = false;
 	[Export] public bool ShouldStop { get; set; } = false;
 
+    public override void _Input(InputEvent @event)
+    {
+        if (Input.IsActionJustPressed("monster_alert"))
+        {
+            GD.Print("Monster alerted is " + !IsAlerted);
+            IsAlerted = !IsAlerted;
+        }
+        if (Input.IsActionJustPressed("damage_monster"))
+        {
+            TakeDamage(0.9f * MaxHitPoints);
+        }
+        if (Input.IsActionJustPressed("heal_monster"))
+        {
+            GD.Print("Healing monster");
+            HitPoints = MaxHitPoints;
+        }
+    }
 
     public override void _PhysicsProcess(double delta)
 	{
-		// find the player controller in the scene tree
-		PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        // find the player controller in the scene tree
+        PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
         if (playerController != null)
         {
-			Vector2 playerPosition = playerController.GlobalPosition;
-			processMonsterAction((float)delta, playerPosition);
-        } else
-		{
-			processMonsterAction((float)delta, null);
-		}
+            Vector2 playerPosition = playerController.GlobalPosition;
+            var distance = GlobalPosition.DistanceTo(playerPosition);
 
-		Vector2 velocity = Velocity;
+            processMonsterAction((float)delta, playerController, distance);
+        }
+        else
+        {
+            processMonsterAction((float)delta, null, MAX_DEFAULT_DISTANCE);
+
+        }
+
+        Vector2 velocity = Velocity;
 
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
@@ -40,70 +92,114 @@ public partial class MonsterController : CharacterBody2D
 		MoveAndSlide();
 	}
 
-	public void processMonsterAction(float delta, Vector2? player_pos)
-	{
-		// if the player is dead let's stop
-		if(player_pos == null)
-		{
-			ShouldFlee = false;
-            ShouldChasePlayer = false;
-			ShouldSleep = false;
-            ShouldAttack = false;
-			ShouldStop = true;
-			ShouldSearch = false;
-			return;
+    private void clearAllDistanceStatus()
+    {
+        IsInAttackRange = false;
+        IsInChaseRange = false;
+        IsInSearchRange = false;
+    }
+
+    private void updateDistanceStatuses(float distance)
+    {
+        // clear the current status.
+        clearAllDistanceStatus();
+
+        if(Math.Abs(distance) < MIN_ATTACK_DISTANCE)
+        {
+            IsInAttackRange = true;
+        } else
+        {
+            IsInAttackRange = false;
+        }
+
+        if(Math.Abs(distance) < MIN_CHASE_DISTANCE)
+        {
+            IsInChaseRange = true;
+        } else
+        {
+            IsInChaseRange = false;
+        }
+
+        if(Math.Abs(distance) < MIN_ATTACK_DISTANCE)
+        {
+            IsInSearchRange = true;
+        } else
+        {
+            IsInSearchRange = false;
+        }
+    }
+
+    public void processMonsterAction(float delta, PlayerController player, float distance)
+    {
+
+        // if the player is dead let's stop
+        if (player == null || player.IsDead)
+        {
+            // do nothing more
+            return;
         }
         else
         {
-			var glob_pos = this.GlobalPosition;
-			var distance = Math.Sqrt(Math.Pow(glob_pos.X - player_pos.Value.X, 2) + Math.Pow(glob_pos.Y - player_pos.Value.Y, 2));
-			GD.Print("dist to player: " + distance);
-			// if it's too close, lets turn away
-			if(distance < 100)
-			{
+            if (HitPoints < 0.20 * MaxHitPoints)
+            {
                 ShouldFlee = true;
-                ShouldChasePlayer = false;
-                ShouldSleep = false;
-                ShouldAttack = false;
-				ShouldStop = false;
-                ShouldSearch = false;
-            } 
-			// lets attack
-			else if (distance < 150)
-			{
-                ShouldFlee = false;
-                ShouldChasePlayer = false;
-                ShouldSleep = false;
-                ShouldAttack = true;
-                ShouldStop = false;
-                ShouldSearch = false;
+
+                // update the distance status
+                updateDistanceStatuses(MAX_DEFAULT_DISTANCE);
             }
-			// let's chase the player
-            else if (distance < 200)
-			{
-				{
-                    ShouldFlee = false;
-                    ShouldChasePlayer = true;
-                    ShouldSleep = false;
-                    ShouldAttack = false;
-                    ShouldStop = false;
-                    ShouldSearch = false;
+            else
+            {
+                ShouldFlee = false;
+
+                // update the distance status
+                updateDistanceStatuses(distance);
+            }
+
+            if (ShouldFlee is false)
+            {
+                GD.Print("dist to player: " + distance);
+                // if it's too close, lets turn away
+                if (ShouldFlee is false)
+                {
+                    if (IsAlerted)
+                    {
+                        if (IsInChaseRange)
+                        {
+                            ShouldChasePlayer = true;
+                        }
+
+                        if (IsInAttackRange)
+                        {
+                            ShouldAttack = true;
+                        }
+
+                        if (IsInSearchRange)
+                        {
+                            ShouldSearch = true;
+                        }
+
+                        if (HitPoints < 0.20 * MaxHitPoints)
+                        {
+                            ShouldFlee = true;
+                        }
+                        else
+                        {
+                            ShouldFlee = false;
+                        }
+                    }
                 }
-
             }
-			// otherwise nothing to do so lets start searching again
-			else
-			{
-                ShouldFlee = false;
-                ShouldChasePlayer = false;
-                ShouldSleep = true;
+            else
+            {
                 ShouldAttack = false;
+                ShouldChasePlayer = false;
+                ShouldSearch = false;
                 ShouldStop = false;
-                ShouldSearch = true;
+                ShouldSleep = false;
             }
-
         }
-	}
+    }
+
 
     public override void _Ready()
     {
@@ -112,8 +208,17 @@ public partial class MonsterController : CharacterBody2D
 
     public void processMovement(float delta)
 	{
-
+        // do no user control movement for now
 	}
+
+    public void TakeDamage(float damage)
+    {
+        HitPoints -= damage;
+        GD.Print("Monster took damage");
+
+        // monster took damage so now its alert.
+        IsAlerted = true;
+    }
 
 	public void Flee()
 	{
@@ -169,5 +274,15 @@ public partial class MonsterController : CharacterBody2D
         Vector2 unit_vec = (new Vector2(rng.RandfRange(-1, 1), rng.RandfRange(-1, 1))).Normalized();
         Velocity = unit_vec * (Speed * 0.25f);
         GD.Print("I'm searching");
+    }
+
+    public void Walk()
+    {
+        GD.Print("I'm walking");
+    }
+
+    public void Idle()
+    {
+        GD.Print("I'm idle");
     }
 }
