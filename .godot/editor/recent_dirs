@@ -1,6 +1,6 @@
-res://resources/graphics
-res://scripts/states
 res://scripts
-res://scenes
+res://resources/graphics
 res://
+res://scenes
+res://scripts/states
 res://scripts/inventory

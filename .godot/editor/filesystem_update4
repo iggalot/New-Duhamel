@@ -1,9 +1,12 @@
 res://scenes/game_manager.tscn
 res://scenes/player_controller.tscn
-res://scenes/monster_controller.tscn
-res://scenes/state_machine.tscn
+res://scenes/item_controller.tscn
+res://item_data.tscn
 res://scripts/StateMachine.cs
 res://scripts/states/MonsterStateMachine.cs
 res://scripts/MonsterController.cs
 res://scripts/GameManager.cs
 res://scripts/PlayerController.cs
+res://resources/data/ItemData.cs
+res://scripts/ItemController.cs
+res://scenes/DetectionArea.cs

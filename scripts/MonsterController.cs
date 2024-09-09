@@ -157,7 +157,7 @@ public partial class MonsterController : CharacterBody2D
 
             if (ShouldFlee is false)
             {
-                GD.Print("dist to player: " + distance);
+                //GD.Print("dist to player: " + distance);
                 // if it's too close, lets turn away
                 if (ShouldFlee is false)
                 {
@@ -214,7 +214,7 @@ public partial class MonsterController : CharacterBody2D
     public void TakeDamage(float damage)
     {
         HitPoints -= damage;
-        GD.Print("Monster took damage");
+        //GD.Print("Monster took damage");
 
         // monster took damage so now its alert.
         IsAlerted = true;
@@ -228,7 +228,7 @@ public partial class MonsterController : CharacterBody2D
 		//reverse the direction
         Vector2 unit_direction = -direction.Normalized();
         Velocity = unit_direction * Speed;
-        GD.Print("Monster is fleeing");
+        //GD.Print("Monster is fleeing");
 	}
 
 	public void ChasePlayer()
@@ -238,13 +238,13 @@ public partial class MonsterController : CharacterBody2D
 		Vector2 unit_vec = direction.Normalized();
         Velocity = unit_vec * Speed;
 
-        GD.Print("I'm chasing the player");
+        //GD.Print("I'm chasing the player");
 	}
 
 	public void Sleep()
 	{
 		Velocity = new Vector2(0, 0);
-        GD.Print("I'm sleeping");
+        //GD.Print("I'm sleeping");
 	}
 
 	public void Attack()
@@ -253,17 +253,17 @@ public partial class MonsterController : CharacterBody2D
         Vector2 direction = playerController.GlobalPosition - this.GlobalPosition;
         Vector2 unit_vec = direction.Normalized();
         Velocity = unit_vec * (Speed);
-        GD.Print("I'm attacking");
+        //GD.Print("I'm attacking");
 	}
 
     public void Dead()
     {
-		GD.Print("I'm dead");
+		//GD.Print("I'm dead");
     }
 
     public void Stop()
     {
-		GD.Print("I'm stopped");
+		//GD.Print("I'm stopped");
         Velocity = new Vector2(0, 0);
     }
 
@@ -273,16 +273,16 @@ public partial class MonsterController : CharacterBody2D
         RandomNumberGenerator rng = new RandomNumberGenerator();
         Vector2 unit_vec = (new Vector2(rng.RandfRange(-1, 1), rng.RandfRange(-1, 1))).Normalized();
         Velocity = unit_vec * (Speed * 0.25f);
-        GD.Print("I'm searching");
+        //GD.Print("I'm searching");
     }
 
     public void Walk()
     {
-        GD.Print("I'm walking");
+       //GD.Print("I'm walking");
     }
 
     public void Idle()
     {
-        GD.Print("I'm idle");
+        //GD.Print("I'm idle");
     }
 }

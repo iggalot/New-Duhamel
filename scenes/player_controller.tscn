@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=41 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Texture2D" uid="uid://bibaxd28kg4mr" path="res://resources/graphics/320x320_Duhamel_Tileset_1.png" id="1_dnn2q"]
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_tqw8m"]
@@ -346,6 +346,9 @@ _data = {
 "message_window_popup": SubResource("Animation_pts55")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_igmax"]
+radius = 27.074
+
 [node name="PlayerController" type="CharacterBody2D"]
 position = Vector2(274, 162)
 script = ExtResource("1_tqw8m")
@@ -396,3 +399,8 @@ libraries = {
 "": SubResource("AnimationLibrary_xe716")
 }
 speed_scale = 2.744
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("CircleShape2D_igmax")

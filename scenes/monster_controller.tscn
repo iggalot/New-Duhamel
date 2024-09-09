@@ -94,6 +94,19 @@ tracks/0/keys = {
 "values": [0.0, 1.5708]
 }
 
+[sub_resource type="Animation" id="Animation_gah3h"]
+resource_name = "dead"
+
+[sub_resource type="Animation" id="Animation_xojj2"]
+resource_name = "flee"
+loop_mode = 1
+
+[sub_resource type="Animation" id="Animation_wjkbr"]
+resource_name = "idle"
+
+[sub_resource type="Animation" id="Animation_amxnl"]
+resource_name = "search"
+
 [sub_resource type="Animation" id="Animation_l1kdn"]
 resource_name = "sleep"
 loop_mode = 1
@@ -109,19 +122,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [true, false, true, false, true]
 }
-
-[sub_resource type="Animation" id="Animation_xojj2"]
-resource_name = "flee"
-loop_mode = 1
-
-[sub_resource type="Animation" id="Animation_wjkbr"]
-resource_name = "idle"
-
-[sub_resource type="Animation" id="Animation_amxnl"]
-resource_name = "search"
-
-[sub_resource type="Animation" id="Animation_gah3h"]
-resource_name = "dead"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_iqchk"]
 _data = {
@@ -293,7 +293,7 @@ texture_filter = 1
 position = Vector2(-1, -42)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_l373r")
-animation = &"attack"
+animation = &"idle"
 
 [node name="StatusAnimationPlayer" type="AnimationPlayer" parent="StatusAnimatedSprite2D"]
 libraries = {

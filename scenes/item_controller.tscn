@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3 uid="uid://ctv8m3ld3irys"]
+
+[ext_resource type="Script" path="res://scripts/ItemController.cs" id="1_6ows0"]
+[ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_hng88"]
+[ext_resource type="PackedScene" uid="uid://dtsj4jh63pnbj" path="res://item_data.tscn" id="2_j1emb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mxjwx"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5cnaj"]
+radius = 18.0278
+
+[node name="ItemController" type="Area2D"]
+script = ExtResource("1_6ows0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(3.8147e-06, -3.8147e-06)
+texture = ExtResource("1_hng88")
+region_enabled = true
+region_rect = Rect2(144.349, 128.486, 15.54, 16.0805)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_mxjwx")
+
+[node name="ItemData" parent="." instance=ExtResource("2_j1emb")]
+Name = "Small Healing Potion"
+Effect = "Heal"
+ItemType = "Potion"
+Description = "A small flask of red liquid."
+Price = 100
+Weight = 2
+MaxStackSize = 5
+
+[node name="InteractionBox" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(10, 10)
+offset_left = -5.0
+offset_top = -31.0
+offset_right = 5.0
+offset_bottom = -11.0
+color = Color(0.52549, 0.505882, 1, 0.509804)
+
+[node name="Label" type="Label" parent="InteractionBox"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -10.0
+offset_right = 5.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "X"
+
+[node name="interaction_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="interaction_area"]
+shape = SubResource("CircleShape2D_5cnaj")
+
+[connection signal="body_entered" from="interaction_area" to="." method="OnInteractionBodyEntered"]
+[connection signal="body_exited" from="interaction_area" to="." method="OnInteractionBodyExited"]
