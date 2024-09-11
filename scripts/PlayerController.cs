@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using static StateMachine;
 
 public partial class PlayerController : CharacterBody2D
@@ -8,6 +9,13 @@ public partial class PlayerController : CharacterBody2D
 
     private float friction = 0.25f;
     private float acceleration = 0.3f;
+
+    private int heldItems = 0;
+//    public List<ItemController> Inventory { get; set; } = new List<ItemController>();
+    public Inventory PlayerInventory { get; set; } = new Inventory();
+    
+    private string inventoryScenePath = "res://scenes/ui/inventory/inventory.tscn";
+    private PackedScene inventoryScene;
 
     // Node getters and setter
     private AnimatedSprite2D animatedSprite;
@@ -34,6 +42,13 @@ public partial class PlayerController : CharacterBody2D
             // Set isDead to true to test death animation and gamve over cycle
             IsDead = true;
         }
+
+        if (Input.IsActionJustPressed("toggle_inventory"))
+        {
+            PlayerInventory.Visible = !PlayerInventory.Visible;
+            PlayerInventory.ShowInventory();
+
+        }
     }
 
     public override void _Ready()
@@ -44,6 +59,15 @@ public partial class PlayerController : CharacterBody2D
         playerMessageWindow = GetNode<ColorRect>("PlayerMessageWindow");
 
         playerMessageWindow.Visible = false;
+
+        // instantiate the inventory scene and add it as a child to the player controller tree
+        inventoryScene = (PackedScene)ResourceLoader.Load(inventoryScenePath);
+        Inventory inv_node = inventoryScene.Instantiate() as Inventory;
+        PlayerInventory = inv_node;
+        AddChild(inv_node);
+
+        // hide the player inventory to start with
+        PlayerInventory.Visible = false;
     }
 
     public override void _Process(double delta)
@@ -169,5 +193,12 @@ public partial class PlayerController : CharacterBody2D
             playerMessageWindowAnimationPlayer.Play("message_window_popup");
             playerMessageAnimationTimer = playerMessageAnimationTimerMax;
         }
+    }
+
+    public void AddItemToInventory(ItemController itemController)
+    {
+        ItemController new_inv_item = itemController.Duplicate() as ItemController;
+        InventorySlot slot = new InventorySlot();
+        slot.AddItemToInventorySlot(new_inv_item);
     }
 }

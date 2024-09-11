@@ -13,6 +13,23 @@ public partial class ItemController : Area2D
         if (Input.IsKeyPressed(Key.X) && canInteract)
         {
 			this.UseItem();
+
+			// test add item to player through game manager
+			GameManager _gameManager = GetTree().GetRoot().GetNode("GameManager") as GameManager;
+
+			GD.Print("Add " + this.Name + " to inventory");
+			_gameManager.Player.AddItemToInventory(this);
+
+			//GD.Print("Inventory Contents");
+			//GD.Print("----------------");
+			//GD.Print(_gameManager.Player.DisplayInventory());
+
+			//QueueFree();
+
+   //         GD.Print("Inventory Contents");
+   //         GD.Print("----------------");
+   //         GD.Print(_gameManager.Player.DisplayInventory());
+
         }
 	}
 

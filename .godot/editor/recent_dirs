@@ -1,6 +1,8 @@
+res://scenes/ui/inventory
+res://scripts/inventory
+res://
+res://resources/data
+res://scenes
 res://scripts
 res://resources/graphics
-res://
-res://scenes
 res://scripts/states
-res://scripts/inventory

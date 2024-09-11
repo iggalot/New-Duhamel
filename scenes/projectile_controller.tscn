@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbswk23gth3vh"]
+
+[ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_3cp8d"]
+[ext_resource type="PackedScene" uid="uid://b2egj0i8xmkyj" path="res://scenes/data/projectile_data.tscn" id="2_dx526"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_se3d1"]
+size = Vector2(64, 68)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yl5th"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_3cp8d")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="ProjectileController" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_se3d1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_yl5th")
+frame_progress = 0.293201
+
+[node name="ProjectileData" parent="." instance=ExtResource("2_dx526")]

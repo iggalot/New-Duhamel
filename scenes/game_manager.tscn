@@ -158,3 +158,9 @@ position = Vector2(716, 333)
 
 [node name="ItemController" parent="." instance=ExtResource("5_wdopp")]
 position = Vector2(299, 353)
+
+[node name="ItemController2" parent="." instance=ExtResource("5_wdopp")]
+position = Vector2(386, 200)
+
+[node name="ItemController3" parent="." instance=ExtResource("5_wdopp")]
+position = Vector2(301, 197)

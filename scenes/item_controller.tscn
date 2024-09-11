@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ItemController.cs" id="1_6ows0"]
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_hng88"]
-[ext_resource type="PackedScene" uid="uid://dtsj4jh63pnbj" path="res://item_data.tscn" id="2_j1emb"]
+[ext_resource type="PackedScene" uid="uid://dtsj4jh63pnbj" path="res://scenes/data/item_data.tscn" id="2_j1emb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mxjwx"]
 radius = 6.0

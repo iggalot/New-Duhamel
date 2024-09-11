@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2egj0i8xmkyj"]
+
+[ext_resource type="Script" path="res://resources/data/ProjectileData.cs" id="1_vjsnx"]
+
+[node name="ProjectileData" type="Node"]
+script = ExtResource("1_vjsnx")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtsj4jh63pnbj"]
+
+[ext_resource type="Script" path="res://resources/data/ItemData.cs" id="1_g6nql"]
+
+[node name="ItemData" type="Node"]
+script = ExtResource("1_g6nql")

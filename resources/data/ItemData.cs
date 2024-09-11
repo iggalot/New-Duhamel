@@ -4,23 +4,23 @@ using System;
 public partial class ItemData : Node
 {
     [Export]
-    public string Name;
+    public string ItemName { get; set; }
     [Export]
-    public string Effect;
+    public string ItemEffect { get; set; }
     [Export]
-    public string ItemType;
+    public string ItemType { get; set; }
     [Export]
-    public string Description { get; set; }
+    public string ItemDescription { get; set; }
     [Export]
-    public string Icon;
+    public string ItemIcon { get; set; }
     [Export]
-    public int Price;
+    public int ItemPrice { get; set; }
     [Export]
-    public int Weight;
+    public int ItemWeight { get; set; }
     [Export]
-    public int Durability { get; set; } = 100;
+    public int ItemDurability { get; set; } = 100;
     [Export]
-    public int MaxStackSize { get; set; } = 1;
+    public int ItemMaxStackSize { get; set; } = 1;
 
     public ItemData()
     {
