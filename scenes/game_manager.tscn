@@ -12,7 +12,7 @@ texture = ExtResource("2_shk4y")
 8:7/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_k1o6x"]
-physics_layer_0/collision_layer = 0
+physics_layer_0/collision_layer = 4096
 physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_hsq5f")
 
@@ -52,7 +52,7 @@ texture = ExtResource("2_shk4y")
 3:1/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_v7ghq"]
-physics_layer_0/collision_layer = 2
+physics_layer_0/collision_layer = 8192
 physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_aet1o")
 
@@ -109,8 +109,8 @@ texture = ExtResource("2_shk4y")
 
 [sub_resource type="TileSet" id="TileSet_b048p"]
 occlusion_layer_0/light_mask = 1
-physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 241
+physics_layer_0/collision_layer = 2
+physics_layer_0/collision_mask = 4093
 sources/1 = SubResource("TileSetAtlasSource_ukvse")
 
 [node name="GameManager" type="Node2D"]
@@ -164,3 +164,5 @@ position = Vector2(386, 200)
 
 [node name="ItemController3" parent="." instance=ExtResource("5_wdopp")]
 position = Vector2(301, 197)
+
+[node name="Projectiles" type="Node2D" parent="."]

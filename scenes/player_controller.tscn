@@ -1,7 +1,7 @@
 [gd_scene load_steps=41 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Texture2D" uid="uid://bibaxd28kg4mr" path="res://resources/graphics/320x320_Duhamel_Tileset_1.png" id="1_dnn2q"]
-[ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_tqw8m"]
+[ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_ej5oo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x5nm2"]
 size = Vector2(23, 14)
@@ -351,7 +351,8 @@ radius = 27.074
 
 [node name="PlayerController" type="CharacterBody2D"]
 position = Vector2(274, 162)
-script = ExtResource("1_tqw8m")
+collision_mask = 886
+script = ExtResource("1_ej5oo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 7)

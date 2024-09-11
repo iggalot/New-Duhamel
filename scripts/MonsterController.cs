@@ -65,6 +65,12 @@ public partial class MonsterController : CharacterBody2D
         }
     }
 
+    public override void _Ready()
+    {
+        // set up the collision layers and masks
+        SetCollisionLayerAndMasks();
+    }
+
     public override void _PhysicsProcess(double delta)
 	{
         // find the player controller in the scene tree
@@ -91,6 +97,58 @@ public partial class MonsterController : CharacterBody2D
 		Velocity = velocity;
 		MoveAndSlide();
 	}
+
+    private void ClearAllCollisionLayersAndMasks()
+    {
+        // clear all collision layer assignments
+        SetCollisionLayerValue((int)LayerMasks.Player, false);
+        SetCollisionLayerValue((int)LayerMasks.WallsAndDoors, false);
+        SetCollisionLayerValue((int)LayerMasks.Monster, false);
+        SetCollisionLayerValue((int)LayerMasks.ProjectileFriendly, false);
+        SetCollisionLayerValue((int)LayerMasks.ProjectileEnemy, false);
+        SetCollisionLayerValue((int)LayerMasks.ProjectileOther, false);
+        SetCollisionLayerValue((int)LayerMasks.Item, false);
+        SetCollisionLayerValue((int)LayerMasks.Interactable, false);
+        SetCollisionLayerValue((int)LayerMasks.SpellsFriendly, false);
+        SetCollisionLayerValue((int)LayerMasks.SpellsEnemy, false);
+        SetCollisionLayerValue((int)LayerMasks.SpellsOther, false);
+        SetCollisionLayerValue((int)LayerMasks.NPCs, false);
+
+        // clear all collision masks assignments
+        SetCollisionMaskValue((int)LayerMasks.Player, false);
+        SetCollisionMaskValue((int)LayerMasks.WallsAndDoors, false);
+        SetCollisionMaskValue((int)LayerMasks.Monster, false);
+        SetCollisionMaskValue((int)LayerMasks.ProjectileFriendly, false);
+        SetCollisionMaskValue((int)LayerMasks.ProjectileEnemy, false);
+        SetCollisionMaskValue((int)LayerMasks.ProjectileOther, false);
+        SetCollisionMaskValue((int)LayerMasks.Item, false);
+        SetCollisionMaskValue((int)LayerMasks.Interactable, false);
+        SetCollisionMaskValue((int)LayerMasks.SpellsFriendly, false);
+        SetCollisionMaskValue((int)LayerMasks.SpellsEnemy, false);
+        SetCollisionMaskValue((int)LayerMasks.SpellsOther, false);
+        SetCollisionMaskValue((int)LayerMasks.NPCs, false);
+
+    }
+
+    private void SetCollisionLayerAndMasks()
+    {
+        // reset the collision layers and masks
+        ClearAllCollisionLayersAndMasks();
+
+        // assign our layer
+        SetCollisionLayerValue((int)LayerMasks.Monster, true);
+
+        SetCollisionMaskValue((int)LayerMasks.WallsAndDoors, true);
+        SetCollisionMaskValue((int)LayerMasks.Player, true);
+        SetCollisionMaskValue((int)LayerMasks.Monster, true);
+        SetCollisionMaskValue((int)LayerMasks.ProjectileFriendly, true);
+        SetCollisionMaskValue((int)LayerMasks.ProjectileOther, true);
+        SetCollisionMaskValue((int)LayerMasks.Item, true);
+        SetCollisionMaskValue((int)LayerMasks.Interactable, true);
+        SetCollisionMaskValue((int)LayerMasks.SpellsFriendly, true);
+        SetCollisionMaskValue((int)LayerMasks.SpellsOther, true);
+        SetCollisionMaskValue((int)LayerMasks.NPCs, true);
+    }
 
     private void clearAllDistanceStatus()
     {
@@ -198,12 +256,6 @@ public partial class MonsterController : CharacterBody2D
                 ShouldSleep = false;
             }
         }
-    }
-
-
-    public override void _Ready()
-    {
-
     }
 
     public void processMovement(float delta)

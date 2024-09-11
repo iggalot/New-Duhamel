@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbswk23gth3vh"]
+[gd_scene load_steps=6 format=3 uid="uid://cbswk23gth3vh"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_3cp8d"]
+[ext_resource type="Script" path="res://scripts/ProjectileController.cs" id="1_ep7s6"]
 [ext_resource type="PackedScene" uid="uid://b2egj0i8xmkyj" path="res://scenes/data/projectile_data.tscn" id="2_dx526"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se3d1"]
@@ -17,7 +18,11 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="ProjectileController" type="Area2D"]
+[node name="ProjectileController" type="CharacterBody2D"]
+scale = Vector2(0.15, 0.15)
+collision_layer = 0
+collision_mask = 34
+script = ExtResource("1_ep7s6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_se3d1")

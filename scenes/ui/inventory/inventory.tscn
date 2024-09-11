@@ -8,6 +8,7 @@ anchors_preset = 0
 script = ExtResource("1_boho7")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
 offset_right = 304.0
 offset_bottom = 214.0
 color = Color(0.650128, 0.650128, 0.650128, 1)

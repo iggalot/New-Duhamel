@@ -11,6 +11,7 @@ script = ExtResource("1_yepfa")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.87451, 0.0745098, 0.87451, 0.341176)
