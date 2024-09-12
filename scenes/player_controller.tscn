@@ -1,7 +1,8 @@
-[gd_scene load_steps=41 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=42 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Texture2D" uid="uid://bibaxd28kg4mr" path="res://resources/graphics/320x320_Duhamel_Tileset_1.png" id="1_dnn2q"]
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_ej5oo"]
+[ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="3_o5pui"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x5nm2"]
 size = Vector2(23, 14)
@@ -354,6 +355,11 @@ position = Vector2(274, 162)
 collision_mask = 886
 script = ExtResource("1_ej5oo")
 
+[node name="PointLight2D" type="PointLight2D" parent="."]
+scale = Vector2(0.5, 0.5)
+color = Color(1, 0.630764, 0.714141, 1)
+texture = ExtResource("3_o5pui")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 7)
 shape = SubResource("RectangleShape2D_x5nm2")
@@ -368,7 +374,7 @@ animation = &"none"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1, 3)
-zoom = Vector2(1.5, 1.5)
+zoom = Vector2(1.2, 1.2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
