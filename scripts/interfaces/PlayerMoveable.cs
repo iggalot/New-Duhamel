@@ -3,9 +3,6 @@ using System;
 
 public class PlayerMoveable
 {
-    float speed = 300.0f;
-    Vector2 motion = Vector2.Zero;
-
     /// <summary>
     /// checks the movement of the player from the input
     /// </summary>

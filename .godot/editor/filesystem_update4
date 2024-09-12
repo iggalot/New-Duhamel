@@ -17,3 +17,5 @@ res://resources/data/ItemData.cs
 res://scripts/PlayerController.cs
 res://resources/data/ProjectileData.cs
 res://scripts/ProjectileController.cs
+res://scenes/data/character_data.tscn
+res://resources/data/CharacterData.cs

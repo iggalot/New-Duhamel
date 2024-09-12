@@ -1,8 +1,9 @@
-[gd_scene load_steps=42 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=43 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Texture2D" uid="uid://bibaxd28kg4mr" path="res://resources/graphics/320x320_Duhamel_Tileset_1.png" id="1_dnn2q"]
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_ej5oo"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="3_o5pui"]
+[ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="4_rfswp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x5nm2"]
 size = Vector2(23, 14)
@@ -411,3 +412,5 @@ speed_scale = 2.744
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 shape = SubResource("CircleShape2D_igmax")
+
+[node name="CharacterData" parent="." instance=ExtResource("4_rfswp")]

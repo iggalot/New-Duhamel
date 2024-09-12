@@ -1,9 +1,10 @@
-[gd_scene load_steps=30 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=31 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
 [ext_resource type="Script" path="res://scripts/states/MonsterStateMachine.cs" id="3_b7rl3"]
 [ext_resource type="Texture2D" uid="uid://nchetx006578" path="res://resources/graphics/duhamel_reaction_sprites.png" id="4_44mec"]
+[ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="5_ixmue"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wkq2h"]
 atlas = ExtResource("1_ee25i")
@@ -309,3 +310,5 @@ libraries = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 shape = SubResource("CircleShape2D_83uyf")
+
+[node name="CharacterData" parent="." instance=ExtResource("5_ixmue")]
