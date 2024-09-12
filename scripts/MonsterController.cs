@@ -10,9 +10,9 @@ public partial class MonsterController : CharacterBody2D
     private const float MAX_SEARCH_TIMER_DURATION = 10.0f;
 
 
-    private const float MIN_ATTACK_DISTANCE = 50.0f;
-    private const float MIN_CHASE_DISTANCE = 125.0f;
-    private const float MIN_SEARCH_DISTANCE = 225.0f;
+    private const float MIN_ATTACK_DISTANCE = 150.0f;
+    private const float MIN_CHASE_DISTANCE = 300.0f;
+    private const float MIN_SEARCH_DISTANCE = 400.0f;
 
     private const float MAX_DEFAULT_DISTANCE = 100000.0f;
 
