@@ -122,6 +122,7 @@ public partial class MonsterSpawnerController : MonsterController
                     if (spawn_loc.DistanceTo(this.GlobalPosition) < SpawnRadius && monster_area.GetOverlappingBodies().Count == 0)
                     {
                         monster.GlobalPosition = spawn_loc;
+                        monster.IsAlerted = true;  // make it alert by default
                         monsters_node.AddChild(monster);
                         spawn_success = true;
                     }

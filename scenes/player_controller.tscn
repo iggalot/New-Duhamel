@@ -359,6 +359,8 @@ script = ExtResource("1_ej5oo")
 [node name="PointLight2D" type="PointLight2D" parent="."]
 scale = Vector2(0.5, 0.5)
 color = Color(1, 0.630764, 0.714141, 1)
+energy = 1.2
+shadow_enabled = true
 texture = ExtResource("3_o5pui")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
