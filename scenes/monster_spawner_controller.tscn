@@ -27,8 +27,16 @@ collision_mask = 0
 script = ExtResource("1_m1ui5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
 scale = Vector2(0.3, 0.3)
 sprite_frames = SubResource("SpriteFrames_3unld")
+
+[node name="ColorRect" type="ColorRect" parent="AnimatedSprite2D"]
+offset_left = -63.0
+offset_top = -63.0
+offset_right = 63.0
+offset_bottom = 63.0
+color = Color(0.956863, 0.0156863, 0.054902, 0.466667)
 
 [node name="MonsterSpawnerBody" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_sq14p")

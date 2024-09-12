@@ -3,6 +3,9 @@ using System;
 
 public partial class MonsterController : CharacterBody2D
 {
+    PackedScene monsterScene;
+    private static string monsterScenePath = "res://scenes/monster_controller.tscn";
+
     private const float MAX_CHASE_TIMER_DRATION = 5.0f;
     private const float MAX_SEARCH_TIMER_DURATION = 10.0f;
 
@@ -129,7 +132,7 @@ public partial class MonsterController : CharacterBody2D
 
     private void SetCollisionLayerAndMasks()
     {
-        GD.Print("setting spwaner collision layer and masks for monster controller");
+        //GD.Print("setting spawner collision layer and masks for monster controller");
         // reset the collision layers and masks
         ClearAllCollisionLayersAndMasks();
 
@@ -260,6 +263,12 @@ public partial class MonsterController : CharacterBody2D
 	{
         // do no user control movement for now
 	}
+
+    public static PackedScene GetScene()
+    {
+        return GD.Load<PackedScene>(monsterScenePath);
+
+    }
 
     public virtual void TakeDamage(float damage)
     {

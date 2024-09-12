@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=32 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
@@ -272,7 +272,10 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_83uyf"]
-radius = 45.7056
+radius = 23.0217
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ducpw"]
+radius = 21.0238
 
 [node name="MonsterController" type="CharacterBody2D"]
 collision_layer = 0
@@ -312,3 +315,8 @@ libraries = {
 shape = SubResource("CircleShape2D_83uyf")
 
 [node name="CharacterData" parent="." instance=ExtResource("5_ixmue")]
+
+[node name="MonsterSpawnArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MonsterSpawnArea"]
+shape = SubResource("CircleShape2D_ducpw")
