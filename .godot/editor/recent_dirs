@@ -1,9 +1,9 @@
-res://resources/graphics
 res://scripts
+res://scripts/states
+res://scenes
+res://resources/graphics
 res://scenes/interface
 res://scenes/ui/inventory
 res://scripts/inventory
 res://
 res://resources/data
-res://scenes
-res://scripts/states

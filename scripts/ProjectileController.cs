@@ -139,6 +139,10 @@ public partial class ProjectileController : CharacterBody2D
                     var monster = (MonsterController)body;
                     monster.TakeDamage(_projectileData.ProjectileDamage);
                     monster.Knockback(_projectileData.ProjectileDirectionUnitVector * _projectileData.ProjectileKnockbackDistance);
+                } else if (body is MonsterSpawnerController)
+                {
+                    var _monster_spawner = (MonsterSpawnerController)body;
+                    GD.Print(" hit a monster spawner controller");
                 } else
                 {
                     // TODO:

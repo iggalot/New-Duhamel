@@ -1,7 +1,5 @@
 using Godot;
 using System;
-using System.Text.RegularExpressions;
-using static StateMachine;
 
 public partial class MonsterController : CharacterBody2D
 {
@@ -16,8 +14,7 @@ public partial class MonsterController : CharacterBody2D
     private const float MAX_DEFAULT_DISTANCE = 100000.0f;
 
 
-    public const float Speed = 50.0f;
-	public const float JumpVelocity = -400.0f;
+    public float Speed { get; set; } = 50.0f;
 
     [Export] public float HitPoints { get; set; } = 100;
     public float MaxHitPoints { get; set; } = 100;
@@ -132,14 +129,15 @@ public partial class MonsterController : CharacterBody2D
 
     private void SetCollisionLayerAndMasks()
     {
+        GD.Print("setting spwaner collision layer and masks for monster controller");
         // reset the collision layers and masks
         ClearAllCollisionLayersAndMasks();
 
         // assign our layer
         SetCollisionLayerValue((int)LayerMasks.Monster, true);
 
-        SetCollisionMaskValue((int)LayerMasks.WallsAndDoors, true);
         SetCollisionMaskValue((int)LayerMasks.Player, true);
+        SetCollisionMaskValue((int)LayerMasks.WallsAndDoors, true);
         SetCollisionMaskValue((int)LayerMasks.Monster, true);
         SetCollisionMaskValue((int)LayerMasks.ProjectileFriendly, true);
         SetCollisionMaskValue((int)LayerMasks.ProjectileOther, true);
@@ -263,7 +261,7 @@ public partial class MonsterController : CharacterBody2D
         // do no user control movement for now
 	}
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         HitPoints -= damage;
         GD.Print("Monster took damage of " + damage + ". It has " + HitPoints + " left.");
@@ -279,13 +277,13 @@ public partial class MonsterController : CharacterBody2D
         }
     }
 
-    public void Knockback(Vector2 direction)
+    public virtual void Knockback(Vector2 direction)
     {
         this.GlobalPosition += direction;
     }
 
 
-    public void Die()
+    public virtual void Die()
     {
         GD.Print("--Monster died");
 

@@ -18,7 +18,8 @@ public partial class ItemData : Node
     [Export]
     public int ItemWeight { get; set; }
     [Export]
-    public int ItemDurability { get; set; } = 100;
+    public int ItemHitPoints
+    { get; set; } = 100;
     [Export]
     public int ItemMaxStackSize { get; set; } = 1;
 

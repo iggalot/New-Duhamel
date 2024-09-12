@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://bm8bv2g7cv4v3"]
+
+[ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_3i2ac"]
+[ext_resource type="Script" path="res://scripts/MonsterSpawnerController.cs" id="1_m1ui5"]
+[ext_resource type="PackedScene" uid="uid://dtsj4jh63pnbj" path="res://scenes/data/item_data.tscn" id="3_3ihvk"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3unld"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_3i2ac")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sq14p"]
+size = Vector2(38, 37.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wpmq7"]
+radius = 84.0952
+
+[node name="MonsterSpawnerController" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_m1ui5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+sprite_frames = SubResource("SpriteFrames_3unld")
+
+[node name="MonsterSpawnerBody" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_sq14p")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+visible = false
+shape = SubResource("CircleShape2D_wpmq7")
+
+[node name="ItemData" parent="." instance=ExtResource("3_3ihvk")]
