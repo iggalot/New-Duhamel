@@ -266,13 +266,36 @@ public partial class MonsterController : CharacterBody2D
     public void TakeDamage(float damage)
     {
         HitPoints -= damage;
-        //GD.Print("Monster took damage");
+        GD.Print("Monster took damage of " + damage + ". It has " + HitPoints + " left.");
 
-        // monster took damage so now its alert.
-        IsAlerted = true;
+        //GD.Print("Monster took damage");
+        if (HitPoints <= 0)
+        {
+            Die();
+        } else
+        {
+            // monster took damage so now its alert.
+            IsAlerted = true;
+        }
     }
 
-	public void Flee()
+    public void Knockback(Vector2 direction)
+    {
+        this.GlobalPosition += direction;
+    }
+
+
+    public void Die()
+    {
+        GD.Print("--Monster died");
+
+        // TODO:  Award rewards, drop loot, gain experience and so on.
+        QueueFree();
+    }
+
+
+    #region State functions
+    public void Flee()
 	{
         PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
         Vector2 direction = playerController.GlobalPosition - this.GlobalPosition;
@@ -337,4 +360,5 @@ public partial class MonsterController : CharacterBody2D
     {
         //GD.Print("I'm idle");
     }
+    #endregion
 }

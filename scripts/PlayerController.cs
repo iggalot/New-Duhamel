@@ -1,5 +1,6 @@
 using Godot;
 using scripts.interfaces;
+using System;
 
 public partial class PlayerController : CharacterBody2D
 {
@@ -10,6 +11,8 @@ public partial class PlayerController : CharacterBody2D
     private const float default_speed = 300.0f;
     private float friction = 0.25f;
     private float acceleration = 0.3f;
+
+    [Export] public float HitPoints { get; set; } = 100;
 
     /// <summary>
     /// Inventory stuff
@@ -327,9 +330,11 @@ public partial class PlayerController : CharacterBody2D
         data.ProjectileOwner = this;
         data.ProjectileSpeed = 500.0f;
         data.ProjectileRangeDistance = 3000.0f;
-        data.ProjectileDirection = (GetGlobalMousePosition() - this.GlobalPosition).Normalized();
+        data.ProjectileDirectionUnitVector = (GetGlobalMousePosition() - this.GlobalPosition).Normalized(); // must be a unit vector
         data.ProjectileSpawnPosition = this.GlobalPosition;
         data.ProjectileSize = 10.0f;
+        data.ProjectileDamage = 45.0f;
+        data.ProjectileKnockbackDistance = 10.0f;
 
         GD.Print(data.ToString());
 
@@ -344,5 +349,31 @@ public partial class PlayerController : CharacterBody2D
 
         // add the projectile to the scene tree
         projectiles_node.AddChild(proj_controller_node);
+    }
+
+    public void Die()
+    {
+        GD.Print("Player died");
+        IsDead = true;
+        IsGameOver = true;
+        DoAnimationPlayer("death");
+    }
+
+    public void TakeDamage(float damage)
+    {
+        HitPoints -= damage;
+        GD.Print("Player took damage of " + damage + ". They have " + HitPoints + " left.");
+
+        if (HitPoints <= 0)
+        {
+            Die();  
+        }
+
+
+    }
+
+    public void Knockback(Vector2 direction)
+    {
+        this.GlobalPosition += direction;
     }
 }

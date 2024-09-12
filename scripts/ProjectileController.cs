@@ -105,7 +105,7 @@ public partial class ProjectileController : CharacterBody2D
 
         // set our velicity
         //this.Velocity = this._projectileData.ProjectileDirection * ((float)delta * this._projectileData.ProjectileSpeed);
-        this.Velocity = this._projectileData.ProjectileDirection * (this._projectileData.ProjectileSpeed);
+        this.Velocity = this._projectileData.ProjectileDirectionUnitVector * (this._projectileData.ProjectileSpeed);
 
 
         var distance_traveled = Math.Abs(this._projectileData.ProjectileSpawnPosition.DistanceTo(this.GlobalPosition));
@@ -123,9 +123,27 @@ public partial class ProjectileController : CharacterBody2D
 		{
             var collision = MoveAndCollide(Velocity * (float)delta);
 
-            if(collision != null)
+            if (collision != null)
             {
-                GD.Print("Projectile collided with " + collision.GetCollider().ToString());
+                var body = collision.GetCollider();
+                GD.Print("Projectile collided with " + body.ToString());
+                GD.Print("body's class is: " + body.GetClass());
+
+                if (body is PlayerController)
+                {
+                    var player = (PlayerController)body;
+                    player.TakeDamage(_projectileData.ProjectileDamage);
+                    player.Knockback(_projectileData.ProjectileDirectionUnitVector * _projectileData.ProjectileKnockbackDistance);
+                } else if (body is MonsterController)
+                {
+                    var monster = (MonsterController)body;
+                    monster.TakeDamage(_projectileData.ProjectileDamage);
+                    monster.Knockback(_projectileData.ProjectileDirectionUnitVector * _projectileData.ProjectileKnockbackDistance);
+                } else
+                {
+                    // TODO:
+                    GD.Print("decide what to do when an object of type " + body.GetClass() + " is hit by a projectile");
+                }
 
                 QueueFree();
             }
