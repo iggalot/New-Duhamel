@@ -1,14 +1,14 @@
+Node2D
+ColorRect
+CanvasLayer
 Sprite2D
 PointLight2D
 LightOccluder2D
 CollisionShape2D
 Area2D
-ColorRect
-Node2D
 AnimatedSprite2D
 CharacterBody2D
 VScrollBar
 MarginContainer
 Control
 TextureRect
-GridContainer

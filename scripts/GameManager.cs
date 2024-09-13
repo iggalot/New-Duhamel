@@ -40,6 +40,8 @@ public partial class GameManager : Node2D
 	public override void _Ready()
 	{
         Player = GetNode<PlayerController>("PlayerController");
+
+        ImportData data = new ImportData();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

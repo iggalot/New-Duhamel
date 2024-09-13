@@ -1,0 +1,21 @@
+[
+
+	{"ItemName":"Iron Sword","ItemAttack":"10","ItemDefense":"0","ItemWeight":"5","ItemDurability":"100"},
+	{"ItemName":"Iron Mace","ItemAttack":"9","ItemDefense":"0","ItemWeight":"7","ItemDurability":"100"},
+	{"ItemName":"Iron Spear","ItemAttack":"12","ItemDefense":"0","ItemWeight":"8","ItemDurability":"100"},
+	{"ItemName":"Steel Sword","ItemAttack":"15","ItemDefense":"0","ItemWeight":"5","ItemDurability":"175"},
+	{"ItemName":"Steel Mace","ItemAttack":"14","ItemDefense":"0","ItemWeight":"7","ItemDurability":"175"},
+	{"ItemName":"Steel Spear","ItemAttack":"18","ItemDefense":"0","ItemWeight":"8","ItemDurability":"175"},
+	{"ItemName":"Iron Gauntlets","ItemAttack":"0","ItemDefense":"10","ItemWeight":"1","ItemDurability":"120"},
+	{"ItemName":"Iron Boots","ItemAttack":"0","ItemDefense":"10","ItemWeight":"2","ItemDurability":"120"},
+	{"ItemName":"Iron Cuirass","ItemAttack":"0","ItemDefense":"18","ItemWeight":"5","ItemDurability":"120"},
+	{"ItemName":"Iron Helmet","ItemAttack":"0","ItemDefense":"12","ItemWeight":"2","ItemDurability":"120"},
+	{"ItemName":"Steel Gauntlets","ItemAttack":"0","ItemDefense":"14","ItemWeight":"1","ItemDurability":"180"},
+	{"ItemName":"Steel Boots","ItemAttack":"0","ItemDefense":"15","ItemWeight":"2","ItemDurability":"180"},
+	{"ItemName":"Steel Cuirass","ItemAttack":"0","ItemDefense":"25","ItemWeight":"5","ItemDurability":"180"},
+	{"ItemName":"Steel Helmet","ItemAttack":"0","ItemDefense":"16","ItemWeight":"1","ItemDurability":"180"},
+	{"ItemName":"Iron Ore","ItemAttack":"0","ItemDefense":"0","ItemWeight":"0.5","ItemDurability":"0"},
+	{"ItemName":"Iron Ingot","ItemAttack":"0","ItemDefense":"0","ItemWeight":"1","ItemDurability":"0"},
+	{"ItemName":"Charcoal","ItemAttack":"0","ItemDefense":"0","ItemWeight":"0.25","ItemDurability":"0"},
+	{"ItemName":"Steel Ingot","ItemAttack":"0","ItemDefense":"0","ItemWeight":"1","ItemDurability":"0"}]
+	

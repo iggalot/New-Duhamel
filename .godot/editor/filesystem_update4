@@ -3,6 +3,7 @@ res://scenes/player_controller.tscn
 res://scenes/projectile_controller.tscn
 res://scenes/monster_controller.tscn
 res://scenes/monster_spawner_controller.tscn
+res://scenes/data/item_data.tscn
 res://scripts/StateMachine.cs
 res://scenes/ui/inventory/InventorySlot.cs
 res://scripts/interfaces/Usable.cs
@@ -19,4 +20,6 @@ res://resources/data/ItemData.cs
 res://scripts/ProjectileController.cs
 res://scripts/PlayerController.cs
 res://scripts/MonsterSpawnerController.cs
-res://scenes/data/item_data.tscn
+res://scenes/item_controller.tscn
+res://scripts/ImportData.cs
+res://resources/data/item_table.json

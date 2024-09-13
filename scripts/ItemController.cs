@@ -3,12 +3,21 @@ using System;
 
 public partial class ItemController : Area2D
 {
-	private Area2D itemInteractionArea { get; set; }
+    PackedScene itemScene;
+    private static string itemScenePath = "res://scenes/item_controller.tscn";
+
+    private Area2D itemInteractionArea { get; set; }
 	private ColorRect interactionBox { get; set; }
 
 	private bool canInteract { get; set; } = false;
 
-	public override void _Input(InputEvent @event)
+    public static PackedScene GetScene()
+    {
+        return GD.Load<PackedScene>(itemScenePath);
+
+    }
+
+    public override void _Input(InputEvent @event)
 	{
         if (Input.IsKeyPressed(Key.X) && canInteract)
         {

@@ -52,10 +52,10 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "X"
 
-[node name="interaction_area" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="interaction_area"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 shape = SubResource("CircleShape2D_5cnaj")
 
-[connection signal="body_entered" from="interaction_area" to="." method="OnInteractionBodyEntered"]
-[connection signal="body_exited" from="interaction_area" to="." method="OnInteractionBodyExited"]
+[connection signal="body_entered" from="InteractionArea" to="." method="OnInteractionBodyEntered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="OnInteractionBodyExited"]
