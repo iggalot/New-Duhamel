@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/ProjectileController.cs" id="1_ep7s6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n3j62"]
-radius = 17.5285
+radius = 6.5
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_430wj"]
 animations = [{
@@ -21,9 +21,8 @@ animations = [{
 script = ExtResource("1_ep7s6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0)
 shape = SubResource("CircleShape2D_n3j62")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_430wj")

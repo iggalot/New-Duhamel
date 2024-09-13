@@ -1,3 +1,6 @@
+Control
+ProgressBar
+Node
 Node2D
 ColorRect
 CanvasLayer
@@ -10,5 +13,3 @@ AnimatedSprite2D
 CharacterBody2D
 VScrollBar
 MarginContainer
-Control
-TextureRect

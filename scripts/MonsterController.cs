@@ -3,6 +3,9 @@ using System;
 
 public partial class MonsterController : CharacterBody2D
 {
+    [Signal]
+    public delegate void UpdateHealthBarEventHandler(int health, int mac_health);
+
     PackedScene monsterScene;
     private static string monsterScenePath = "res://scenes/monster_controller.tscn";
 
@@ -284,6 +287,8 @@ public partial class MonsterController : CharacterBody2D
             // monster took damage so now its alert.
             IsAlerted = true;
         }
+
+        EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
     }
 
     public virtual void Knockback(Vector2 direction)
