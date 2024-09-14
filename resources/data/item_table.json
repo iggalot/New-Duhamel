@@ -1,6 +1,4 @@
-[
-
-	{"ItemName":"Iron Sword","ItemAttack":"10","ItemDefense":"0","ItemWeight":"5","ItemDurability":"100"},
+[{"ItemName":"Iron Sword","ItemAttack":"10","ItemDefense":"0","ItemWeight":"5","ItemDurability":"100"},
 	{"ItemName":"Iron Mace","ItemAttack":"9","ItemDefense":"0","ItemWeight":"7","ItemDurability":"100"},
 	{"ItemName":"Iron Spear","ItemAttack":"12","ItemDefense":"0","ItemWeight":"8","ItemDurability":"100"},
 	{"ItemName":"Steel Sword","ItemAttack":"15","ItemDefense":"0","ItemWeight":"5","ItemDurability":"175"},

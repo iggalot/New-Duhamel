@@ -24,6 +24,7 @@ script = ExtResource("1_2xoej")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(30, 5)
+layout_mode = 0
 offset_right = 30.0
 offset_bottom = 5.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)

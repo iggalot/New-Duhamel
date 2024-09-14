@@ -17,10 +17,10 @@ public partial class PlayerController : CharacterBody2D
     /// <summary>
     /// Inventory stuff
     /// </summary>
-    public Inventory PlayerInventory { get; set; } = new Inventory();
-    private string inventoryScenePath = "res://scenes/ui/inventory/inventory.tscn";
-    private PackedScene inventoryScene;
-    private int heldItems = 0;
+    //public Inventory PlayerInventory { get; set; } = new Inventory();
+    //private string inventoryScenePath = "res://scenes/ui/inventory/inventory.tscn";
+    //private PackedScene inventoryScene;
+    //private int heldItems = 0;
 
     // for projectiles
     private string projectileScenePath = "res://scenes/projectile_controller.tscn";
@@ -53,12 +53,12 @@ public partial class PlayerController : CharacterBody2D
             IsDead = true;
         }
 
-        // toggles the inventory
-        if (Input.IsActionJustPressed("toggle_inventory"))
-        {
-            PlayerInventory.Visible = !PlayerInventory.Visible;
-            PlayerInventory.ShowInventory();
-        }
+        //// toggles the inventory
+        //if (Input.IsActionJustPressed("toggle_inventory"))
+        //{
+        //    PlayerInventory.Visible = !PlayerInventory.Visible;
+        //    PlayerInventory.ShowInventory();
+        //}
 
         // a test toggle to see if we can disable player character movement via the attributes manager
         if (Input.IsActionJustPressed("can_move_toggle"))
@@ -89,14 +89,14 @@ public partial class PlayerController : CharacterBody2D
         playerMessageWindow = GetNode<ColorRect>("PlayerMessageWindow");
         playerMessageWindow.Visible = false;
 
-        // instantiate the inventory scene and add it as a child to the player controller tree
-        inventoryScene = (PackedScene)ResourceLoader.Load(inventoryScenePath);
-        Inventory inv_node = inventoryScene.Instantiate() as Inventory;
-        PlayerInventory = inv_node;
-        AddChild(inv_node);
+        //// instantiate the inventory scene and add it as a child to the player controller tree
+        //inventoryScene = (PackedScene)ResourceLoader.Load(inventoryScenePath);
+        //Inventory inv_node = inventoryScene.Instantiate() as Inventory;
+        //PlayerInventory = inv_node;
+        //AddChild(inv_node);
 
-        // hide the player inventory to start with
-        PlayerInventory.Visible = false;
+        //// hide the player inventory to start with
+        //PlayerInventory.Visible = false;
     }
 
     public override void _Process(double delta)
@@ -314,9 +314,9 @@ public partial class PlayerController : CharacterBody2D
     /// <param name="itemController"></param>
     public void AddItemToInventory(ItemController itemController)
     {
-        ItemController new_inv_item = itemController.Duplicate() as ItemController;
-        InventorySlot slot = new InventorySlot();
-        slot.AddItemToInventorySlot(new_inv_item);
+        //ItemController new_inv_item = itemController.Duplicate() as ItemController;
+        //InventorySlot slot = new InventorySlot();
+        //slot.AddItemToInventorySlot(new_inv_item);
     }
 
     public void Shoot()
