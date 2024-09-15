@@ -1,108 +1,73 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class StateMachine : Node
 {
-	// an array to hold our states for the state machine
-	String[] States = new string[]{};
+    private List<State> states = new List<State>();
+    State previousState;
+    State currentState;
 
-	//public enum States
-
-	//public enum States
-	//{
-	//	Null,
-	//	None,
-	//	Idle,
-	//	Walk,
-	//	Patrol,
-	//	Searching,
-	//	Run,
-	//	Attack_Melee,
-	//	Attack_Range,
-	//	Flee,
-	//	Rest,
-	//	Dead
-	//}
-
-	[Export]
-	public string State = null;
-	public string PreviousState = null;
-
-	public Node Parent { get => GetParent(); }
-
-    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
-	{
-
-	}
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _PhysicsProcess(double delta)
     {
-        if (State != null)
-        {
-            StateLogic((float)delta);
-            string transition = GetTransition((float)delta);
-            if (transition != null)
-            {
-                SetState(transition);
-            }
-        }
-    }
-
-    public virtual void StateLogic(float delta)
-    {
+        // delete this ready call until we explictly enable it.
+        ProcessMode = Node.ProcessModeEnum.Disabled;
         return;
     }
 
-    public virtual string GetTransition(float delta)
+    public override void _Process(double delta)
     {
-        return null;
+        ChangeState(currentState.Process(delta));
+        return;
     }
 
-
-
-	public virtual void EnterState(string new_state, string old_state) 
-	{
-		return;
-	}
-
-	public virtual void ExitState(string old_state, string new_state)
-	{
-		return;
-	}
-
-	public void SetState(string new_state)
+    public override void _PhysicsProcess(double delta)
     {
-        if (State != new_state)
+        ChangeState(currentState.Physics(delta));
+        return;
+    }
+
+    public override void _UnhandledInput(InputEvent input_event)
+    {
+        ChangeState(currentState.HandleInput(input_event));
+        return;
+    }
+
+    public void Initialize(CharacterBody2D character)
+    {
+        // find out how many children are states (should be all...but you never now)
+        foreach (State c in GetChildren())
         {
-            PreviousState = State;
-            State = new_state;
+            if(c is State)
+            {
+                c.stateOwner = character;
+                states.Add((State)c);
+            }
         }
 
-		if(PreviousState != null)
-		{
-            ExitState(PreviousState, State);
-        }
-        
-		if(new_state != null)
-		{
-            EnterState(new_state, PreviousState);
+        if(states.Count > 0)
+        {
+            ChangeState(states[0]);
+            ProcessMode = Node.ProcessModeEnum.Inherit; // turn back on the process mode now that we are established
         }
     }
 
-	public void AddState(string state)
+    public void ChangeState(State new_State)
     {
-        if (state != null)
+        if ((new_State == null) || (new_State == currentState))
         {
-            SetState(state);
             return;
         }
 
-		// resize the current array and add a new state to the list of states
-		string[] temp = new string[States.Length + 1];
-        System.Array.Copy(States, temp, States.Length);
-		States[States.Length] = state;
-	}
+        if (currentState != null)
+        {
+            currentState.ExitState();
+        }
+
+        previousState = currentState;
+        currentState = new_State;
+        currentState.EnterState();
+    }
 }

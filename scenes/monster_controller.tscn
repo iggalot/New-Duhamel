@@ -1,11 +1,17 @@
-[gd_scene load_steps=33 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=39 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
-[ext_resource type="Script" path="res://scripts/states/MonsterStateMachine.cs" id="3_b7rl3"]
+[ext_resource type="Script" path="res://scripts/StateMachine.cs" id="3_fkbqd"]
 [ext_resource type="Texture2D" uid="uid://nchetx006578" path="res://resources/graphics/duhamel_reaction_sprites.png" id="4_44mec"]
+[ext_resource type="Script" path="res://scripts/states/MonsterIdleState.cs" id="4_a7ia8"]
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="5_ixmue"]
+[ext_resource type="Script" path="res://scripts/states/MonsterWalkState.cs" id="5_qkqkv"]
 [ext_resource type="PackedScene" uid="uid://d4bxcy4uq47dk" path="res://scenes/ui/health_bar.tscn" id="6_f1s16"]
+[ext_resource type="Script" path="res://scripts/states/MonsterChaseState.cs" id="6_g5jfc"]
+[ext_resource type="Script" path="res://scripts/states/MonsterAttackState.cs" id="7_84jll"]
+[ext_resource type="Script" path="res://scripts/states/MonsterFleeState.cs" id="8_5vnuy"]
+[ext_resource type="Script" path="res://scripts/states/MonsterDeadState.cs" id="9_c6thw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wkq2h"]
 atlas = ExtResource("1_ee25i")
@@ -295,8 +301,26 @@ libraries = {
 "": SubResource("AnimationLibrary_iqchk")
 }
 
-[node name="MonsterStateMachine" type="Node" parent="."]
-script = ExtResource("3_b7rl3")
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_fkbqd")
+
+[node name="MonsterIdle" type="Node" parent="StateMachine"]
+script = ExtResource("4_a7ia8")
+
+[node name="MonsterWalk" type="Node" parent="StateMachine"]
+script = ExtResource("5_qkqkv")
+
+[node name="MonsterChase" type="Node" parent="StateMachine"]
+script = ExtResource("6_g5jfc")
+
+[node name="MonsterAttack" type="Node" parent="StateMachine"]
+script = ExtResource("7_84jll")
+
+[node name="MonsterFlee" type="Node" parent="StateMachine"]
+script = ExtResource("8_5vnuy")
+
+[node name="MonsterDead" type="Node" parent="StateMachine"]
+script = ExtResource("9_c6thw")
 
 [node name="StatusAnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

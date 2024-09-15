@@ -88,15 +88,6 @@ public partial class PlayerController : CharacterBody2D
         playerMessageWindowAnimationPlayer = GetNode<AnimationPlayer>("PlayerMessageWindow/AnimationPlayer");
         playerMessageWindow = GetNode<ColorRect>("PlayerMessageWindow");
         playerMessageWindow.Visible = false;
-
-        //// instantiate the inventory scene and add it as a child to the player controller tree
-        //inventoryScene = (PackedScene)ResourceLoader.Load(inventoryScenePath);
-        //Inventory inv_node = inventoryScene.Instantiate() as Inventory;
-        //PlayerInventory = inv_node;
-        //AddChild(inv_node);
-
-        //// hide the player inventory to start with
-        //PlayerInventory.Visible = false;
     }
 
     public override void _Process(double delta)
@@ -314,9 +305,7 @@ public partial class PlayerController : CharacterBody2D
     /// <param name="itemController"></param>
     public void AddItemToInventory(ItemController itemController)
     {
-        //ItemController new_inv_item = itemController.Duplicate() as ItemController;
-        //InventorySlot slot = new InventorySlot();
-        //slot.AddItemToInventorySlot(new_inv_item);
+
     }
 
     public void Shoot()
@@ -368,8 +357,6 @@ public partial class PlayerController : CharacterBody2D
         {
             Die();  
         }
-
-
     }
 
     public void Knockback(Vector2 direction)

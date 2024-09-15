@@ -150,6 +150,7 @@ sources/1 = SubResource("TileSetAtlasSource_ukvse")
 script = ExtResource("1_ibax6")
 
 [node name="HUD" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="LeftPanel" type="ColorRect" parent="HUD"]
 anchors_preset = 4
@@ -262,12 +263,6 @@ position = Vector2(301, 197)
 
 [node name="Projectiles" type="Node2D" parent="."]
 
-[node name="MonsterSpawnerController" parent="." instance=ExtResource("5_wjc75")]
-position = Vector2(497, 433)
-
-[node name="MonsterSpawnerController2" parent="." instance=ExtResource("5_wjc75")]
-position = Vector2(482, -261)
-
 [node name="Monsters" type="Node2D" parent="."]
 
 [node name="Items" type="Node2D" parent="."]
@@ -275,7 +270,7 @@ position = Vector2(482, -261)
 [node name="Lights" type="Node2D" parent="."]
 
 [node name="PointLight2D" type="PointLight2D" parent="Lights"]
-position = Vector2(17, 37)
+position = Vector2(26, 39)
 scale = Vector2(0.632162, 0.486654)
 energy = 2.0
 shadow_enabled = true
@@ -285,3 +280,9 @@ texture_scale = 3.0
 [node name="Sprite2D" type="Sprite2D" parent="Lights/PointLight2D"]
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("8_twufo")
+
+[node name="MonsterSpawnerController" parent="." instance=ExtResource("5_wjc75")]
+position = Vector2(407, -307)
+
+[node name="MonsterSpawnerController" parent="MonsterSpawnerController" instance=ExtResource("5_wjc75")]
+position = Vector2(98, 695)

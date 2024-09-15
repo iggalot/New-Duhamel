@@ -1,3 +1,4 @@
+Node
 ColorRect
 Label
 TextureButton
@@ -9,6 +10,5 @@ VScrollBar
 HScrollBar
 Control
 ProgressBar
-Node
 Node2D
 CanvasLayer

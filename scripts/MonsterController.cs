@@ -9,46 +9,36 @@ public partial class MonsterController : CharacterBody2D
     PackedScene monsterScene;
     private static string monsterScenePath = "res://scenes/monster_controller.tscn";
 
-    private const float MAX_CHASE_TIMER_DRATION = 5.0f;
-    private const float MAX_SEARCH_TIMER_DURATION = 10.0f;
+    // the state machine for this monster -- requires state node defintions (if other than the default set).
+    private StateMachine stateMachine;
 
+    public float MIN_ATTACK_DISTANCE {get; set;} = 150.0f;
+    public float MIN_CHASE_DISTANCE { get; set; } = 300.0f;
+    public float MIN_SEARCH_DISTANCE { get; set; } = 400.0f;
+    public float MAX_DEFAULT_DISTANCE { get; set; } = 100000.0f;
 
-    private const float MIN_ATTACK_DISTANCE = 150.0f;
-    private const float MIN_CHASE_DISTANCE = 300.0f;
-    private const float MIN_SEARCH_DISTANCE = 400.0f;
+    public Vector2 DirectionUnitVector { get; set; } = Vector2.Zero;
 
-    private const float MAX_DEFAULT_DISTANCE = 100000.0f;
+    // how fast the monster moves in normal movement
+    [Export] public float WalkSpeed { get; set; } = 100;
+    // how fast the monster moves while searhing
+    [Export] public float SearchSpeed { get; set; } = 150.0f;
+    // how fast the monster moves while chasing
+    [Export] public float ChaseSpeed { get; set; } = 175.0f;
+    [Export] public float AttackSpeed { get; set; } = 200.0f;
+    // how fast the monster moves while fleeing -- this numbershould be negative to indicate away from the player
+    [Export] public float FleeSpeed { get; set; } = -200.0f;
+    [Export] public float FleeAtHealthPercentage { get; set; } = 0.25f;
 
-
-    public float Speed { get; set; } = 50.0f;
 
     [Export] public float HitPoints { get; set; } = 100;
     public float MaxHitPoints { get; set; } = 100;
 
-    private float ChaseTimer { get; set; } = MAX_CHASE_TIMER_DRATION;
-    private float ChaseTimerMax { get; set; } = MAX_CHASE_TIMER_DRATION;
-    private float AttackTimer { get; set; } = MAX_SEARCH_TIMER_DURATION;
-    private float AttackTimerMax { get; set; } = MAX_SEARCH_TIMER_DURATION;
-
-
-    private float AIDecisionTimer { get; set; } = 5.0f;
-    private float AIDecisionTimerMax { get; set; } = 5.0f;
-
-
     [Export] public bool IsAlerted { get; set; } = false;
-    [Export] public bool IsInAttackRange { get; set; } = false;
-    [Export] public bool IsInChaseRange { get; set; } = false;
-    [Export] public bool IsInSearchRange { get; set; } = false;
     [Export] public bool IsDead { get; set; } = false;
 
 
-
     [Export] public bool ShouldFlee { get; set; } = false;
-    [Export] public bool ShouldChasePlayer { get; set; } = false;
-	[Export] public bool ShouldSleep { get; set; } = false;
-	[Export] public bool ShouldAttack { get; set; } = false;
-	[Export] public bool ShouldSearch { get; set; } = false;
-	[Export] public bool ShouldStop { get; set; } = false;
 
     public override void _Input(InputEvent @event)
     {
@@ -65,39 +55,35 @@ public partial class MonsterController : CharacterBody2D
         {
             GD.Print("Healing monster");
             HitPoints = MaxHitPoints;
+
+            // update the health bar via signal
+            EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
         }
     }
 
     public override void _Ready()
     {
+        // set our Godot node and then intialize the state machine with this as the owner.
+        stateMachine = GetNode<StateMachine>("StateMachine");
+        stateMachine.Initialize(this);
+
+        // need to tell the individual states who their owner is
+        var states = stateMachine.GetChildren();
+        foreach (var state in states)
+        {
+            // initialize the owners in each state (so that they are cast correctly)
+            ((State)state).InitializeOwner();
+        }
+
         // set up the collision layers and masks
         SetCollisionLayerAndMasks();
     }
 
     public override void _PhysicsProcess(double delta)
 	{
-        // find the player controller in the scene tree
-        PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
-        if (playerController != null)
-        {
-            Vector2 playerPosition = playerController.GlobalPosition;
-            var distance = GlobalPosition.DistanceTo(playerPosition);
+        DirectionUnitVector = Velocity.Normalized();
 
-            processMonsterAction((float)delta, playerController, distance);
-        }
-        else
-        {
-            processMonsterAction((float)delta, null, MAX_DEFAULT_DISTANCE);
-
-        }
-
-        Vector2 velocity = Velocity;
-
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		processMovement((float)delta);
-
-		Velocity = velocity;
+        // Velocity is set by the individual states currently.
 		MoveAndSlide();
 	}
 
@@ -132,7 +118,6 @@ public partial class MonsterController : CharacterBody2D
         SetCollisionMaskValue((int)LayerMasks.NPCs, false);
 
     }
-
     private void SetCollisionLayerAndMasks()
     {
         //GD.Print("setting spawner collision layer and masks for monster controller");
@@ -154,129 +139,20 @@ public partial class MonsterController : CharacterBody2D
         SetCollisionMaskValue((int)LayerMasks.NPCs, true);
     }
 
-    private void clearAllDistanceStatus()
-    {
-        IsInAttackRange = false;
-        IsInChaseRange = false;
-        IsInSearchRange = false;
-    }
-
-    private void updateDistanceStatuses(float distance)
-    {
-        // clear the current status.
-        clearAllDistanceStatus();
-
-        if(Math.Abs(distance) < MIN_ATTACK_DISTANCE)
-        {
-            IsInAttackRange = true;
-        } else
-        {
-            IsInAttackRange = false;
-        }
-
-        if(Math.Abs(distance) < MIN_CHASE_DISTANCE)
-        {
-            IsInChaseRange = true;
-        } else
-        {
-            IsInChaseRange = false;
-        }
-
-        if(Math.Abs(distance) < MIN_ATTACK_DISTANCE)
-        {
-            IsInSearchRange = true;
-        } else
-        {
-            IsInSearchRange = false;
-        }
-    }
-
-    public void processMonsterAction(float delta, PlayerController player, float distance)
-    {
-
-        // if the player is dead let's stop
-        if (player == null || player.IsDead)
-        {
-            // do nothing more
-            return;
-        }
-        else
-        {
-            if (HitPoints < 0.20 * MaxHitPoints)
-            {
-                ShouldFlee = true;
-
-                // update the distance status
-                updateDistanceStatuses(MAX_DEFAULT_DISTANCE);
-            }
-            else
-            {
-                ShouldFlee = false;
-
-                // update the distance status
-                updateDistanceStatuses(distance);
-            }
-
-            if (ShouldFlee is false)
-            {
-                //GD.Print("dist to player: " + distance);
-                // if it's too close, lets turn away
-                if (ShouldFlee is false)
-                {
-                    if (IsAlerted)
-                    {
-                        if (IsInChaseRange)
-                        {
-                            ShouldChasePlayer = true;
-                        }
-
-                        if (IsInAttackRange)
-                        {
-                            ShouldAttack = true;
-                        }
-
-                        if (IsInSearchRange)
-                        {
-                            ShouldSearch = true;
-                        }
-
-                        if (HitPoints < 0.20 * MaxHitPoints)
-                        {
-                            ShouldFlee = true;
-                        }
-                        else
-                        {
-                            ShouldFlee = false;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                ShouldAttack = false;
-                ShouldChasePlayer = false;
-                ShouldSearch = false;
-                ShouldStop = false;
-                ShouldSleep = false;
-            }
-        }
-    }
-
-    public void processMovement(float delta)
-	{
-        // do no user control movement for now
-	}
-
     public static PackedScene GetScene()
     {
         return GD.Load<PackedScene>(monsterScenePath);
-
     }
 
     public virtual void TakeDamage(float damage)
     {
         HitPoints -= damage;
         GD.Print("Monster took damage of " + damage + ". It has " + HitPoints + " left.");
+
+        if(HitPoints < FleeAtHealthPercentage * MaxHitPoints)
+        {
+            ShouldFlee = true;
+        }
 
         //GD.Print("Monster took damage");
         if (HitPoints <= 0)
@@ -291,12 +167,13 @@ public partial class MonsterController : CharacterBody2D
         EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
     }
 
+    // apply a knockback effect when a monster is hit.
     public virtual void Knockback(Vector2 direction)
     {
         this.GlobalPosition += direction;
     }
 
-
+    // kill the monster
     public virtual void Die()
     {
         GD.Print("--Monster died");
@@ -307,6 +184,10 @@ public partial class MonsterController : CharacterBody2D
         QueueFree();
     }
 
+    /// <summary>
+    /// Spanws look items when a monster dies
+    /// TODO:  link loot tables into this.
+    /// </summary>
     public virtual void DropLoot()
     {
         //GD.Print("Spawning monster");
@@ -317,7 +198,6 @@ public partial class MonsterController : CharacterBody2D
         Node2D items_node = game_mgr.GetNode<Node2D>("Items");
 
         //GD.Print("Monsters in room currently: " + monsters_node.GetChildren().Count);
-
 
         // get the room's spawn area
         Area2D spawn_area = game_mgr.GetNode<Area2D>("SpawnArea");
@@ -388,7 +268,6 @@ public partial class MonsterController : CharacterBody2D
                         items_node.AddChild(item);
                         spawn_success = true;
                     }
-
                     
                     if (spawn_success)
                     {
@@ -404,8 +283,6 @@ public partial class MonsterController : CharacterBody2D
 
                 spawn_attempt_count++;
             }
-
-
         }
         else
         {
@@ -415,72 +292,27 @@ public partial class MonsterController : CharacterBody2D
         GD.Print("---Spawning loot");
     }
 
-
-    #region State functions
-    public void Flee()
-	{
-        PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
-        Vector2 direction = playerController.GlobalPosition - this.GlobalPosition;
-
-		//reverse the direction
-        Vector2 unit_direction = -direction.Normalized();
-        Velocity = unit_direction * Speed;
-        //GD.Print("Monster is fleeing");
-	}
-
-	public void ChasePlayer()
-	{
-        PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
-		Vector2 direction = playerController.GlobalPosition - this.GlobalPosition;
-		Vector2 unit_vec = direction.Normalized();
-        Velocity = unit_vec * Speed;
-
-        //GD.Print("I'm chasing the player");
-	}
-
-	public void Sleep()
-	{
-		Velocity = new Vector2(0, 0);
-        //GD.Print("I'm sleeping");
-	}
-
-	public void Attack()
-	{
-        PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
-        Vector2 direction = playerController.GlobalPosition - this.GlobalPosition;
-        Vector2 unit_vec = direction.Normalized();
-        Velocity = unit_vec * (Speed);
-        //GD.Print("I'm attacking");
-	}
-
-    public void Dead()
+    /// <summary>
+    /// routine that plays the monster animations associated with each state of the monster.  Called by the
+    /// monster states in the state machine.
+    /// </summary>
+    /// <param name="animation_state_string"></param>
+    public void UpdateAnimation(string animation_state_string)
     {
-		//GD.Print("I'm dead");
-    }
+        // animation
+        AnimatedSprite2D statusSprite = GetNode<AnimatedSprite2D>("StatusAnimatedSprite2D") as AnimatedSprite2D;
+        AnimationPlayer statusAnimationPlayer = GetNode<AnimationPlayer>("StatusAnimatedSprite2D/StatusAnimationPlayer") as AnimationPlayer;
+        AnimationPlayer animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer") as AnimationPlayer;
 
-    public void Stop()
-    {
-		//GD.Print("I'm stopped");
-        Velocity = new Vector2(0, 0);
-    }
+        // end our current animations and reset them to original
+        animationPlayer.Stop();
+        animationPlayer.Play("RESET");
+        statusAnimationPlayer.Stop();
+        statusAnimationPlayer.Play("RESET");
 
-    public void Search()
-    {
-        PlayerController playerController = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
-        RandomNumberGenerator rng = new RandomNumberGenerator();
-        Vector2 unit_vec = (new Vector2(rng.RandfRange(-1, 1), rng.RandfRange(-1, 1))).Normalized();
-        Velocity = unit_vec * (Speed * 0.25f);
-        //GD.Print("I'm searching");
+        // play the new animations
+        animationPlayer.Play(animation_state_string);
+        statusSprite.Play(animation_state_string);
+        statusAnimationPlayer.Play("MoveStatusSprite");
     }
-
-    public void Walk()
-    {
-       //GD.Print("I'm walking");
-    }
-
-    public void Idle()
-    {
-        //GD.Print("I'm idle");
-    }
-    #endregion
 }

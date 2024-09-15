@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class MonsterSpawnerController : MonsterController
@@ -22,13 +21,13 @@ public partial class MonsterSpawnerController : MonsterController
 
     public override void _Ready()
     {
-        Speed = 0.0f;
         HitPoints = 200;
         MaxHitPoints = 200;
 
         // set up the collision layers and masks via the base _Ready() class --
         // this function overrides the base _Ready() function in the MonsterController.cs file
         // so we need to explictly call it -- to set up the collision layers and masks
+
         base._Ready();
 
     }
@@ -141,16 +140,10 @@ public partial class MonsterSpawnerController : MonsterController
 
                 spawn_attempt_count++;
             }
-
-
         } else
         {
             GD.Print("Spawn area shape is some other shape -- not implemented yet");
         }
-
-
-
-
     }
 
     // helper function to find a random spawn location near the spawn with in the spawner's radius
