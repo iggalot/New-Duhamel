@@ -63,7 +63,7 @@ public partial class MonsterAttackState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        GD.Print("I'm attacking");
+        //GD.Print("I'm attacking");
 
         // if our owner is gone or dead, then delete the item from the tree.
         if (controllerOwner == null)

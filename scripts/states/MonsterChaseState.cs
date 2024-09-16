@@ -60,7 +60,7 @@ public partial class MonsterChaseState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        GD.Print("I'm chasing");
+        //GD.Print("I'm chasing");
 
         // if our owner is gone or dead, then delete the item from the tree.
         if (controllerOwner == null)

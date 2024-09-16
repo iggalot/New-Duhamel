@@ -5,13 +5,15 @@ using System;
 /// A base class for all states.  This is used to define the required
 /// behavior for each state.
 /// </summary>
-public partial class MonsterIdleState : State
+public partial class PlayerIdleState : State
 {
-    MonsterController controllerOwner;
+    PlayerController controllerOwner;
 
     private State walkState;
+    private State deadState;
+
     // Constructor
-    public MonsterIdleState()
+    public PlayerIdleState()
     {
 
     }
@@ -20,12 +22,13 @@ public partial class MonsterIdleState : State
     {
         // cast the stateOwner as a MonsterController so that we can access
         // its properties and methods
-        this.controllerOwner = stateOwner as MonsterController;
+        this.controllerOwner = stateOwner as PlayerController;
     }
 
     public override void _Ready()
     {
-        walkState = GetNode<State>("../MonsterWalk");  // set the reference to the idle state node in the Godot tree
+        walkState = GetNode<State>("../PlayerWalk");  // set the reference to the walk state node in the Godot tree
+        deadState = GetNode<State>("../PlayerDead");  // set the reference to the walk state node in the Godot tree
     }
 
     // What happens when the player enters this State?
@@ -33,7 +36,7 @@ public partial class MonsterIdleState : State
     {
         InitializeOwner();
 
-        this.controllerOwner.UpdateAnimation("idle");
+        this.controllerOwner.UpdateAnimation("idle_down");
         return;
     }
 
@@ -46,18 +49,17 @@ public partial class MonsterIdleState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        //GD.Print("im idling");
-
-        // check if the monster is alerted --- if so, go to walk / search mode
-        if (controllerOwner.IsAlerted)
+        GD.Print("player is idle");
+        if (controllerOwner.IsDead)
+        {
+            return deadState;
+        }
+        if(controllerOwner.DirectionUnitVector != Vector2.Zero)
+        {
             return walkState;
-
-        // check the current velocity of the monster -- if its non-zero then the monster is walking
-        if (controllerOwner.DirectionUnitVector != Vector2.Zero)
-            return walkState;
-
-        // otherwise, we are not moving, so set the velocity to zero.
+        }
         controllerOwner.Velocity = Vector2.Zero;
+
         return null;
     }
 

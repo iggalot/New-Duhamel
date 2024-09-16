@@ -6,13 +6,21 @@ public partial class PlayerController : CharacterBody2D
 {
     // property flags for moveable pickable and other things -- used by all objects -- sort of an interface hack
     private AttributesManager attributesManager = new AttributesManager();
+    private StateMachine stateMachine;
+
+    private string state = "idle";
 
     // this players properties
+    private Vector2 CardinalDirection { get; set; } = Vector2.Down;
+    private Vector2 DirectionVector { get; set; } = Vector2.Zero;
+
     private const float default_speed = 300.0f;
     private float friction = 0.25f;
     private float acceleration = 0.3f;
 
+    [Export] public Vector2 DirectionUnitVector = Vector2.Zero;
     [Export] public float HitPoints { get; set; } = 100;
+    [Export] public float WalkSpeed { get; set; } = default_speed;
 
     /// <summary>
     /// Inventory stuff
@@ -28,6 +36,7 @@ public partial class PlayerController : CharacterBody2D
 
     // Node getters and setter
     private AnimatedSprite2D animatedSprite;
+    private Sprite2D sprite;
     private AnimationPlayer animationPlayer;  // for a graphical animation of the character
     private AnimationPlayer playerMessageWindowAnimationPlayer; // for a graphical animation of the player message window
     private ColorRect playerMessageWindow;
@@ -76,6 +85,18 @@ public partial class PlayerController : CharacterBody2D
 
     public override void _Ready()
     {
+        //// set our Godot node and then intialize the state machine with this as the owner.
+        //stateMachine = GetNode<StateMachine>("StateMachine");
+        //stateMachine.Initialize(this);
+
+        //// need to tell the individual states who their owner is
+        //var states = stateMachine.GetChildren();
+        //foreach (var state in states)
+        //{
+        //    // initialize the owners in each state (so that they are cast correctly)
+        //    ((State)state).InitializeOwner();
+        //}
+
         // Set our collision masks
         SetCollisionLayerAndMasks();
 
@@ -84,6 +105,7 @@ public partial class PlayerController : CharacterBody2D
 
         // visuals for the player
         animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        sprite = GetNode<Sprite2D>("Sprite2D");
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         playerMessageWindowAnimationPlayer = GetNode<AnimationPlayer>("PlayerMessageWindow/AnimationPlayer");
         playerMessageWindow = GetNode<ColorRect>("PlayerMessageWindow");
@@ -92,61 +114,78 @@ public partial class PlayerController : CharacterBody2D
 
     public override void _Process(double delta)
     {
-        // is the game over?  do nothing more with the player
-        if (IsGameOver)
+        var direction = DirectionVector;
+        direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+        //this.Direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+        direction.Y = Input.GetActionStrength("down") - Input.GetActionStrength("up");
+
+        Velocity = direction.Normalized() * WalkSpeed;
+        DirectionVector = direction;
+
+        if(SetState() == true || SetDirection() == true)
         {
-            return;
+            UpdateAnimation();
         }
 
-        // decrease the timers
-        if(playerMessageAnimationTimer > 0.0f && playerMessageAnimationTimer <= playerMessageAnimationTimerMax)
-        {
-            playerMessageAnimationTimer -= (float)delta;
-        }
-        // is the player dead?  Show the animation then end the game
-        if (IsDead)
-        {
-            // play the death animation for the character
-            if (DeathAnimationHasPlayed is false)
-            {
-                if (!animationPlayer.IsPlaying() || playerMessageWindowAnimationPlayer.CurrentAnimation != "death")
-                {
-                    DoAnimationPlayer("death"); // send the death animation to the player -- "death" is defined in Godot's AnimationPlayer
-                    DeathAnimationHasPlayed = true;
-                }
-            }
+        //if (SetState() is true || SetDirection() is true)
+        //{
+        //    UpdateAnimation();
+        //}
 
-            // Display the death message popup
-            if (DeathMessagePopupHasPlayed is false)
-            {
-                if (!playerMessageWindowAnimationPlayer.IsPlaying() || playerMessageWindowAnimationPlayer.CurrentAnimation != "message_window_popup")
-                {
-                    DoPlayerMessageWindowAnimation("U r ded!"); // display our death message here
-                    DeathMessagePopupHasPlayed  = true;
-                }
-            }
+        //// decrease the timers
+        //if(playerMessageAnimationTimer > 0.0f && playerMessageAnimationTimer <= playerMessageAnimationTimerMax)
+        //{
+        //    playerMessageAnimationTimer -= (float)delta;
+        //}
+        //// is the player dead?  Show the animation then end the game
+        //if (IsDead)
+        //{
+        //    // play the death animation for the character
+        //    if (DeathAnimationHasPlayed is false)
+        //    {
+        //        if (!animationPlayer.IsPlaying() || playerMessageWindowAnimationPlayer.CurrentAnimation != "death")
+        //        {
+        //            DoAnimationPlayer("death"); // send the death animation to the player -- "death" is defined in Godot's AnimationPlayer
+        //            DeathAnimationHasPlayed = true;
+        //        }
+        //    }
 
-            // are the animations finished? If so, signal the game has ended and dont let the palyer do anything else
-            if(DeathMessagePopupHasPlayed && DeathAnimationHasPlayed && !animationPlayer.IsPlaying() && !playerMessageWindowAnimationPlayer.IsPlaying())
-            {
-                IsGameOver = true;
-                return;
-            }
-        }
+        //    // Display the death message popup
+        //    if (DeathMessagePopupHasPlayed is false)
+        //    {
+        //        if (!playerMessageWindowAnimationPlayer.IsPlaying() || playerMessageWindowAnimationPlayer.CurrentAnimation != "message_window_popup")
+        //        {
+        //            DoPlayerMessageWindowAnimation("U r ded!"); // display our death message here
+        //            DeathMessagePopupHasPlayed  = true;
+        //        }
+        //    }
+
+        //    // are the animations finished? If so, signal the game has ended and dont let the palyer do anything else
+        //    if(DeathMessagePopupHasPlayed && DeathAnimationHasPlayed && !animationPlayer.IsPlaying() && !playerMessageWindowAnimationPlayer.IsPlaying())
+        //    {
+        //        IsGameOver = true;
+        //        return;
+        //    }
+        //}
 
         // Get the input direction and handle the movement/deceleration.
         // As good practice, you should replace UI actions with custom gameplay actions.
         //Velocity = playerMovement.HandleMovement((float)delta);
-        Velocity = processMovement((float)delta);
-        displayMovement();
+        ///Velocity = processMovement((float)delta);
 
-        if(!IsDead && !IsGameOver) {
-            MoveAndSlide();
-        }
+
 
         // rotate our node so its looking at the mouse position
         //LookAt(GetGlobalMousePosition());
 
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        if (!IsDead && !IsGameOver)
+        {
+            MoveAndSlide();
+        }
     }
 
 
@@ -203,13 +242,13 @@ public partial class PlayerController : CharacterBody2D
 
 
     // handles the animation of our movement
-    private void displayMovement()
+    private string GetAnimatedSpriteString()
     {
         Vector2 unit_vec = Velocity.Normalized();
 
         if (unit_vec == Vector2.Zero)
         {
-            animatedSprite.Play("none");
+            return "none";
         }
         else {
             // returns the angle of the vector between 0 and 360 as a positive degrees with respect to +X <1, 0> vector
@@ -217,19 +256,19 @@ public partial class PlayerController : CharacterBody2D
 
             if (angle_degrees < 45)
             {
-                animatedSprite.Play("walk_right");
+                return "walk_right";
             } else if (angle_degrees < 135)
             {
-                animatedSprite.Play("walk_down");
+                return "walk_down";
             } else if (angle_degrees < 225)
             {
-                animatedSprite.Play("walk_left");
+                return "walk_left";
             } else if (angle_degrees < 315)
             {
-                animatedSprite.Play("walk_up");
+                return "walk_up";
             } else
             {
-                animatedSprite.Play("walk_right");
+                return "walk_right";
             }
         }
     }
@@ -362,5 +401,105 @@ public partial class PlayerController : CharacterBody2D
     public void Knockback(Vector2 direction)
     {
         this.GlobalPosition += direction;
+    }
+
+    /// <summary>
+    /// A helper function to update the animation of our character....
+    /// called from the respective states of the state machine
+    /// </summary>
+    /// <param name="animation_state_string"></param>
+    public void UpdatePlayerAnimatedSprite()
+    {
+        AnimatedSprite2D animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D") as AnimatedSprite2D;
+        
+        // end our current sprite animations and reset them to original
+        animatedSprite.Stop();
+        animatedSprite.Play("DEFAULT");
+
+        // play the new animations
+        animatedSprite.Play(GetAnimatedSpriteString());
+    }
+
+    /// <summary>
+    /// A helper function to update the animation of our character....
+    /// called from the respective states of the state machine
+    /// </summary>
+    /// <param name="animation_state_string"></param>
+    public void UpdateAnimation(string animation_state_string)
+    {
+        // animation
+        //animationPlayer.Play(animation_state_string);
+        animationPlayer.Play(animation_state_string);
+    }
+
+    /// <summary>
+    /// A helper function to update the animation of our character....
+    /// called from the respective states of the state machine
+    /// </summary>
+    /// <param name="animation_state_string"></param>
+    public void UpdateAnimation()
+    {
+        GD.Print("Updating animation: " + state + "_" + AnimDirection());
+        // animation
+        //animationPlayer.Play(animation_state_string);
+        animationPlayer.Play(state + "_" + AnimDirection());
+        return;
+    }
+
+
+
+    public bool SetDirection()
+    {
+        Vector2 new_dir = CardinalDirection;
+
+        if(DirectionVector == Vector2.Zero)
+        {
+            return false;
+        }
+
+        if(DirectionVector.Y == 0)
+        {
+            new_dir = (DirectionVector.X < 0) ? Vector2.Left : Vector2.Right;
+        } else if (DirectionVector.X == 0)
+        {
+            new_dir = (DirectionVector.Y < 0) ? Vector2.Up : Vector2.Down;
+        }
+
+        if (new_dir == CardinalDirection)
+        {
+            return false;
+        }
+
+        CardinalDirection = new_dir;
+
+        return true;
+    }
+
+    public bool SetState()
+    {
+        string new_state = (DirectionVector == Vector2.Zero) ? "idle" : "walk";
+        if (new_state == state)
+        {
+            return false;
+        }
+        state = new_state;
+        return true;
+    }
+
+    public string AnimDirection()
+    {
+        if(CardinalDirection == Vector2.Down)
+        {
+            return "down";
+        } else if(CardinalDirection == Vector2.Up)
+        {
+            return "up";
+        } else if (CardinalDirection == Vector2.Left)
+        {
+            return "left";
+        } else
+        {
+            return "right";
+        }
     }
 }
