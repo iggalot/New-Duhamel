@@ -133,9 +133,13 @@ public partial class PlayerController : CharacterBody2D
         // need to declare DirectionVector as a variable here for some reason.  Then after the calcs we can
         // assign it back...not sure why that is.
         var direction = DirectionVector;
-        direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
-        direction.Y = Input.GetActionStrength("down") - Input.GetActionStrength("up");
-        DirectionVector = direction;
+        //direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+        //direction.Y = Input.GetActionStrength("down") - Input.GetActionStrength("up");
+        direction = new Vector2(
+            Input.GetAxis("left", "right"),
+            Input.GetAxis("up", "down")
+        ).Normalized();
+        DirectionVector = direction; ;
 
 
 

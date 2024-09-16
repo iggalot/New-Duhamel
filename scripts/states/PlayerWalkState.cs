@@ -16,6 +16,8 @@ public partial class PlayerWalkState : State
     // references to the connected states of this state
     private State idleState;
     private State deadState;
+    private State attackState;
+
 
 
     //[Export] public float WalkSpeed = 100.0f;
@@ -39,6 +41,7 @@ public partial class PlayerWalkState : State
     {
         idleState = GetNode<State>("../PlayerIdle");  // set the reference to the idle state node in the Godot tree
         deadState = GetNode<State>("../PlayerDead");  // set the reference to the idle state node in the Godot tree
+        attackState = GetNode<State>("../PlayerAttack");  // set the reference to the idle state node in the Godot tree
 
         // get the player character from the scnee tree
         controllerOwner = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
@@ -92,6 +95,14 @@ public partial class PlayerWalkState : State
     // What happens with the input events in this State?
     public override State HandleInput(InputEvent input_event)
     {
+        // if idle and we attack, move to attack state
+        if (input_event.IsActionPressed("attack"))
+        {
+            GD.Print("attacking from walking state");
+
+            return attackState;
+        }
+
         return null;
     }
 }

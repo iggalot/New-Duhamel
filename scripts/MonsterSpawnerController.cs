@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public partial class MonsterSpawnerController : MonsterController
 {
     // timer constants for spawning a new mob
-    private float SpawnTimer = 1.0f;
-    private float SpawnTimerMax = 1.0f;
+    private float SpawnTimer = 10.0f;
+    private float SpawnTimerMax = 10.0f;
 
     // The distance around the controller for which a mob can be spawned
     private float SpawnRadius = 400.0f;

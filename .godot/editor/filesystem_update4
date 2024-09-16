@@ -29,3 +29,4 @@ res://scripts/MonsterController.cs
 res://scripts/ItemController.cs
 res://scripts/states/MonsterAttackState.cs
 res://scenes/state_machine.tscn
+res://scripts/states/PlayerAttackState.cs

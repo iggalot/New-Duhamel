@@ -10,6 +10,8 @@ public partial class PlayerIdleState : State
 
     private State walkState;
     private State deadState;
+    private State attackState;
+
 
     // Constructor
     public PlayerIdleState()
@@ -28,6 +30,8 @@ public partial class PlayerIdleState : State
     {
         walkState = GetNode<State>("../PlayerWalk");  // set the reference to the walk state node in the Godot tree
         deadState = GetNode<State>("../PlayerDead");  // set the reference to the walk state node in the Godot tree
+        deadState = GetNode<State>("../PlayerAttack");  // set the reference to the walk state node in the Godot tree
+
     }
 
     // What happens when the player enters this State?
@@ -72,6 +76,15 @@ public partial class PlayerIdleState : State
     // What happens with the input events in this State?
     public override State HandleInput(InputEvent input_event)
     {
+
+        // if idle and we attack, move to attack state
+        if (input_event.IsActionPressed("attack"))
+        {
+            GD.Print("attacking from idle state");
+
+            return attackState;
+        }
+
         return null;
     }
 }

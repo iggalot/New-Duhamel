@@ -1,4 +1,7 @@
 Sprite2D
+AudioStreamPlayer2D
+Node2D
+AnimationPlayer
 Node
 ColorRect
 Label
@@ -9,6 +12,3 @@ VBoxContainer
 ScrollContainer
 VScrollBar
 HScrollBar
-Control
-ProgressBar
-Node2D
