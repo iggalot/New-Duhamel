@@ -9,7 +9,9 @@ public partial class PlayerWalkState : State
 {
     // the stateOwner from the State class cast into the appropriate controller type -- 
     // in this case to distinguish between player states and monster states
-    private PlayerController player;
+    private PlayerController controllerOwner;
+
+    [Export] public float walk_speed { get; set; } = 0.0f;
 
     // references to the connected states of this state
     private State idleState;
@@ -27,7 +29,9 @@ public partial class PlayerWalkState : State
     {
         // cast the stateOwner as a MonsterController so that we can access
         // its properties and methods
-        player = stateOwner as PlayerController;
+        controllerOwner = stateOwner as PlayerController;
+        walk_speed = controllerOwner.WalkSpeed;
+        
         
     }
 
@@ -37,12 +41,13 @@ public partial class PlayerWalkState : State
         deadState = GetNode<State>("../PlayerDead");  // set the reference to the idle state node in the Godot tree
 
         // get the player character from the scnee tree
-        player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        controllerOwner = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
     }
 
     // What happens when the player enters this State?
     public override void EnterState()
     {
+        this.controllerOwner.UpdateAnimation("walk");
         return;
     }
 
@@ -57,53 +62,25 @@ public partial class PlayerWalkState : State
     {
         GD.Print("player is walking");
 
-        var speed = player.WalkSpeed;
-        State new_state = null;
-        string animation = "walk_down";
-        string animated_sprite_string = "walk_down";
+        var speed = controllerOwner.WalkSpeed;
 
-        if (player.IsDead is true)
+        if (controllerOwner.IsDead is true)
         {
-            speed = 0.0f;
-            new_state = deadState;
-            animated_sprite_string = "dead";
-            animation = "dead";
-        } else if (player.DirectionUnitVector == Vector2.Zero)
+            return deadState;
+        } else if (controllerOwner.DirectionVector == Vector2.Zero)
         {
-            speed = 0.0f;
-            new_state = idleState;
-            animated_sprite_string = "idle_front";
+            return idleState;
         } else
         {
-            speed = player.WalkSpeed;
-            new_state = this;
-            animated_sprite_string = "walk_down";
+            controllerOwner.Velocity = controllerOwner.DirectionVector.Normalized() * walk_speed;
+
+            if(controllerOwner.SetDirection() is true)
+            {
+                controllerOwner.UpdateAnimation("walk");
+            }
         }
 
-        UpdateVelocityAndSpeed(speed);
-
-        //if (player.SetDirection()){
-        //    player.UpdateAnimation("walk_down");
-        //}
-
-        if(animation != String.Empty)
-        {
-            player.UpdateAnimation(animation);
-        }
-
-        player.UpdatePlayerAnimatedSprite();
-
-
-        return new_state;
-    }
-
-    private void UpdateVelocityAndSpeed(float speed)
-    {
-        // get the vector between the monster and the player and compute the unit vector
-        // and then set the velocity.
-        Vector2 direction = player.DirectionUnitVector;  // get the direction to the player.
-        player.DirectionUnitVector = direction.Normalized(); ;
-        player.Velocity = player.DirectionUnitVector * speed;
+        return null;
     }
 
     // What happens during the _PhysicsProcess() update in this State?

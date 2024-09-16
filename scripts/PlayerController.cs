@@ -4,22 +4,25 @@ using System;
 
 public partial class PlayerController : CharacterBody2D
 {
+    [Signal]
+    public delegate void UpdateHealthBarEventHandler(int health, int mac_health);
+
     // property flags for moveable pickable and other things -- used by all objects -- sort of an interface hack
     private AttributesManager attributesManager = new AttributesManager();
     private StateMachine stateMachine;
+    private GameManager gameManager;
 
-    private string state = "idle";
 
     // this players properties
     private Vector2 CardinalDirection { get; set; } = Vector2.Down;
-    private Vector2 DirectionVector { get; set; } = Vector2.Zero;
+    public Vector2 DirectionVector { get; set; } = Vector2.Zero;
 
     private const float default_speed = 300.0f;
     private float friction = 0.25f;
     private float acceleration = 0.3f;
 
-    [Export] public Vector2 DirectionUnitVector = Vector2.Zero;
     [Export] public float HitPoints { get; set; } = 100;
+    [Export] public float MaxHitPoints { get; set; } = 100;
     [Export] public float WalkSpeed { get; set; } = default_speed;
 
     /// <summary>
@@ -35,15 +38,12 @@ public partial class PlayerController : CharacterBody2D
     private PackedScene projectileScene;
 
     // Node getters and setter
-    private AnimatedSprite2D animatedSprite;
     private Sprite2D sprite;
-    private AnimationPlayer animationPlayer;  // for a graphical animation of the character
+    private AnimationPlayer animationPlayer { get; set; }  // for a graphical animation of the character
     private AnimationPlayer playerMessageWindowAnimationPlayer; // for a graphical animation of the player message window
     private ColorRect playerMessageWindow;
 
     // our attributes
-    private float animationTimer = 2.0f;
-    private float animationTimerMax = 2.0f;
     private float playerMessageAnimationTimer = 2.0f;
     private float playerMessageAnimationTimerMax = 2.0f;
 
@@ -51,7 +51,6 @@ public partial class PlayerController : CharacterBody2D
     public bool IsDead = false;
     private bool DeathAnimationHasPlayed = false;
     private bool DeathMessagePopupHasPlayed = false;
-    private bool IsGameOver = false;
 
     public override void _Input(InputEvent @event)
     {
@@ -85,17 +84,23 @@ public partial class PlayerController : CharacterBody2D
 
     public override void _Ready()
     {
-        //// set our Godot node and then intialize the state machine with this as the owner.
-        //stateMachine = GetNode<StateMachine>("StateMachine");
-        //stateMachine.Initialize(this);
+        // get our gameManager object
+        gameManager = GetTree().Root.GetNode<GameManager>("GameManager");
 
-        //// need to tell the individual states who their owner is
-        //var states = stateMachine.GetChildren();
-        //foreach (var state in states)
-        //{
-        //    // initialize the owners in each state (so that they are cast correctly)
-        //    ((State)state).InitializeOwner();
-        //}
+        // set our Godot node and then intialize the state machine with this as the owner.
+        stateMachine = GetNode<StateMachine>("StateMachine");
+        stateMachine.Initialize(this);
+
+        // need to tell the individual states who their owner is
+        var states = stateMachine.GetChildren();
+        foreach (var state in states)
+        {
+            // initialize the owners in each state (so that they are cast correctly)
+            // -- the state machine creates a generic owner, but this function is needed to cast the owner
+            // -- to the proper Character2D type (monster controller or play controller) so that the core
+            // -- state machine functonality can be shared.
+            ((State)state).InitializeOwner();
+        }
 
         // Set our collision masks
         SetCollisionLayerAndMasks();
@@ -104,7 +109,6 @@ public partial class PlayerController : CharacterBody2D
         attributesManager.IsPlayerMoveable = true;
 
         // visuals for the player
-        animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         sprite = GetNode<Sprite2D>("Sprite2D");
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         playerMessageWindowAnimationPlayer = GetNode<AnimationPlayer>("PlayerMessageWindow/AnimationPlayer");
@@ -114,29 +118,27 @@ public partial class PlayerController : CharacterBody2D
 
     public override void _Process(double delta)
     {
-        var direction = DirectionVector;
-        direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
-        //this.Direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
-        direction.Y = Input.GetActionStrength("down") - Input.GetActionStrength("up");
-
-        Velocity = direction.Normalized() * WalkSpeed;
-        DirectionVector = direction;
-
-        if(SetState() == true || SetDirection() == true)
+        // if we are dead, do no further processing
+        if (IsDead)
         {
-            UpdateAnimation();
+            return;
         }
 
-        //if (SetState() is true || SetDirection() is true)
-        //{
-        //    UpdateAnimation();
-        //}
+        // decrease the timers
+        if (playerMessageAnimationTimer > 0.0f && playerMessageAnimationTimer <= playerMessageAnimationTimerMax)
+        {
+            playerMessageAnimationTimer -= (float)delta;
+        }
 
-        //// decrease the timers
-        //if(playerMessageAnimationTimer > 0.0f && playerMessageAnimationTimer <= playerMessageAnimationTimerMax)
-        //{
-        //    playerMessageAnimationTimer -= (float)delta;
-        //}
+        // need to declare DirectionVector as a variable here for some reason.  Then after the calcs we can
+        // assign it back...not sure why that is.
+        var direction = DirectionVector;
+        direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+        direction.Y = Input.GetActionStrength("down") - Input.GetActionStrength("up");
+        DirectionVector = direction;
+
+
+
         //// is the player dead?  Show the animation then end the game
         //if (IsDead)
         //{
@@ -168,26 +170,55 @@ public partial class PlayerController : CharacterBody2D
         //    }
         //}
 
-        // Get the input direction and handle the movement/deceleration.
-        // As good practice, you should replace UI actions with custom gameplay actions.
-        //Velocity = playerMovement.HandleMovement((float)delta);
-        ///Velocity = processMovement((float)delta);
-
-
-
         // rotate our node so its looking at the mouse position
         //LookAt(GetGlobalMousePosition());
-
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (!IsDead && !IsGameOver)
+        // update velocity by processing the movement of the player
+        // -- applying some basic friction and acceleration for moving.
+        Velocity = processMovement();
+
+        // if we aren't dead, or the game isn't over, then we can move the player.
+        if ((IsDead is false) && (gameManager.IsGameOver is false))
         {
             MoveAndSlide();
         }
     }
 
+    /// <summary>
+    /// handles movement characteristics for the player if it is flagged as moveable
+    /// </summary>
+    /// <param name="delta"></param>
+    /// <returns></returns>
+    private Vector2 processMovement()
+    {
+        Vector2 velocity = this.Velocity;
+        Vector2 dir_unit_vec = new Vector2(0, 0);
+
+        // is player flagged as moveable?  if so, then handle the movements
+        if (attributesManager.DoPlayerMoveable != null)
+        {
+            dir_unit_vec = (attributesManager.DoPlayerMoveable).HandleMovement();
+        }
+
+        // apply friction and acceleration to our velocity
+        if (dir_unit_vec != Vector2.Zero)
+        {
+            // if e are moving, then apply acceleration
+            velocity.X = Mathf.Lerp(velocity.X, dir_unit_vec.X * default_speed, acceleration);
+            velocity.Y = Mathf.Lerp(velocity.Y, dir_unit_vec.Y * default_speed, acceleration);
+        }
+        else
+        {
+            // otherwise apply friction to slow us down
+            velocity.X = Mathf.Lerp(velocity.X, 0, friction);
+            velocity.Y = Mathf.Lerp(velocity.Y, 0, friction);
+        }
+
+        return velocity;
+    }
 
     private void ClearAllCollisionLayersAndMasks()
     {
@@ -238,88 +269,6 @@ public partial class PlayerController : CharacterBody2D
         SetCollisionMaskValue((int)LayerMasks.SpellsEnemy, true);
         SetCollisionMaskValue((int)LayerMasks.SpellsOther, true);
         SetCollisionMaskValue((int)LayerMasks.NPCs, true);
-    }
-
-
-    // handles the animation of our movement
-    private string GetAnimatedSpriteString()
-    {
-        Vector2 unit_vec = Velocity.Normalized();
-
-        if (unit_vec == Vector2.Zero)
-        {
-            return "none";
-        }
-        else {
-            // returns the angle of the vector between 0 and 360 as a positive degrees with respect to +X <1, 0> vector
-            float angle_degrees = (360.0f + Mathf.RadToDeg(unit_vec.Angle())) % 360.0f; ;  
-
-            if (angle_degrees < 45)
-            {
-                return "walk_right";
-            } else if (angle_degrees < 135)
-            {
-                return "walk_down";
-            } else if (angle_degrees < 225)
-            {
-                return "walk_left";
-            } else if (angle_degrees < 315)
-            {
-                return "walk_up";
-            } else
-            {
-                return "walk_right";
-            }
-        }
-    }
-
-    /// <summary>
-    /// handles movement characteristics for the player if it is flagged as moveable
-    /// </summary>
-    /// <param name="delta"></param>
-    /// <returns></returns>
-    private Vector2 processMovement(float delta)
-    {
-        Vector2 velocity = this.Velocity;
-        Vector2 dir_unit_vec = new Vector2(0, 0);
-
-        // is player flagged as moveable?  if so, then handle the movements
-        if (attributesManager.DoPlayerMoveable != null)
-        {
-            dir_unit_vec = (attributesManager.DoPlayerMoveable).HandleMovement();
-        }
-
-        // apply friction and acceleration to our velocity
-        if (dir_unit_vec != Vector2.Zero)
-        {
-            // if e are moving, then apply acceleration
-            velocity.X = Mathf.Lerp(velocity.X, dir_unit_vec.X * default_speed, acceleration);
-            velocity.Y = Mathf.Lerp(velocity.Y, dir_unit_vec.Y * default_speed, acceleration);
-        }
-        else
-        {
-            animatedSprite.Play("idle_front");
-            // otherwise apply friction to slow us down
-            velocity.X = Mathf.Lerp(velocity.X, 0, friction);
-            velocity.Y = Mathf.Lerp(velocity.Y, 0, friction);
-        }
-
-        return velocity;
-    }
-
-    /// <summary>
-    /// Plays a character animation
-    /// </summary>
-    /// <param name="anim_name"></param>
-    private void DoAnimationPlayer(string anim_name)
-    {
-        if (animationPlayer.IsPlaying() is false && animationPlayer.CurrentAnimation != anim_name)
-        {
-            animationPlayer.CurrentAnimation = anim_name;
-            animationPlayer.Play();
-            animationTimer = animationTimerMax;
-        }
-
     }
 
     /// <summary>
@@ -381,21 +330,24 @@ public partial class PlayerController : CharacterBody2D
 
     public void Die()
     {
-        GD.Print("Player died");
+        GD.Print("-- Player died");
         IsDead = true;
-        IsGameOver = true;
-        DoAnimationPlayer("death");
+        gameManager.IsGameOver = true; // signal the game is over
     }
 
     public void TakeDamage(float damage)
     {
         HitPoints -= damage;
-        GD.Print("Player took damage of " + damage + ". They have " + HitPoints + " left.");
+        GD.Print("Player took damage of " + damage + ". You have " + HitPoints + " left.");
 
+
+        //GD.Print("Monster took damage");
         if (HitPoints <= 0)
         {
-            Die();  
+            Die();
         }
+
+        EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
     }
 
     public void Knockback(Vector2 direction)
@@ -408,44 +360,15 @@ public partial class PlayerController : CharacterBody2D
     /// called from the respective states of the state machine
     /// </summary>
     /// <param name="animation_state_string"></param>
-    public void UpdatePlayerAnimatedSprite()
+    public void UpdateAnimation(string state)
     {
-        AnimatedSprite2D animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D") as AnimatedSprite2D;
-        
-        // end our current sprite animations and reset them to original
-        animatedSprite.Stop();
-        animatedSprite.Play("DEFAULT");
+        // set our animation node -- gettin this node doesnt work in Ready() for some reason...but it works here...
+        // maybe a timing issue where the player controller isn't full created when READY is called??
+        animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
-        // play the new animations
-        animatedSprite.Play(GetAnimatedSpriteString());
-    }
-
-    /// <summary>
-    /// A helper function to update the animation of our character....
-    /// called from the respective states of the state machine
-    /// </summary>
-    /// <param name="animation_state_string"></param>
-    public void UpdateAnimation(string animation_state_string)
-    {
-        // animation
-        //animationPlayer.Play(animation_state_string);
-        animationPlayer.Play(animation_state_string);
-    }
-
-    /// <summary>
-    /// A helper function to update the animation of our character....
-    /// called from the respective states of the state machine
-    /// </summary>
-    /// <param name="animation_state_string"></param>
-    public void UpdateAnimation()
-    {
-        GD.Print("Updating animation: " + state + "_" + AnimDirection());
-        // animation
-        //animationPlayer.Play(animation_state_string);
         animationPlayer.Play(state + "_" + AnimDirection());
         return;
     }
-
 
 
     public bool SetDirection()
@@ -472,17 +395,6 @@ public partial class PlayerController : CharacterBody2D
 
         CardinalDirection = new_dir;
 
-        return true;
-    }
-
-    public bool SetState()
-    {
-        string new_state = (DirectionVector == Vector2.Zero) ? "idle" : "walk";
-        if (new_state == state)
-        {
-            return false;
-        }
-        state = new_state;
         return true;
     }
 

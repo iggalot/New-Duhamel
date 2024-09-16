@@ -52,6 +52,13 @@ public partial class PlayerDeadState : State
     {
         GD.Print("player is dead");
         controllerOwner.Velocity = Vector2.Zero;
+        controllerOwner.DirectionVector = Vector2.Zero;
+
+        // set our state to dead
+        if (controllerOwner.IsDead)
+        {
+            return this;
+        }
 
         return null;
     }

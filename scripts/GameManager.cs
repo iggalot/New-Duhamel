@@ -34,7 +34,10 @@ public enum LayerMasks
 
 public partial class GameManager : Node2D
 {
-	public PlayerController Player { get; set; }
+    public PlayerController Player { get; set; }
+
+
+    public bool IsGameOver {get; set;} = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -44,9 +47,16 @@ public partial class GameManager : Node2D
         ImportData data = new ImportData();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
+    public override void _Process(double delta)
+    {
+        if(IsGameOver is true){
+            GD.Print("Game Over");
+            GetTree().Paused = true; // pause the game loop cause we are dead now
 
-	}
+            // TODO:  add game over scene here
+
+            return;
+        }
+
+    }
 }

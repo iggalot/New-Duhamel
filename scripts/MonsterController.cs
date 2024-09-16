@@ -72,6 +72,9 @@ public partial class MonsterController : CharacterBody2D
         foreach (var state in states)
         {
             // initialize the owners in each state (so that they are cast correctly)
+            // -- this allows us to share the basic statemachine logic aross different entities
+            // -- with different state configurations.  This needs to be called after the Initialize() on
+            // -- the  state machine.
             ((State)state).InitializeOwner();
         }
 

@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 /// <summary>
 /// A base class for all states.  This is used to define the required
@@ -20,7 +19,7 @@ public partial class PlayerIdleState : State
 
     public override void InitializeOwner()
     {
-        // cast the stateOwner as a MonsterController so that we can access
+        // cast the stateOwner as a PlayerController so that we can access
         // its properties and methods
         this.controllerOwner = stateOwner as PlayerController;
     }
@@ -36,7 +35,7 @@ public partial class PlayerIdleState : State
     {
         InitializeOwner();
 
-        this.controllerOwner.UpdateAnimation("idle_down");
+        this.controllerOwner.UpdateAnimation("idle");
         return;
     }
 
@@ -54,10 +53,11 @@ public partial class PlayerIdleState : State
         {
             return deadState;
         }
-        if(controllerOwner.DirectionUnitVector != Vector2.Zero)
+        if(controllerOwner.DirectionVector != Vector2.Zero)
         {
             return walkState;
         }
+
         controllerOwner.Velocity = Vector2.Zero;
 
         return null;

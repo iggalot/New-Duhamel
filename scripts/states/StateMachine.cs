@@ -1,8 +1,5 @@
 using Godot;
-using Godot.Collections;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class StateMachine : Node
 {
@@ -37,7 +34,7 @@ public partial class StateMachine : Node
 
     public void Initialize(CharacterBody2D character)
     {
-        // find out how many children are states (should be all...but you never now)
+        // find out how many children are states (should be all...but you never know)
         foreach (State c in GetChildren())
         {
             if(c is State)
