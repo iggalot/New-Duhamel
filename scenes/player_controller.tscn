@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=56 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Texture2D" uid="uid://bibaxd28kg4mr" path="res://resources/graphics/320x320_Duhamel_Tileset_1.png" id="1_dnn2q"]
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_ej5oo"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="4_rfswp"]
 [ext_resource type="PackedScene" uid="uid://c67btl4crsql7" path="res://scenes/state_machine.tscn" id="5_4ct3q"]
 [ext_resource type="Script" path="res://scripts/states/PlayerIdleState.cs" id="6_u0yem"]
+[ext_resource type="Script" path="res://scripts/states/StateMachine.cs" id="6_urule"]
 [ext_resource type="Script" path="res://scripts/states/PlayerWalkState.cs" id="7_l7wxf"]
 [ext_resource type="Script" path="res://scripts/states/PlayerDeadState.cs" id="8_1v1rb"]
 
@@ -574,6 +575,7 @@ shape = SubResource("CircleShape2D_igmax")
 [node name="CharacterData" parent="." instance=ExtResource("4_rfswp")]
 
 [node name="StateMachine" parent="." instance=ExtResource("5_4ct3q")]
+script = ExtResource("6_urule")
 
 [node name="PlayerIdle" type="Node" parent="StateMachine"]
 script = ExtResource("6_u0yem")

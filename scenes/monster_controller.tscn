@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
-[ext_resource type="Script" path="res://scripts/StateMachine.cs" id="3_fkbqd"]
+[ext_resource type="Script" path="res://scripts/states/StateMachine.cs" id="3_xlxll"]
 [ext_resource type="Texture2D" uid="uid://nchetx006578" path="res://resources/graphics/duhamel_reaction_sprites.png" id="4_44mec"]
 [ext_resource type="Script" path="res://scripts/states/MonsterIdleState.cs" id="4_a7ia8"]
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="5_ixmue"]
@@ -302,7 +302,7 @@ libraries = {
 }
 
 [node name="StateMachine" type="Node" parent="."]
-script = ExtResource("3_fkbqd")
+script = ExtResource("3_xlxll")
 
 [node name="MonsterIdle" type="Node" parent="StateMachine"]
 script = ExtResource("4_a7ia8")
