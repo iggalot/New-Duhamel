@@ -40,6 +40,7 @@ public partial class StateMachine : Node
             if(c is State)
             {
                 c.stateOwner = character;
+                c.Init();
                 states.Add((State)c);
             }
         }

@@ -14,6 +14,12 @@ public partial class State : Node
         return;
     }
 
+    // what to do when the state is initialized
+    public virtual void Init()
+    {
+        return;
+    }
+
     // overridden by the indiviual states to set the properly casted owner (to distinguish between monsters and players)
     public virtual void InitializeOwner()
     {

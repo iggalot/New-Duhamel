@@ -15,7 +15,7 @@ public partial class PlayerController : CharacterBody2D
 
     // this players properties
     private Vector2 CardinalDirection { get; set; } = Vector2.Down;
-    private Vector2[] DIR_4 {get; set;} = new Vector2[]{ Vector2.Right, Vector2.Down, Vector2.Left, Vector2.Up };
+    public Vector2[] DIR_4 {get; set;} = new Vector2[]{ Vector2.Right, Vector2.Down, Vector2.Left, Vector2.Up };
     public Vector2 DirectionVector { get; set; } = Vector2.Zero;
 
     private const float default_speed = 300.0f;
@@ -87,6 +87,12 @@ public partial class PlayerController : CharacterBody2D
     {
         // get our gameManager object
         gameManager = GetTree().Root.GetNode<GameManager>("GameManager");
+
+        // set our global player variable
+        Node node = GetTree().Root.GetNode<Node>("PlayerManager");
+        GlobalPlayerManager mgr = (GlobalPlayerManager)node;
+        mgr.player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        mgr.player = this;
 
         // set our Godot node and then intialize the state machine with this as the owner.
         stateMachine = GetNode<StateMachine>("StateMachine");

@@ -1,3 +1,5 @@
+res://resources/graphics
+res://globals
 res://scripts/states
 res://scripts/ui/inventory
 res://scenes/ui/inventory
@@ -6,7 +8,6 @@ res://scripts/ui
 res://scenes/ui
 res://scripts
 res://scenes
-res://resources/graphics
 res://scenes/interface
 res://scripts/inventory
 res://

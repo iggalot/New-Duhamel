@@ -5,25 +5,30 @@ using System;
 /// A base class for all states.  This is used to define the required
 /// behavior for each state.
 /// </summary>
-public partial class MonsterIdleState : State
+public partial class MonsterWanderState : State
 {
     // who owns this specific state machine
     MonsterController controllerOwner;
 
-    [Export] string animName = "idle";
-    [Export] string spriteStatusName = "idle"; // name of the sprite animation to use while in this state
+    [Export] string animName = "walk"; // name of the animation to use while in this state
+    [Export] string spriteStatusName = "wander"; // name of the sprite animation to use while in this state
 
+    [Export] float wanderSpeed = 50.0f;
 
     [ExportCategory("AI")]
-    [Export] private float stateDurationMin { get; set; } = 0.5f;
-    [Export] private float stateDurationMax { get; set; } = 1.5f;
+    [Export] private float stateAnimationDuration { get; set; } = 0.7f; // this needs to match duration of the animation clip
+    
+    // How many cycles this state should run for (based on the animation duration);
+    [Export] private int stateCyclesMin { get; set; } = 1;
+    [Export] private int stateCyclesMax { get; set; } = 3;
     [Export] private State nextState { get; set; }
 
     private float timer { get; set; } = 0.0f;
+    private Vector2 direction { get; set; } = Vector2.Zero;
 
-    private State wanderState;
+    private State idleState;
     // Constructor
-    public MonsterIdleState()
+    public MonsterWanderState()
     {
 
     }
@@ -37,29 +42,34 @@ public partial class MonsterIdleState : State
 
     public override void _Ready()
     {
-        // set the after idle state to be a wander state
-        wanderState = GetNode<State>("../MonsterWander");  // set the reference to the idle state node in the Godot tree
-        nextState = wanderState;
+        idleState = GetNode<State>("../MonsterIdle");  // set the reference to the idle state node in the Godot tree
     }
 
     public override void Init()
     {
+        // must initialize the owner to get the casting correct.
+        InitializeOwner();
+        nextState = idleState;
+
         return;
     }
 
     // What happens when the player enters this State?
     public override void EnterState()
     {
-        InitializeOwner();
-
-        controllerOwner.Velocity = Vector2.Zero;
         var rng = new RandomNumberGenerator();
-        timer = rng.RandfRange(stateDurationMin, stateDurationMax); // set a random timer duration
+        timer = rng.RandiRange(stateCyclesMin, stateCyclesMax) * stateAnimationDuration;
+
+        var rand = rng.RandiRange(0, controllerOwner.DIR_4.Length - 1);
+        direction = controllerOwner.DIR_4[rand];
+        controllerOwner.Velocity = direction.Normalized() * wanderSpeed;
+        controllerOwner.SetDirection(direction);
+        GD.Print("wander dir: " + direction.ToString());
+        GD.Print("wander vel: " + controllerOwner.Velocity.ToString());
 
         // update animations and status symbols
         controllerOwner.UpdateAnimation(animName);
         controllerOwner.UpdateStatusSpriteAnimation(spriteStatusName);
-
         return;
     }
 
@@ -72,25 +82,14 @@ public partial class MonsterIdleState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        // countdown our timer
         timer -= (float)delta;
 
-        if(timer <= 0.0f)
+        if (timer < 0)
         {
             return nextState;
         }
-        //GD.Print("im idling");
 
-        //// check if the monster is alerted --- if so, go to walk / search mode
-        //if (controllerOwner.IsAlerted)
-        //    return walkState;
 
-        //// check the current velocity of the monster -- if its non-zero then the monster is walking
-        //if (controllerOwner.DirectionUnitVector != Vector2.Zero)
-        //    return walkState;
-
-        //// otherwise, we are not moving, so set the velocity to zero.
-        //controllerOwner.Velocity = Vector2.Zero;
         return null;
     }
 
