@@ -43,7 +43,7 @@ public partial class PlayerAttackState : State
         attackAnimPlayer = controllerOwner.GetNode<AnimationPlayer>("Sprite2D/AttackEffectSprite/AnimationPlayer");
         attackAudioStreamPlayer = controllerOwner.GetNode<AudioStreamPlayer2D>("Audio/AudioStreamPlayer2D");
 
-        hurtBox = controllerOwner.GetNode<HurtBox>("Interactions/HurtBox");
+        hurtBox = controllerOwner.GetNode<HurtBox>("Sprite2D/AttackHurtBox");
     }
 
     public override void _Ready()

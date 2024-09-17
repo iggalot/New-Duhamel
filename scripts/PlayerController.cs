@@ -15,6 +15,7 @@ public partial class PlayerController : CharacterBody2D
 
     // this players properties
     private Vector2 CardinalDirection { get; set; } = Vector2.Down;
+    private Vector2[] DIR_4 {get; set;} = new Vector2[]{ Vector2.Right, Vector2.Down, Vector2.Left, Vector2.Up };
     public Vector2 DirectionVector { get; set; } = Vector2.Zero;
 
     private const float default_speed = 300.0f;
@@ -377,20 +378,20 @@ public partial class PlayerController : CharacterBody2D
 
     public bool SetDirection()
     {
-        Vector2 new_dir = CardinalDirection;
 
         if(DirectionVector == Vector2.Zero)
         {
             return false;
         }
 
-        if(DirectionVector.Y == 0)
-        {
-            new_dir = (DirectionVector.X < 0) ? Vector2.Left : Vector2.Right;
-        } else if (DirectionVector.X == 0)
-        {
-            new_dir = (DirectionVector.Y < 0) ? Vector2.Up : Vector2.Down;
-        }
+        // convoluted method of getting the direction index
+        float angle = (DirectionVector.Normalized() + CardinalDirection * 0.1f).Angle();
+        float tau_calc = (float)(angle / Math.Tau);
+        float times_dir_id = tau_calc * DIR_4.Length;
+        var final = (Math.Round(times_dir_id) + DIR_4.Length) % DIR_4.Length; // confine us to a valid index range
+
+        int direction_id = (int)final;
+        Vector2 new_dir = DIR_4[direction_id];
 
         if (new_dir == CardinalDirection)
         {
