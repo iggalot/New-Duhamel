@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://dp18l5ry5wfro"]
+[gd_scene load_steps=18 format=4 uid="uid://dp18l5ry5wfro"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.cs" id="1_ibax6"]
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="2_shk4y"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bm8bv2g7cv4v3" path="res://scenes/monster_spawner_controller.tscn" id="5_wjc75"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="7_hvgyk"]
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="8_twufo"]
+[ext_resource type="PackedScene" uid="uid://v5xun7lg8778" path="res://props/plants/plant.tscn" id="9_fxise"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r3yeh"]
 size = Vector2(947, 884)
@@ -147,6 +148,7 @@ physics_layer_0/collision_mask = 4093
 sources/1 = SubResource("TileSetAtlasSource_ukvse")
 
 [node name="GameManager" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_ibax6")
 
 [node name="HUD" type="CanvasLayer" parent="."]
@@ -286,3 +288,15 @@ position = Vector2(407, -307)
 
 [node name="MonsterSpawnerController" parent="MonsterSpawnerController" instance=ExtResource("5_wjc75")]
 position = Vector2(98, 695)
+
+[node name="Plant" parent="." instance=ExtResource("9_fxise")]
+position = Vector2(160, 245)
+
+[node name="Plant2" parent="." instance=ExtResource("9_fxise")]
+position = Vector2(166, 348)
+
+[node name="Plant3" parent="." instance=ExtResource("9_fxise")]
+position = Vector2(316, 280)
+
+[node name="Plant4" parent="." instance=ExtResource("9_fxise")]
+position = Vector2(219, 349)

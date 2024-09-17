@@ -4,8 +4,8 @@ using System;
 
 public partial class PlayerController : CharacterBody2D
 {
-    [Signal]
-    public delegate void UpdateHealthBarEventHandler(int health, int mac_health);
+    [Signal] public delegate void UpdateHealthBarEventHandler(int health, int mac_health);
+    [Signal] public delegate void DirectionChangedEventHandler(Vector2 new_direction);
 
     // property flags for moveable pickable and other things -- used by all objects -- sort of an interface hack
     private AttributesManager attributesManager = new AttributesManager();
@@ -398,6 +398,7 @@ public partial class PlayerController : CharacterBody2D
         }
 
         CardinalDirection = new_dir;
+        EmitSignal(SignalName.DirectionChanged, new_dir); // signal to other nodes that the direction has changed
 
         return true;
     }

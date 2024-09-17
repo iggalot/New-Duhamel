@@ -23,13 +23,13 @@ public partial class PlayerAttackState : State
     private State deadState;
     private State idleState;
 
+    private HurtBox hurtBox;
 
     private bool attacking = false;
 
     // Constructor
     public PlayerAttackState()
     {
-
     }
 
     public override void InitializeOwner()
@@ -43,6 +43,7 @@ public partial class PlayerAttackState : State
         attackAnimPlayer = controllerOwner.GetNode<AnimationPlayer>("Sprite2D/AttackEffectSprite/AnimationPlayer");
         attackAudioStreamPlayer = controllerOwner.GetNode<AudioStreamPlayer2D>("Audio/AudioStreamPlayer2D");
 
+        hurtBox = controllerOwner.GetNode<HurtBox>("Interactions/HurtBox");
     }
 
     public override void _Ready()
@@ -53,7 +54,7 @@ public partial class PlayerAttackState : State
     }
 
     // What happens when the player enters this State?
-    public override void EnterState()
+    public override async void EnterState()
     {
         InitializeOwner();
 
@@ -73,6 +74,11 @@ public partial class PlayerAttackState : State
         // remember to disconnect in ExitState()
         animPlayer.AnimationFinished += EndAttack;
         attacking = true;
+
+        // create a small delay when attacking
+        await ToSignal(GetTree().CreateTimer(0.075f), SceneTreeTimer.SignalName.Timeout);
+
+        hurtBox.Monitoring = true;  // turn on the hurtbox monitoring
         return;
     }
 
@@ -82,6 +88,8 @@ public partial class PlayerAttackState : State
         // disconnect from the signal so we don't get repeated warnings about already being connected
         animPlayer.AnimationFinished -= EndAttack;
         attacking = false;
+
+        hurtBox.Monitoring = false; // turn it back off when we aren't attacking
 
         return;
     }

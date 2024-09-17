@@ -2,33 +2,39 @@ using Godot;
 
 // Payer Layer Mask Definitions
 // 1 - Player
-// 2 - Walls and Doors
-// 3 - Monster
-// 4 - Projectile - Friendly
-// 5 - Projectile - Enemy
-// 6 - Projectile - Other
-// 7 - Item
-// 8 - Interactable
-// 9 - Spells - Friendly
-// 10 - Spells - Enemy
-// 11 - Spells - Other
-// 12 - NPCs
+// 2 - PlayerHurt
+//
+// 5 - Walls and Doors
+//
+// 9 - Monster
+// 15 - Projectile - Friendly
+// 16 - Projectile - Enemy
+// 17 - Projectile - Other
+// 20 - Item
+// 21 - Interactable
+// 25 - Spells - Friendly
+// 26 - Spells - Enemy
+// 27 - Spells - Other
+// 28 - NPCs
+// 29 - Background
+// 30 - Floors
 public enum LayerMasks
 {
     Player = 1,
-    WallsAndDoors = 2,
-    Monster = 3,
-    ProjectileFriendly = 4,
-    ProjectileEnemy = 5,
-    ProjectileOther = 6,
-    Item = 7,
-    Interactable = 8,
-    SpellsFriendly = 9,
-    SpellsEnemy = 10,
-    SpellsOther = 11,
-    NPCs = 11,
-    Background = 12,
-    Floors = 13
+    PlayerHurt = 2,
+    WallsAndDoors = 5,
+    Monster = 9,
+    ProjectileFriendly = 15,
+    ProjectileEnemy = 16,
+    ProjectileOther = 17,
+    Item = 20,
+    Interactable = 21,
+    SpellsFriendly = 25,
+    SpellsEnemy = 26,
+    SpellsOther = 27,
+    NPCs = 28,
+    Background = 29,
+    Floors = 30
 }
 
 
