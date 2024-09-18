@@ -25,6 +25,7 @@ public partial class PlayerController : CharacterBody2D
     [Export] public float HitPoints { get; set; } = 100;
     [Export] public float MaxHitPoints { get; set; } = 100;
     [Export] public float WalkSpeed { get; set; } = default_speed;
+    [Export] public float MeleeDamage { get; set; } = 40.0f;
 
     /// <summary>
     /// Inventory stuff

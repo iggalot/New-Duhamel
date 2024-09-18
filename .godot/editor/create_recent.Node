@@ -1,11 +1,11 @@
-Node
+AnimationPlayer
 Sprite2D
-Node2D
+AudioStreamPlayer2D
+Node
 CollisionShape2D
+Node2D
 StaticBody2D
 Area2D
-AudioStreamPlayer2D
-AnimationPlayer
 ColorRect
 Label
 TextureButton

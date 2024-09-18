@@ -35,12 +35,15 @@ public partial class StateMachine : Node
     public void Initialize(CharacterBody2D character)
     {
         // find out how many children are states (should be all...but you never know)
-        foreach (State c in GetChildren())
+        foreach (Node c in GetChildren())
         {
+            if (c == null)
+                continue;
+
             if(c is State)
             {
-                c.stateOwner = character;
-                c.Init();
+                ((State)c).stateOwner = character;
+                ((State)c).Init();
                 states.Add((State)c);
             }
         }

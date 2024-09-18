@@ -5,30 +5,26 @@ using System;
 /// A base class for all states.  This is used to define the required
 /// behavior for each state.
 /// </summary>
-public partial class MonsterWanderState : State
+public partial class MonsterStunState : State
 {
     // who owns this specific state machine
     MonsterController controllerOwner;
 
-    [Export] string animName = "walk"; // name of the animation to use while in this state
+    [Export] string animName = "stun"; // name of the animation to use while in this state
     [Export] string spriteStatusName = "wander"; // name of the sprite animation to use while in this state
 
-    [Export] float wanderSpeed = 50.0f;
+    [Export] float knockbackSpeed = 300.0f;
+    [Export] float decelerateSpeed = 50.0f;
 
     [ExportCategory("AI")]
-    [Export] private float stateAnimationDuration { get; set; } = 0.7f; // this needs to match duration of the animation clip
-    
-    // How many cycles this state should run for (based on the animation duration);
-    [Export] private int stateCyclesMin { get; set; } = 1;
-    [Export] private int stateCyclesMax { get; set; } = 3;
     [Export] private State nextState { get; set; }
 
-    private float timer { get; set; } = 0.0f;
     private Vector2 direction { get; set; } = Vector2.Zero;
+    private bool animationFinished { get; set; } = false;
 
     private State idleState;
     // Constructor
-    public MonsterWanderState()
+    public MonsterStunState()
     {
 
     }
@@ -49,6 +45,10 @@ public partial class MonsterWanderState : State
     {
         // must initialize the owner to get the casting correct.
         InitializeOwner();
+
+        // connect to the enemy damage signal in monster controller
+        controllerOwner.EnemyDamaged += OnEnemyDamaged;
+
         nextState = idleState;
 
         return;
@@ -57,36 +57,45 @@ public partial class MonsterWanderState : State
     // What happens when the player enters this State?
     public override void EnterState()
     {
-        var rng = new RandomNumberGenerator();
-        timer = rng.RandiRange(stateCyclesMin, stateCyclesMax) * stateAnimationDuration;
+        controllerOwner.IsInvulernable = true;
 
-        var rand = rng.RandiRange(0, controllerOwner.DIR_4.Length - 1);
-        direction = controllerOwner.DIR_4[rand];
-        controllerOwner.Velocity = direction.Normalized() * wanderSpeed;
+        animationFinished = false;
+        direction = controllerOwner.GlobalPosition.DirectionTo(controllerOwner.Player.GlobalPosition);
+
+
         controllerOwner.SetDirection(direction);
+        controllerOwner.Velocity = direction.Normalized() * -knockbackSpeed;
 
         // update animations and status symbols
         controllerOwner.UpdateAnimation(animName);
         controllerOwner.UpdateStatusSpriteAnimation(spriteStatusName);
+
+        controllerOwner.animationPlayer.AnimationFinished += OnAnimationFinished;
         return;
     }
+
 
     // What happens when the player exits this State?
     public override void ExitState()
     {
+        controllerOwner.IsInvulernable = false;
+
+        // unhook the signal for this state -- it will reconnect the next time the state is entered
+        controllerOwner.animationPlayer.AnimationFinished -= OnAnimationFinished;
+        controllerOwner.animationPlayer.Play("RESET"); // reset the animations
+
         return;
     }
 
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        timer -= (float)delta;
-
-        if (timer < 0)
+        if (animationFinished is true)
         {
             return nextState;
         }
 
+        controllerOwner.Velocity -= controllerOwner.Velocity * decelerateSpeed * (float)delta;
 
         return null;
     }
@@ -101,5 +110,15 @@ public partial class MonsterWanderState : State
     public override State HandleInput(InputEvent input_event)
     {
         return null;
+    }
+
+    private void OnEnemyDamaged(float damage)
+    {
+        controllerOwner.stateMachine.ChangeState(this);
+    }
+
+    private void OnAnimationFinished(StringName animName)
+    {
+        animationFinished = true;
     }
 }

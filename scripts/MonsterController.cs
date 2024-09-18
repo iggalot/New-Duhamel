@@ -8,6 +8,7 @@ public partial class MonsterController : CharacterBody2D
     [Signal] public delegate void UpdateHealthBarEventHandler(int health, int mac_health);
     [Signal] public delegate void DirectionChangedEventHandler(Vector2 new_direction);
     [Signal] public delegate void EnemyDamagedEventHandler(float damage);
+    [Signal] public delegate void EnemyKilledEventHandler();
 
     PackedScene monsterScene;
     private static string monsterScenePath = "res://scenes/monster_controller.tscn";
@@ -20,16 +21,18 @@ public partial class MonsterController : CharacterBody2D
     private Vector2 CardinalDirection { get; set; } = Vector2.Down;
     public Vector2[] DIR_4 { get; set; } = new Vector2[] { Vector2.Right, Vector2.Down, Vector2.Left, Vector2.Up };
     public Vector2 DirectionVector { get; set; } = Vector2.Zero;
+    public bool IsInvulernable { get; set; } = false;
+    public PlayerController Player { get; set; }
 
     // property flags for moveable pickable and other things -- used by all objects -- sort of an interface hack
     private AttributesManager attributesManager = new AttributesManager();
     
     // Node from Godot scene tree
     private GameManager gameManager;
-    private StateMachine stateMachine;
-    private AnimationPlayer animationPlayer;
-    private Sprite2D sprite;
-    //private HitBox hitBox;
+    public StateMachine stateMachine;
+    public AnimationPlayer animationPlayer;
+    public Sprite2D sprite;
+    public HitBox hitBox;
 
     private const float default_speed = 100.0f;
     private float friction = 0.25f;
@@ -59,6 +62,9 @@ public partial class MonsterController : CharacterBody2D
 
     [Export] public float HitPoints { get; set; } = 100;
     public float MaxHitPoints { get; set; } = 100;
+    [Export] public float MeleeDamage { get; set; } = 40.0f;
+
+
 
     [Export] public bool IsAlerted { get; set; } = false;
     [Export] public bool IsDead { get; set; } = false;
@@ -89,9 +95,12 @@ public partial class MonsterController : CharacterBody2D
 
     public override void _Ready()
     {
+        Player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+
         gameManager = GetTree().Root.GetNode<GameManager>("GameManager");
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         sprite = GetNode<Sprite2D>("Sprite2D");
+        hitBox = GetNode<HitBox>("HitBox");
 
         // set our Godot node and then intialize the state machine with this as the owner.
         stateMachine = GetNode<StateMachine>("StateMachine");
@@ -99,13 +108,19 @@ public partial class MonsterController : CharacterBody2D
 
         // need to tell the individual states who their owner is
         var states = stateMachine.GetChildren();
-        foreach (var state in states)
+        foreach (Node state in states)
         {
+            State c = state as State;
+            if(c == null)
+            {
+                continue;
+            }
+
             // initialize the owners in each state (so that they are cast correctly)
             // -- this allows us to share the basic statemachine logic aross different entities
             // -- with different state configurations.  This needs to be called after the Initialize() on
             // -- the  state machine.
-            ((State)state).InitializeOwner();
+            c.InitializeOwner();
         }
 
         // set our global player variable
@@ -113,6 +128,9 @@ public partial class MonsterController : CharacterBody2D
         GlobalPlayerManager mgr = (GlobalPlayerManager)node;
         mgr.player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
         player = mgr.player;
+
+        // connect to our HitBox damaged signal
+        hitBox.Damaged += TakeDamage;
 
         // set up the collision layers and masks
         SetCollisionLayerAndMasks();
@@ -132,9 +150,9 @@ public partial class MonsterController : CharacterBody2D
             return;
         } else
         {
-            GD.Print("I'm moving now");
-            GD.Print("My velocity is: " + Velocity);
-            GD.Print("My position is: " + Position);
+            //GD.Print("I'm moving now");
+            //GD.Print("My velocity is: " + Velocity);
+            //GD.Print("My position is: " + Position);
             MoveAndSlide();
         }
     }
@@ -229,27 +247,42 @@ public partial class MonsterController : CharacterBody2D
         return GD.Load<PackedScene>(monsterScenePath);
     }
 
-    public virtual void TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
-        HitPoints -= damage;
-        GD.Print("Monster took damage of " + damage + ". It has " + HitPoints + " left.");
-
-        if(HitPoints < FleeAtHealthPercentage * MaxHitPoints)
+        // if the monster is invulnerable, don't take damage
+        if(IsInvulernable is true)
         {
-            ShouldFlee = true;
+            return;
         }
 
-        //GD.Print("Monster took damage");
-        if (HitPoints <= 0)
+        HitPoints -= damage;
+
+        if(HitPoints > 0)
         {
-            Die();
+            EmitSignal(SignalName.EnemyDamaged, damage);
         } else
         {
-            // monster took damage so now its alert.
-            IsAlerted = true;
+            EmitSignal(SignalName.EnemyKilled);
         }
 
-        EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
+        //GD.Print("Monster took damage of " + damage + ". It has " + HitPoints + " left.");
+
+        //if(HitPoints < FleeAtHealthPercentage * MaxHitPoints)
+        //{
+        //    ShouldFlee = true;
+        //}
+
+        ////GD.Print("Monster took damage");
+        //if (HitPoints <= 0)
+        //{
+        //    Die();
+        //} else
+        //{
+        //    // monster took damage so now its alert.
+        //    IsAlerted = true;
+        //}
+
+        //EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
     }
 
     // apply a knockback effect when a monster is hit.

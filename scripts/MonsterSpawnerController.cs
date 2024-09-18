@@ -154,22 +154,22 @@ public partial class MonsterSpawnerController : MonsterController
         return spawn_loc;
     }
 
-    public override void TakeDamage(float damage)
-    {
-        HitPoints -= damage;
-        GD.Print("Monster spawner took damage of " + damage + ". It has " + HitPoints + " left.");
+    //public override void TakeDamage(float damage)
+    //{
+    //    HitPoints -= damage;
+    //    GD.Print("Monster spawner took damage of " + damage + ". It has " + HitPoints + " left.");
 
-        //GD.Print("Monster took damage");
-        if (HitPoints <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            // monster took damage so now its alert.
-            IsAlerted = true;
-        }
-    }
+    //    //GD.Print("Monster took damage");
+    //    if (HitPoints <= 0)
+    //    {
+    //        Die();
+    //    }
+    //    else
+    //    {
+    //        // monster took damage so now its alert.
+    //        IsAlerted = true;
+    //    }
+    //}
 
     public override void Knockback(Vector2 direction)
     {
