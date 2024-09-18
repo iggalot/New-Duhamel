@@ -43,16 +43,22 @@ public partial class StateMachine : Node
             if(c is State)
             {
                 ((State)c).stateOwner = character;
+                ((State)c).stateMachine = this;
                 ((State)c).Init();
                 states.Add((State)c);
             }
         }
 
-        if(states.Count > 0)
+        // no states in the list
+        if(states.Count == 0)
         {
-            ChangeState(states[0]);
-            ProcessMode = Node.ProcessModeEnum.Inherit; // turn back on the process mode now that we are established
+            return;
         }
+
+        // otherwise
+
+        ChangeState(states[0]);
+        ProcessMode = Node.ProcessModeEnum.Inherit; // turn back on the process mode now that we are established
     }
 
     public void ChangeState(State new_State)

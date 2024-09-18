@@ -7,8 +7,8 @@ public partial class MonsterController : CharacterBody2D
 {
     [Signal] public delegate void UpdateHealthBarEventHandler(int health, int mac_health);
     [Signal] public delegate void DirectionChangedEventHandler(Vector2 new_direction);
-    [Signal] public delegate void EnemyDamagedEventHandler(float damage);
-    [Signal] public delegate void EnemyKilledEventHandler();
+    [Signal] public delegate void EnemyDamagedEventHandler(HurtBox hurt_box);
+    [Signal] public delegate void EnemyKilledEventHandler(HurtBox hurt_box);
 
     PackedScene monsterScene;
     private static string monsterScenePath = "res://scenes/monster_controller.tscn";
@@ -78,18 +78,6 @@ public partial class MonsterController : CharacterBody2D
         {
             GD.Print("Monster alerted is " + !IsAlerted);
             IsAlerted = !IsAlerted;
-        }
-        if (Input.IsActionJustPressed("damage_monster"))
-        {
-            TakeDamage(0.9f * MaxHitPoints);
-        }
-        if (Input.IsActionJustPressed("heal_monster"))
-        {
-            GD.Print("Healing monster");
-            HitPoints = MaxHitPoints;
-
-            // update the health bar via signal
-            EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
         }
     }
 
@@ -247,7 +235,7 @@ public partial class MonsterController : CharacterBody2D
         return GD.Load<PackedScene>(monsterScenePath);
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(HurtBox hurt_box)
     {
         // if the monster is invulnerable, don't take damage
         if(IsInvulernable is true)
@@ -255,14 +243,14 @@ public partial class MonsterController : CharacterBody2D
             return;
         }
 
-        HitPoints -= damage;
+        HitPoints -= hurt_box.damage;
 
         if(HitPoints > 0)
         {
-            EmitSignal(SignalName.EnemyDamaged, damage);
+            EmitSignal(SignalName.EnemyDamaged, hurt_box);
         } else
         {
-            EmitSignal(SignalName.EnemyKilled);
+            EmitSignal(SignalName.EnemyKilled, hurt_box);
         }
 
         //GD.Print("Monster took damage of " + damage + ". It has " + HitPoints + " left.");

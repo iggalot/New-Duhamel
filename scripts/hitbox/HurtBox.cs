@@ -3,6 +3,7 @@ using Godot;
 public partial class HurtBox : Area2D
 {
     [Export] public float damage = 1;
+
     CharacterBody2D ownerController;
 
 
@@ -32,7 +33,7 @@ public partial class HurtBox : Area2D
     {
         if(area is HitBox)
         {
-            ((HitBox)area).TakeDamage(damage);
+            ((HitBox)area).TakeDamage(this);
         }
         return;
     }

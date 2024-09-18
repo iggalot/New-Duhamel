@@ -10,7 +10,7 @@ public partial class Plant : Node
         hitBox.Damaged += TakeDamage;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(HurtBox hurtBox)
     {
         QueueFree();
         return;

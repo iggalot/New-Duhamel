@@ -3,7 +3,7 @@ using System;
 
 public partial class HitBox : Area2D
 {
-    [Signal] public delegate void DamagedEventHandler(float damage);
+    [Signal] public delegate void DamagedEventHandler(HurtBox hurt_box);
 
     public override void _Ready()
     {
@@ -13,9 +13,9 @@ public partial class HitBox : Area2D
     {
     }
 
-    public void TakeDamage(float damage) 
+    public void TakeDamage(HurtBox hurt_box) 
     { 
-        GD.Print( "TakeDamage: " + damage.ToString() );
-        EmitSignal(SignalName.Damaged, damage);
+        //GD.Print( "TakeDamage: " + damage.ToString() );
+        EmitSignal(SignalName.Damaged, hurt_box);
     }
 }

@@ -36,3 +36,4 @@ res://scripts/ui/HealthBar.cs
 res://scripts/MonsterSpawnerController.cs
 res://scripts/states/PlayerWalkState.cs
 res://scripts/states/MonsterDestroyState.cs
+res://scripts/states/PlayerStunState.cs

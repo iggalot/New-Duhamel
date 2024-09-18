@@ -6,6 +6,7 @@ public partial class PlayerController : CharacterBody2D
 {
     [Signal] public delegate void UpdateHealthBarEventHandler(int health, int mac_health);
     [Signal] public delegate void DirectionChangedEventHandler(Vector2 new_direction);
+    [Signal] public delegate void PlayerDamagedEventHandler(HurtBox hurt_box);
 
     // property flags for moveable pickable and other things -- used by all objects -- sort of an interface hack
     private AttributesManager attributesManager = new AttributesManager();
@@ -17,6 +18,8 @@ public partial class PlayerController : CharacterBody2D
     private Vector2 CardinalDirection { get; set; } = Vector2.Down;
     public Vector2[] DIR_4 {get; set;} = new Vector2[]{ Vector2.Right, Vector2.Down, Vector2.Left, Vector2.Up };
     public Vector2 DirectionVector { get; set; } = Vector2.Zero;
+
+    public bool IsInvulnerable { get; set; } = false;
 
     private const float default_speed = 300.0f;
     private float friction = 0.25f;
@@ -40,10 +43,12 @@ public partial class PlayerController : CharacterBody2D
     private PackedScene projectileScene;
 
     // Node getters and setter
-    private Sprite2D sprite;
-    private AnimationPlayer animationPlayer { get; set; }  // for a graphical animation of the character
-    private AnimationPlayer playerMessageWindowAnimationPlayer; // for a graphical animation of the player message window
-    private ColorRect playerMessageWindow;
+    public Sprite2D sprite;
+    public AnimationPlayer animationPlayer { get; set; }  // for a graphical animation of the character
+    public AnimationPlayer effectAnimationPlayer { get; set; }  // for handling our effect animations (blinks, warps, etc)
+    public AnimationPlayer playerMessageWindowAnimationPlayer; // for a graphical animation of the player message window
+    public ColorRect playerMessageWindow;
+    public HitBox hitBox;
 
     // our attributes
     private float playerMessageAnimationTimer = 2.0f;
@@ -119,9 +124,14 @@ public partial class PlayerController : CharacterBody2D
         // visuals for the player
         sprite = GetNode<Sprite2D>("Sprite2D");
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+        effectAnimationPlayer = GetNode<AnimationPlayer>("EffectAnimationPlayer");
         playerMessageWindowAnimationPlayer = GetNode<AnimationPlayer>("PlayerMessageWindow/AnimationPlayer");
         playerMessageWindow = GetNode<ColorRect>("PlayerMessageWindow");
         playerMessageWindow.Visible = false;
+
+        hitBox = GetNode<HitBox>("HitBox");
+        hitBox.Damaged += TakeDamage;
+        UpdateHitPoints(MaxHitPoints);
     }
 
     public override void _Process(double delta)
@@ -347,19 +357,49 @@ public partial class PlayerController : CharacterBody2D
         gameManager.IsGameOver = true; // signal the game is over
     }
 
-    public void TakeDamage(float damage)
-    {
-        HitPoints -= damage;
-        GD.Print("Player took damage of " + damage + ". You have " + HitPoints + " left.");
+    public void TakeDamage(HurtBox hurt_box)
+    { 
+        if(IsInvulnerable is true)
+        {
+            return;
+        }
+        UpdateHitPoints(-hurt_box.damage);
+
+        GD.Print("Player took damage of " + hurt_box.damage + ". You have " + HitPoints + " left.");
 
 
         //GD.Print("Monster took damage");
-        if (HitPoints <= 0)
+        if (HitPoints > 0)
         {
-            Die();
+            EmitSignal(SignalName.PlayerDamaged, hurt_box);
+        } else
+        {
+            GD.Print("Player died");
+            // for now do a full heal on the player
+            EmitSignal(SignalName.PlayerDamaged, hurt_box);
+            UpdateHitPoints(MaxHitPoints);  // instant heal if we die for now
         }
 
         EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
+    }
+
+    public void UpdateHitPoints(float delta)
+    {
+        HitPoints = Math.Clamp(HitPoints + delta, 0, MaxHitPoints);
+        return;
+    }
+
+    public async void MakeInvulnerable(float duration = 1.0f)
+    {
+        IsInvulnerable = true;
+        hitBox.Monitoring = false;
+
+        // cause a delay before we can be hit again
+        await ToSignal(GetTree().CreateTimer(duration), SceneTreeTimer.SignalName.Timeout);
+
+        IsInvulnerable = false;
+        hitBox.Monitoring = true;
+        return;
     }
 
     public void Knockback(Vector2 direction)

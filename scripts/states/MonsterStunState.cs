@@ -19,6 +19,7 @@ public partial class MonsterStunState : State
     [ExportCategory("AI")]
     [Export] private State nextState { get; set; }
 
+    public Vector2 damagePosition { get; set; }
     private Vector2 direction { get; set; } = Vector2.Zero;
     private bool animationFinished { get; set; } = false;
 
@@ -60,7 +61,7 @@ public partial class MonsterStunState : State
         controllerOwner.IsInvulernable = true;
 
         animationFinished = false;
-        direction = controllerOwner.GlobalPosition.DirectionTo(controllerOwner.Player.GlobalPosition);
+        direction = controllerOwner.GlobalPosition.DirectionTo(damagePosition);
 
 
         controllerOwner.SetDirection(direction);
@@ -112,8 +113,9 @@ public partial class MonsterStunState : State
         return null;
     }
 
-    private void OnEnemyDamaged(float damage)
+    private void OnEnemyDamaged(HurtBox hurt_box)
     {
+        damagePosition = hurt_box.GlobalPosition;
         controllerOwner.stateMachine.ChangeState(this);
     }
 

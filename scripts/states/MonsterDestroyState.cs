@@ -18,6 +18,7 @@ public partial class MonsterDestroyState : State
 
     [ExportCategory("AI")]
 
+    public Vector2 damagePosition { get; set; }
     private Vector2 direction { get; set; } = Vector2.Zero;
 
     // Constructor
@@ -52,7 +53,7 @@ public partial class MonsterDestroyState : State
     public override void EnterState()
     {
         controllerOwner.IsInvulernable = true;
-        direction = controllerOwner.GlobalPosition.DirectionTo(controllerOwner.Player.GlobalPosition);
+        direction = controllerOwner.GlobalPosition.DirectionTo(damagePosition);
         controllerOwner.SetDirection(direction);
         controllerOwner.Velocity = direction.Normalized() * -knockbackSpeed;
 
@@ -90,8 +91,9 @@ public partial class MonsterDestroyState : State
         return null;
     }
 
-    private void OnEnemyKilled()
+    private void OnEnemyKilled(HurtBox hurt_box)
     {
+        damagePosition = hurt_box.GlobalPosition;
         controllerOwner.stateMachine.ChangeState(this);
     }
 

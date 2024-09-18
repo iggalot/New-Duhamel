@@ -100,57 +100,57 @@ public partial class ProjectileController : CharacterBody2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-        // update our current position
-        //this._projectileData.ProjectileCurrentPosition = this.GlobalPosition;
+  //      // update our current position
+  //      //this._projectileData.ProjectileCurrentPosition = this.GlobalPosition;
 
-        // set our velicity
-        //this.Velocity = this._projectileData.ProjectileDirection * ((float)delta * this._projectileData.ProjectileSpeed);
-        this.Velocity = this._projectileData.ProjectileDirectionUnitVector * (this._projectileData.ProjectileSpeed);
+  //      // set our velicity
+  //      //this.Velocity = this._projectileData.ProjectileDirection * ((float)delta * this._projectileData.ProjectileSpeed);
+  //      this.Velocity = this._projectileData.ProjectileDirectionUnitVector * (this._projectileData.ProjectileSpeed);
 
 
-        var distance_traveled = Math.Abs(this._projectileData.ProjectileSpawnPosition.DistanceTo(this.GlobalPosition));
+  //      var distance_traveled = Math.Abs(this._projectileData.ProjectileSpawnPosition.DistanceTo(this.GlobalPosition));
 
-		//GD.Print(_projectileData.ToString());
-       // GD.Print(Velocity);
-		//GD.Print("dist traveled: " + distance_traveled);
-        //GD.Print("current pos" + this.GlobalPosition);
+		////GD.Print(_projectileData.ToString());
+  //     // GD.Print(Velocity);
+		////GD.Print("dist traveled: " + distance_traveled);
+  //      //GD.Print("current pos" + this.GlobalPosition);
 
-		if (distance_traveled > this._projectileData.ProjectileRangeDistance)
-		{
-			GD.Print("Projectile out of range, destroying");
-			QueueFree();
-		} else
-		{
-            var collision = MoveAndCollide(Velocity * (float)delta);
+		//if (distance_traveled > this._projectileData.ProjectileRangeDistance)
+		//{
+		//	GD.Print("Projectile out of range, destroying");
+		//	QueueFree();
+		//} else
+		//{
+  //          var collision = MoveAndCollide(Velocity * (float)delta);
 
-            if (collision != null)
-            {
-                var body = collision.GetCollider();
-                GD.Print("Projectile collided with " + body.ToString());
-                GD.Print("body's class is: " + body.GetClass());
+  //          if (collision != null)
+  //          {
+  //              var body = collision.GetCollider();
+  //              GD.Print("Projectile collided with " + body.ToString());
+  //              GD.Print("body's class is: " + body.GetClass());
 
-                if (body is PlayerController)
-                {
-                    var player = (PlayerController)body;
-                    player.TakeDamage(_projectileData.ProjectileDamage);
-                    player.Knockback(_projectileData.ProjectileDirectionUnitVector * _projectileData.ProjectileKnockbackDistance);
-                } else if (body is MonsterController)
-                {
-                    var monster = (MonsterController)body;
-                    monster.TakeDamage(_projectileData.ProjectileDamage);
-                    monster.Knockback(_projectileData.ProjectileDirectionUnitVector * _projectileData.ProjectileKnockbackDistance);
-                } else if (body is MonsterSpawnerController)
-                {
-                    var _monster_spawner = (MonsterSpawnerController)body;
-                    GD.Print(" hit a monster spawner controller");
-                } else
-                {
-                    // TODO:
-                    GD.Print("decide what to do when an object of type " + body.GetClass() + " is hit by a projectile");
-                }
+  //              if (body is PlayerController)
+  //              {
+  //                  var player = (PlayerController)body;
+  //                  player.TakeDamage(_projectileData.ProjectileDamage);
+  //                  player.Knockback(_projectileData.ProjectileDirectionUnitVector * _projectileData.ProjectileKnockbackDistance);
+  //              } else if (body is MonsterController)
+  //              {
+  //                  var monster = (MonsterController)body;
+  //                  monster.TakeDamage(_projectileData.ProjectileDamage);
+  //                  monster.Knockback(_projectileData.ProjectileDirectionUnitVector * _projectileData.ProjectileKnockbackDistance);
+  //              } else if (body is MonsterSpawnerController)
+  //              {
+  //                  var _monster_spawner = (MonsterSpawnerController)body;
+  //                  GD.Print(" hit a monster spawner controller");
+  //              } else
+  //              {
+  //                  // TODO:
+  //                  GD.Print("decide what to do when an object of type " + body.GetClass() + " is hit by a projectile");
+  //              }
 
-                QueueFree();
-            }
-        }
+  //              QueueFree();
+  //          }
+  //      }
     }
 }

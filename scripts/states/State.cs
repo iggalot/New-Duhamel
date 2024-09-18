@@ -8,6 +8,7 @@ using System;
 public partial class State : Node
 {
     public CharacterBody2D stateOwner { get; set; } = null;
+    public StateMachine stateMachine { get; set; } = null;
 
     public override void _Ready()
     {
