@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://j302rqwol1ll"]
+
+[ext_resource type="Texture2D" uid="uid://bpto0ahwa0le2" path="res://resources/graphics/GUI/hud/gui-health.png" id="1_kqinc"]
+[ext_resource type="Script" path="res://scripts/ui/hud/PlayerHud.cs" id="1_yym00"]
+
+[node name="PlayerHUD" type="CanvasLayer"]
+script = ExtResource("1_yym00")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Control"]
+position = Vector2(971, 13)
+texture = ExtResource("1_kqinc")
+region_enabled = true
+region_rect = Rect2(29.0254, 0, 33.9746, 8.83672)
+
+[node name="HFlowContainer" type="HFlowContainer" parent="Control"]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 22.0
+offset_right = 1088.0
+offset_bottom = 83.0
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 2
+alignment = 1

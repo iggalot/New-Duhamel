@@ -112,10 +112,10 @@ public partial class MonsterController : CharacterBody2D
         }
 
         // set our global player variable
-        Node node = GetTree().Root.GetNode<Node>("PlayerManager");
-        GlobalPlayerManager mgr = (GlobalPlayerManager)node;
-        mgr.player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
-        player = mgr.player;
+        //Node node = GetTree().Root.GetNode<Node>("PlayerManager");
+        //GlobalPlayerManager mgr = (GlobalPlayerManager)node;
+        //mgr.player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        player = GlobalPlayerManager.Instance.player;
 
         // connect to our HitBox damaged signal
         hitBox.Damaged += TakeDamage;

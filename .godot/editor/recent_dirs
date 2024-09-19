@@ -1,3 +1,4 @@
+res://scenes/ui
 res://resources/graphics
 res://globals
 res://scripts/states
@@ -5,7 +6,6 @@ res://scripts/ui/inventory
 res://scenes/ui/inventory
 res://resources/fonts/kirifont
 res://scripts/ui
-res://scenes/ui
 res://scripts
 res://scenes
 res://scenes/interface

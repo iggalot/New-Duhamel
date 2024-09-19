@@ -26,7 +26,7 @@ public partial class PlayerController : CharacterBody2D
     private float acceleration = 0.3f;
 
     [Export] public float HitPoints { get; set; } = 100;
-    [Export] public float MaxHitPoints { get; set; } = 100;
+    [Export] public float MaxHitPoints { get; set; } = 300;
     [Export] public float WalkSpeed { get; set; } = default_speed;
     [Export] public float MeleeDamage { get; set; } = 40.0f;
 
@@ -94,11 +94,13 @@ public partial class PlayerController : CharacterBody2D
         // get our gameManager object
         gameManager = GetTree().Root.GetNode<GameManager>("GameManager");
 
-        // set our global player variable
-        Node node = GetTree().Root.GetNode<Node>("PlayerManager");
-        GlobalPlayerManager mgr = (GlobalPlayerManager)node;
-        mgr.player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
-        mgr.player = this;
+        // set our global player variable so we can find it in the future from other scripts
+        GlobalPlayerManager.Instance.player = this;
+
+        //Node node = GetTree().Root.GetNode<Node>("PlayerManager");
+        //GlobalPlayerManager mgr = (GlobalPlayerManager)node;
+        //mgr.player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        //mgr.player = this;
 
         // set our Godot node and then intialize the state machine with this as the owner.
         stateMachine = GetNode<StateMachine>("StateMachine");
@@ -131,7 +133,11 @@ public partial class PlayerController : CharacterBody2D
 
         hitBox = GetNode<HitBox>("HitBox");
         hitBox.Damaged += TakeDamage;
-        UpdateHitPoints(MaxHitPoints);
+
+        //// This is a full heal for our player
+        //UpdateHitPoints(MaxHitPoints);
+
+        return;
     }
 
     public override void _Process(double delta)
@@ -386,6 +392,9 @@ public partial class PlayerController : CharacterBody2D
     public void UpdateHitPoints(float delta)
     {
         HitPoints = Math.Clamp(HitPoints + delta, 0, MaxHitPoints);
+
+        if (GlobalPlayerManager.Instance.playerHud != null)
+            GlobalPlayerManager.Instance.playerHud.UpdateHitPoints(HitPoints, MaxHitPoints);
         return;
     }
 

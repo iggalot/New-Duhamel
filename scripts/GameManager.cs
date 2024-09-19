@@ -41,17 +41,23 @@ public enum LayerMasks
 public partial class GameManager : Node2D
 {
     public PlayerController Player { get; set; }
+    public PlayerHud playerHud { get; set; }
 
 
     public bool IsGameOver {get; set;} = false;
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
         Player = GetNode<PlayerController>("PlayerController");
+        playerHud = GetNode<PlayerHud>("PlayerHUD");
+
+        // Set the global variables here
+        GlobalPlayerManager.Instance.player = Player;
+        GlobalPlayerManager.Instance.playerHud = playerHud;
 
         ImportData data = new ImportData();
-	}
+    }
 
     public override void _Process(double delta)
     {
