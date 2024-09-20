@@ -1,8 +1,9 @@
-res://scripts
+res://levels/scripts
+res://globals
 res://levels/Area00
+res://scripts
 res://scenes/ui
 res://resources/graphics
-res://globals
 res://scripts/states
 res://scripts/ui/inventory
 res://scenes/ui/inventory

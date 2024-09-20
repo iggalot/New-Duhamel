@@ -11,12 +11,13 @@ config_version=5
 [application]
 
 config/name="New Duhamel"
-run/main_scene="res://scenes/game_manager.tscn"
+run/main_scene="res://levels/Area00/00.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
+LevelManager="*res://globals/GlobalLevelManager.cs"
 GameManager="*res://scripts/GameManager.cs"
 ImportData="*res://scripts/ImportData.cs"
 PlayerManager="*res://globals/GlobalPlayerManager.cs"
