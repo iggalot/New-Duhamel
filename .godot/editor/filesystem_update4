@@ -47,3 +47,5 @@ res://scripts/states/PlayerStunState.cs
 res://levels/scripts/LevelTileMap.cs
 res://scripts/states/MonsterStunState.cs
 res://resources/data/ProjectileData.cs
+res://levels/scripts/LevelTransition.cs
+res://levels/level_transition.tscn

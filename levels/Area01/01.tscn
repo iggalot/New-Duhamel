@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://b3o6sgu2mok8l"]
+[gd_scene load_steps=10 format=4 uid="uid://b3o6sgu2mok8l"]
 
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_ewamd"]
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_q8ywe"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://scenes/monster_controller.tscn" id="3_0fw3m"]
 [ext_resource type="PackedScene" uid="uid://ctv8m3ld3irys" path="res://scenes/item_controller.tscn" id="4_qcget"]
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="5_k6euc"]
+[ext_resource type="PackedScene" uid="uid://bpqiml3cwfeh6" path="res://levels/level_transition.tscn" id="7_gpkpv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3hvvb"]
 texture = ExtResource("1_q8ywe")
@@ -140,3 +141,9 @@ position = Vector2(301, 197)
 
 [node name="PlayerSpawn" parent="." instance=ExtResource("5_k6euc")]
 position = Vector2(579, 372)
+
+[node name="LevelTransition" parent="." instance=ExtResource("7_gpkpv")]
+position = Vector2(128, 272)
+level = "res://levels/Area00/00.tscn"
+targetTransitionArea = "LevelTransition2"
+size = 4

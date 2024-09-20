@@ -1,7 +1,8 @@
-res://levels/scripts
-res://levels/Area02
-res://globals
 res://levels/Area00
+res://levels/Area02
+res://levels/Area01
+res://levels/scripts
+res://globals
 res://scripts
 res://scenes/ui
 res://resources/graphics
