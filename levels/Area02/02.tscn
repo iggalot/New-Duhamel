@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=4 uid="uid://cs36rkjdel4u6"]
 
-[ext_resource type="Script" path="res://levels/scripts/LevelTileMap.cs" id="1_uqf0a"]
+[ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_ve8no"]
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="2_ptiub"]
 [ext_resource type="PackedScene" uid="uid://j302rqwol1ll" path="res://scenes/ui/player_hud.tscn" id="3_i06vh"]
 [ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://scenes/monster_controller.tscn" id="4_3gl1f"]
@@ -114,7 +114,7 @@ texture = ExtResource("2_ptiub")
 sources/0 = SubResource("TileSetAtlasSource_3hvvb")
 
 [node name="01" type="Node2D"]
-script = ExtResource("1_uqf0a")
+script = ExtResource("1_ve8no")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 z_index = -1

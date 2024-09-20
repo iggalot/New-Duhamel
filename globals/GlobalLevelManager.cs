@@ -10,6 +10,16 @@ public partial class GlobalLevelManager : Node
 
     public Vector2[] currentTileMapBounds { get; set; }
 
+    // The tilemap bounds extents as a VEctor2[2] for upper left and lower right corner of bounding box
+    public Vector2[] bounds { get; set; }
+
+    public override void _Ready()
+    {
+        //bounds = GetTileMapBounds();
+        //ChangeTileMapBounds(GetTileMapBounds());
+    }
+
+
 
     public override void _EnterTree()
     {
