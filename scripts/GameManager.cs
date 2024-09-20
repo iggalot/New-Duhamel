@@ -40,35 +40,44 @@ public enum LayerMasks
 
 public partial class GameManager : Node2D
 {
-    public PlayerController Player { get; set; }
-    public PlayerHud playerHud { get; set; }
+    private static GameManager _instance;
+    public static GameManager Instance => _instance;
 
 
     public bool IsGameOver {get; set;} = false;
 
+    public override void _EnterTree()
+    {
+        if (_instance != null)
+        {
+            this.QueueFree(); // The singleton is already loaded, kill this instance
+        }
+        _instance = this;
+    }
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        Player = GetNode<PlayerController>("PlayerController");
-        playerHud = GetNode<PlayerHud>("PlayerHUD");
+        //Player = GetNode<PlayerController>("PlayerController");
+        //playerHud = GetNode<PlayerHud>("PlayerHUD");
 
-        // Set the global variables here
-        GlobalPlayerManager.Instance.player = Player;
-        GlobalPlayerManager.Instance.playerHud = playerHud;
+        //// Set the global variables here
+        //GlobalPlayerManager.Instance.player = Player;
+        //GlobalPlayerManager.Instance.playerHud = playerHud;
 
         ImportData data = new ImportData();
     }
 
     public override void _Process(double delta)
     {
-        if(IsGameOver is true){
-            GD.Print("Game Over");
-            GetTree().Paused = true; // pause the game loop cause we are dead now
+        //if(IsGameOver is true){
+        //    GD.Print("Game Over");
+        //    GetTree().Paused = true; // pause the game loop cause we are dead now
 
-            // TODO:  add game over scene here
+        //    // TODO:  add game over scene here
 
-            return;
-        }
+        //    return;
+        //}
 
     }
 }

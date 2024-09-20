@@ -41,7 +41,8 @@ public partial class MonsterChaseState : State
         deadState = GetNode<State>("../MonsterDead");  // set the reference to the idle state node in the Godot tree
 
         // get the player character from the scnee tree
-        player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        player = GlobalPlayerManager.Instance.player;
+
     }
 
     // What happens when the player enters this State?

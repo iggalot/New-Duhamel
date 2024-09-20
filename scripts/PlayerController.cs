@@ -11,7 +11,7 @@ public partial class PlayerController : CharacterBody2D
     // property flags for moveable pickable and other things -- used by all objects -- sort of an interface hack
     private AttributesManager attributesManager = new AttributesManager();
     private StateMachine stateMachine;
-    private GameManager gameManager;
+ //   private GameManager gameManager;
 
 
     // this players properties
@@ -92,7 +92,7 @@ public partial class PlayerController : CharacterBody2D
     public override void _Ready()
     {
         // get our gameManager object
-        gameManager = GetTree().Root.GetNode<GameManager>("GameManager");
+ //       gameManager = GetTree().Root.GetNode<GameManager>("GameManager");
 
         // set our global player variable so we can find it in the future from other scripts
         GlobalPlayerManager.Instance.player = this;
@@ -208,11 +208,7 @@ public partial class PlayerController : CharacterBody2D
         // -- applying some basic friction and acceleration for moving.
         Velocity = processMovement();
 
-        // if we aren't dead, or the game isn't over, then we can move the player.
-        if ((IsDead is false) && (gameManager.IsGameOver is false))
-        {
-            MoveAndSlide();
-        }
+        MoveAndSlide();
     }
 
     /// <summary>
@@ -360,7 +356,7 @@ public partial class PlayerController : CharacterBody2D
     {
         GD.Print("-- Player died");
         IsDead = true;
-        gameManager.IsGameOver = true; // signal the game is over
+        GameManager.Instance.IsGameOver = true; // signal the game is over
     }
 
     public void TakeDamage(HurtBox hurt_box)

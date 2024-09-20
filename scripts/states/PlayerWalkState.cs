@@ -44,7 +44,7 @@ public partial class PlayerWalkState : State
         attackState = GetNode<State>("../PlayerAttack");  // set the reference to the idle state node in the Godot tree
 
         // get the player character from the scnee tree
-        controllerOwner = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        controllerOwner = GetTree().Root.GetNode<PlayerController>("PlayerManager/PlayerController");
     }
 
     // What happens when the player enters this State?

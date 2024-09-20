@@ -83,7 +83,7 @@ public partial class MonsterController : CharacterBody2D
 
     public override void _Ready()
     {
-        Player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        Player = GlobalPlayerManager.Instance.player;
 
         gameManager = GetTree().Root.GetNode<GameManager>("GameManager");
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");

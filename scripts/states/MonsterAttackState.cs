@@ -44,7 +44,7 @@ public partial class MonsterAttackState : State
 
 
         // get the player character from the scnee tree
-        player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        player = GlobalPlayerManager.Instance.player;
     }
 
     // What happens when the player enters this State?

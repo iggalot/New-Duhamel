@@ -44,7 +44,7 @@ public partial class PlayerStunState : State
         idleState = GetNode<State>("../PlayerIdle");  // set the reference to the idle state node in the Godot tree
 
         // get the player character from the scnee tree
-        controllerOwner = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        controllerOwner = GetTree().Root.GetNode<PlayerController>("PlayerManager/PlayerController");
     }
 
     public override void Init()

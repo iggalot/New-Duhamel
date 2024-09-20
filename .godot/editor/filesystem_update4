@@ -1,3 +1,8 @@
+res://scenes/monster_controller.tscn
+res://scenes/player_controller.tscn
+res://scenes/game_manager.tscn
+res://levels/Area01/01.tscn
+res://levels/Area00/00.tscn
 res://props/plants/Plant.cs
 res://resources/data/CharacterData.cs
 res://scripts/states/PlayerStunState.cs
@@ -36,8 +41,5 @@ res://scripts/states/PlayerAttackState.cs
 res://scripts/states/MonsterChaseState.cs
 res://scripts/ui/hud/PlayerHud.cs
 res://scripts/PlayerInteractionsHost.cs
-res://scenes/monster_controller.tscn
-res://scenes/player_controller.tscn
-res://scenes/game_manager.tscn
-res://scenes/ui/player_hud.tscn
-res://scenes/ui/heart_gui.tscn
+res://levels/player_spawn.tscn
+res://levels/scripts/PlayerSpawn.cs

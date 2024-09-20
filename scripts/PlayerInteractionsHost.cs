@@ -6,7 +6,7 @@ public partial class PlayerInteractionsHost : Node2D
     PlayerController player;
     public override void _Ready()
     {
-        player = GetTree().Root.GetNode<PlayerController>("GameManager/PlayerController");
+        player = GetTree().Root.GetNode<PlayerController>("PlayerManager/PlayerController");
         player.DirectionChanged += UpdateDirection;
     }
 
