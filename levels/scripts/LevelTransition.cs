@@ -47,10 +47,73 @@ public partial class LevelTransition : Area2D
     }// node getters and setters
         CollisionShape2D collisionShape { get; set; }
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         // set the node getters and setters
         collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
+
+        UpdateArea();
+
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+
+        Monitoring = false;
+        
+        PlacePlayer();
+
+        await ToSignal(GlobalLevelManager.Instance, "LevelLoaded");
+
+        Monitoring = true;
+
+        BodyEntered += OnPlayerEntered;
+
+        return;
+    }
+
+    public void OnPlayerEntered(Node2D p)
+    {
+        GlobalLevelManager.Instance.LoadNewLevel(level, targetTransitionArea, GetOffset());
+        return;
+    }
+
+    public void PlacePlayer()
+    {
+        if(this.Name != GlobalLevelManager.Instance.targetTransition)
+        {
+            return;
+        }
+
+        GlobalPlayerManager.Instance.SetPlayerPosition(GlobalPosition + GlobalLevelManager.Instance.positionOffset);
+    }
+
+    public Vector2 GetOffset()
+    {
+        Vector2 offset = Vector2.Zero;
+        Vector2 player_position = GlobalPlayerManager.Instance.player.GlobalPosition;
+        
+        if(side == SIDE.LEFT || side == SIDE.RIGHT)
+        {
+            offset.Y = player_position.Y - GlobalPosition.Y;
+            offset.X = 16;
+            if (side == SIDE.LEFT)
+            {
+                offset.X *= -1;
+            }
+        }
+        else
+        {
+            offset.X = player_position.X - GlobalPosition.X;
+            offset.Y = 16;
+            if (side == SIDE.TOP)
+            {
+                offset.Y *= -1;
+            }
+        }
+
+
+        return offset;
     }
 
     public void UpdateArea()

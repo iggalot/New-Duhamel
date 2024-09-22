@@ -1,9 +1,10 @@
-res://levels/Area02/02.tscn
-res://levels/Area00/00.tscn
-res://levels/Area01/01.tscn
 res://scenes/monster_controller.tscn
 res://scenes/player_controller.tscn
 res://scenes/game_manager.tscn
+res://levels/Area02/02.tscn
+res://levels/Area00/00.tscn
+res://levels/Area01/01.tscn
+res://levels/level_transition.tscn
 res://globals/GlobalPlayerManager.cs
 res://levels/scripts/Level.cs
 res://scripts/states/PlayerIdleState.cs
@@ -44,8 +45,7 @@ res://scripts/ui/hud/PlayerHud.cs
 res://scripts/PlayerController.cs
 res://resources/data/CharacterData.cs
 res://scripts/states/PlayerStunState.cs
-res://levels/scripts/LevelTileMap.cs
+res://levels/scripts/LevelTransition.cs
 res://scripts/states/MonsterStunState.cs
 res://resources/data/ProjectileData.cs
-res://levels/scripts/LevelTransition.cs
-res://levels/level_transition.tscn
+res://scenes/junk scene.tscn

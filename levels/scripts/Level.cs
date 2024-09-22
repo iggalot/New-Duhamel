@@ -6,14 +6,29 @@ public partial class Level : Node2D
     public override void _Ready()
     {
         this.YSortEnabled = true;
-        GlobalPlayerManager.Instance.SetAsParent(this);
+//        GlobalPlayerManager.Instance.SetAsParent(this);
         
         // setup the camera limits based on the tilemap boundary -- this is a merged hack of the original TileMapLayer script
         // -- we had to combine that script into this one since GODOT only allows one script file per object
         GlobalLevelManager.Instance.bounds = GetTileMapBounds();
         GlobalLevelManager.Instance.ChangeTileMapBounds(GlobalLevelManager.Instance.bounds);
         
+        GlobalLevelManager.Instance.LevelLoadStarted += FreeLevel;
+
         return;
+    }
+
+
+
+    public void FreeLevel()
+    {
+        // TODO there is a bug here that THIS can be referencing an object that is already deleted...not sure really why that is.
+
+        //if (IsInstanceIdValid(this.GetInstanceId()))
+        //    return;
+
+        GlobalPlayerManager.Instance.UnparentPlayer(this);
+        QueueFree();
     }
 
     /// <summary>
