@@ -33,7 +33,7 @@ public partial class GlobalLevelManager : Node
         targetTransition = target_transition;
         positionOffset = position_offset;
 
-        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame); // level transition is not instant
+        await SceneTransition.Instance.FadeOut();
 
         EmitSignal(SignalName.LevelLoadStarted);
 
@@ -41,7 +41,7 @@ public partial class GlobalLevelManager : Node
 
         GetTree().ChangeSceneToFile(level_path);
 
-        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame); // level transition is not instant
+        await SceneTransition.Instance.FadeIn(); // level transition is not instant
 
         GetTree().Paused = false;
 

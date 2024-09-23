@@ -21,6 +21,7 @@ LevelManager="*res://globals/GlobalLevelManager.cs"
 GameManager="*res://scripts/GameManager.cs"
 ImportData="*res://scripts/ImportData.cs"
 PlayerManager="*res://globals/GlobalPlayerManager.cs"
+SceneTransition="*res://scenes/ui/scene_transition/scene_transition.tscn"
 
 [display]
 
