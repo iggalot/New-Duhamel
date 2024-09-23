@@ -3,6 +3,9 @@ using System;
 
 public partial class PauseMenu : CanvasLayer
 {
+    [Signal] public delegate void ShownEventHandler();
+    [Signal] public delegate void HiddenEventHandler();
+
     Button buttonSave { get; set; }
     Button buttonLoad { get; set; }
 
@@ -26,8 +29,8 @@ public partial class PauseMenu : CanvasLayer
         HidePauseMenu();  // hide the menu as soon as this node loads
 
         // setup the getters for our button nodes
-        buttonSave = GetNode<Button>("HBoxContainer/Button_Save");
-        buttonLoad = GetNode<Button>("HBoxContainer/Button_Load");
+        buttonSave = GetNode<Button>("Control/HBoxContainer/Button_Save");
+        buttonLoad = GetNode<Button>("Control/HBoxContainer/Button_Load");
 
         buttonSave.Pressed += OnSavePressed;
         buttonLoad.Pressed += OnLoadPressed;
@@ -54,7 +57,7 @@ public partial class PauseMenu : CanvasLayer
         GetTree().Paused = true;
         Visible = true;
         IsPaused = true;
-        buttonSave.GrabFocus(); // focus the attention to the save button
+        EmitSignal(SignalName.Shown);
     }
 
     public void HidePauseMenu()
@@ -62,6 +65,7 @@ public partial class PauseMenu : CanvasLayer
         GetTree().Paused = false;
         Visible = false;
         IsPaused = false;
+        EmitSignal(SignalName.Hidden);
     }
 
     public void OnSavePressed()

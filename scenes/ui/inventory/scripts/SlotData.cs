@@ -2,6 +2,6 @@ using Godot;
 
 public partial class SlotData : Resource
 {
-    [Export] ItemData item_data;
-    [Export] int item_quantity = 0;
+    [Export] public ItemData item_data { get; set; } =  new ItemData();
+    [Export] public int item_quantity { get; set; } = 0;
 }

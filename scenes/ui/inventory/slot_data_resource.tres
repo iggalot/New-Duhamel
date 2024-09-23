@@ -1,9 +1,0 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dflpyrxfj46sr"]
-
-[ext_resource type="Resource" uid="uid://cydfao5w13jfq" path="res://items/gem.tres" id="1_3qcn3"]
-[ext_resource type="Script" path="res://scenes/ui/inventory/scripts/SlotData.cs" id="1_wh32r"]
-
-[resource]
-script = ExtResource("1_wh32r")
-item_data = ExtResource("1_3qcn3")
-item_quantity = 30

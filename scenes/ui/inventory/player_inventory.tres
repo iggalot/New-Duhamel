@@ -1,8 +1,24 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://co2x321kboads"]
+[gd_resource type="Resource" load_steps=18 format=3 uid="uid://co2x321kboads"]
 
 [ext_resource type="Script" path="res://scenes/ui/inventory/scripts/InventoryData.cs" id="1_p7wsf"]
-[ext_resource type="Resource" uid="uid://dflpyrxfj46sr" path="res://scenes/ui/inventory/slot_data_resource.tres" id="2_a2fbk"]
+[ext_resource type="Resource" uid="uid://dflpyrxfj46sr" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource0.tres" id="2_5kn88"]
+[ext_resource type="Resource" uid="uid://cadn57gfhm2yl" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource1.tres" id="3_6um5u"]
+[ext_resource type="Resource" uid="uid://bevrrtinxg2fo" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource2.tres" id="3_12bu6"]
+[ext_resource type="Resource" uid="uid://dfs5le4pwmnk" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource3.tres" id="5_6jl4l"]
+[ext_resource type="Resource" uid="uid://cvcidc87p78bu" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource4.tres" id="6_rf13o"]
+[ext_resource type="Resource" uid="uid://118udyy8ulhp" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource5.tres" id="7_nlv58"]
+[ext_resource type="Resource" uid="uid://0a1p4uub8a2r" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource6.tres" id="8_be6ua"]
+[ext_resource type="Resource" uid="uid://dgktfmfcgrp1k" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource7.tres" id="9_th2cf"]
+[ext_resource type="Resource" uid="uid://b86t06coky00c" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource8.tres" id="10_bd0mk"]
+[ext_resource type="Resource" uid="uid://wk2yfbihut20" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource9.tres" id="11_ewu62"]
+[ext_resource type="Resource" uid="uid://bx81djtej5h6y" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource10.tres" id="12_n866v"]
+[ext_resource type="Resource" uid="uid://r8fwsy1rth5q" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource11.tres" id="13_8iv28"]
+[ext_resource type="Resource" uid="uid://c1jdr5vhcd6gc" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource12.tres" id="14_qyeha"]
+[ext_resource type="Resource" uid="uid://do1isarks2gjr" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource13.tres" id="15_dm7f1"]
+[ext_resource type="Resource" uid="uid://c3tkip182i6ih" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource14.tres" id="16_g4sfi"]
+[ext_resource type="Resource" uid="uid://cl05mxexmivqt" path="res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource15.tres" id="17_4giu1"]
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_p7wsf")
-slots = [ExtResource("2_a2fbk"), null, null]
+slots = [ExtResource("2_5kn88"), ExtResource("3_6um5u"), ExtResource("3_12bu6"), ExtResource("5_6jl4l"), ExtResource("6_rf13o"), ExtResource("7_nlv58"), ExtResource("8_be6ua"), ExtResource("9_th2cf"), ExtResource("10_bd0mk"), ExtResource("11_ewu62"), ExtResource("12_n866v"), ExtResource("13_8iv28"), ExtResource("14_qyeha"), ExtResource("15_dm7f1"), ExtResource("16_g4sfi"), ExtResource("17_4giu1")]

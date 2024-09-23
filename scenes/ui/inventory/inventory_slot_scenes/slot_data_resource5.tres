@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://118udyy8ulhp"]
+
+[ext_resource type="Resource" uid="uid://e3idbcgtngrc" path="res://items/potion.tres" id="1_p4qfs"]
+[ext_resource type="Script" path="res://scenes/ui/inventory/scripts/SlotData.cs" id="2_qi5fv"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("2_qi5fv")
+item_data = ExtResource("1_p4qfs")
+item_quantity = 20

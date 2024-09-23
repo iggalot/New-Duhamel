@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dflpyrxfj46sr"]
+
+[ext_resource type="Resource" uid="uid://cydfao5w13jfq" path="res://items/gem.tres" id="1_uh8so"]
+[ext_resource type="Script" path="res://scenes/ui/inventory/scripts/SlotData.cs" id="2_2xcti"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("2_2xcti")
+item_data = ExtResource("1_uh8so")
+item_quantity = 20

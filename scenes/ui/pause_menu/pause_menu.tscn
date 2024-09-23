@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://8nv7ixw00vcm"]
+[gd_scene load_steps=8 format=3 uid="uid://8nv7ixw00vcm"]
 
 [ext_resource type="Script" path="res://scenes/ui/pause_menu/PauseMenu.cs" id="1_urvmn"]
 [ext_resource type="Texture2D" uid="uid://dxv12ndl5xk7o" path="res://items/sprites/items.png" id="2_y48oq"]
 [ext_resource type="PackedScene" uid="uid://dderv40wdw0pc" path="res://scenes/ui/inventory/inventory_slot.tscn" id="3_faeo2"]
+[ext_resource type="Script" path="res://scenes/ui/inventory/scripts/InventoryUI.cs" id="3_pxyq8"]
+[ext_resource type="Resource" uid="uid://co2x321kboads" path="res://scenes/ui/inventory/player_inventory.tres" id="4_nc023"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jhwbs"]
 atlas = ExtResource("2_y48oq")
@@ -23,7 +25,16 @@ texture_margin_bottom = 14.0
 process_mode = 3
 script = ExtResource("1_urvmn")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -31,62 +42,64 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.152941, 0.152941, 0.152941, 0.588235)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+layout_mode = 0
 offset_left = 55.0
 offset_top = 101.0
-offset_right = 95.0
-offset_bottom = 141.0
+offset_right = 251.0
+offset_bottom = 268.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_6vec2")
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer"]
+[node name="GridContainer" type="GridContainer" parent="Control/PanelContainer"]
 layout_mode = 2
 columns = 5
+script = ExtResource("3_pxyq8")
+data = ExtResource("4_nc023")
 
-[node name="InventorySlot" parent="PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
+[node name="InventorySlot" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
 layout_mode = 2
 
-[node name="InventorySlot2" parent="PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
+[node name="InventorySlot2" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
 layout_mode = 2
 
-[node name="InventorySlot3" parent="PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
+[node name="InventorySlot3" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
 layout_mode = 2
 
-[node name="InventorySlot4" parent="PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
+[node name="InventorySlot4" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
 layout_mode = 2
 
-[node name="InventorySlot5" parent="PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
+[node name="InventorySlot5" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
 layout_mode = 2
 
-[node name="InventorySlot6" parent="PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
+[node name="InventorySlot6" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
 layout_mode = 2
 
-[node name="VBoxContainer" type="HBoxContainer" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -524.0
-offset_top = 260.0
-offset_right = -321.0
-offset_bottom = 326.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Button_Save" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(75, 75)
-layout_mode = 2
-text = "SAVE"
-
-[node name="Button_Load" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(75, 75)
-layout_mode = 2
-text = "LOAD"
-
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
 offset_left = 53.0
 offset_top = 55.0
 offset_right = 121.0
 offset_bottom = 78.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.533333)
 text = "[paused]"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = -96.0
+offset_right = 222.0
+offset_bottom = -21.0
+grow_vertical = 0
+
+[node name="Button_Save" type="Button" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+text = "SAVE"
+
+[node name="Button_Load" type="Button" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+text = "LOAD"

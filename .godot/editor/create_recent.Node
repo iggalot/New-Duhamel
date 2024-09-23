@@ -1,3 +1,4 @@
+Control
 Label
 TextureRect
 Button
@@ -8,7 +9,6 @@ VBoxContainer
 ColorRect
 CanvasLayer
 AnimationPlayer
-Control
 Sprite2D
 TileMapLayer
 CollisionShape2D
