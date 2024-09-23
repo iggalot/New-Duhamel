@@ -26,8 +26,8 @@ public partial class PauseMenu : CanvasLayer
         HidePauseMenu();  // hide the menu as soon as this node loads
 
         // setup the getters for our button nodes
-        buttonSave = GetNode<Button>("VBoxContainer/Button_Save");
-        buttonLoad = GetNode<Button>("VBoxContainer/Button_Load");
+        buttonSave = GetNode<Button>("HBoxContainer/Button_Save");
+        buttonLoad = GetNode<Button>("HBoxContainer/Button_Load");
 
         buttonSave.Pressed += OnSavePressed;
         buttonLoad.Pressed += OnLoadPressed;

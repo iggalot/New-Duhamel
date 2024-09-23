@@ -1,7 +1,8 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://co2x321kboads"]
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://co2x321kboads"]
 
 [ext_resource type="Script" path="res://scenes/ui/inventory/scripts/InventoryData.cs" id="1_p7wsf"]
+[ext_resource type="Resource" uid="uid://dflpyrxfj46sr" path="res://scenes/ui/inventory/slot_data_resource.tres" id="2_a2fbk"]
 
 [resource]
 script = ExtResource("1_p7wsf")
-slots = [null, null, null]
+slots = [ExtResource("2_a2fbk"), null, null]

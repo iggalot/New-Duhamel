@@ -62,3 +62,4 @@ res://items/stone.tres
 res://scenes/ui/inventory/inventory_resource.tres
 res://scenes/ui/inventory/player_inventory.tres
 res://scenes/ui/inventory/slot_data_resource.tres
+res://scenes/ui/inventory/inventory_slot.tscn

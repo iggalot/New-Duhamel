@@ -1,5 +1,9 @@
 Label
+TextureRect
 Button
+GridContainer
+PanelContainer
+HBoxContainer
 VBoxContainer
 ColorRect
 CanvasLayer
@@ -8,8 +12,3 @@ Control
 Sprite2D
 TileMapLayer
 CollisionShape2D
-Area2D
-HFlowContainer
-Node
-AudioStreamPlayer2D
-Node2D
