@@ -22,6 +22,7 @@ GameManager="*res://scripts/GameManager.cs"
 ImportData="*res://scripts/ImportData.cs"
 PlayerManager="*res://globals/GlobalPlayerManager.cs"
 SceneTransition="*res://scenes/ui/scene_transition/scene_transition.tscn"
+SaveManager="*res://globals/GlobalSaveManager.cs"
 PauseMenu="*res://scenes/ui/pause_menu/pause_menu.tscn"
 
 [display]

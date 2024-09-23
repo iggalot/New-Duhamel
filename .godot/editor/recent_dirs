@@ -1,3 +1,4 @@
+res://globals
 res://scenes/ui/pause_menu
 res://scenes/ui/scene_transition
 res://levels/scripts
@@ -5,7 +6,6 @@ res://scenes
 res://levels/Area00
 res://levels/Area02
 res://levels/Area01
-res://globals
 res://scripts
 res://scenes/ui
 res://resources/graphics

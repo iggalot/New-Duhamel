@@ -28,6 +28,9 @@ public partial class PauseMenu : CanvasLayer
         // setup the getters for our button nodes
         buttonSave = GetNode<Button>("VBoxContainer/Button_Save");
         buttonLoad = GetNode<Button>("VBoxContainer/Button_Load");
+
+        buttonSave.Pressed += OnSavePressed;
+        buttonLoad.Pressed += OnLoadPressed;
     }
 
     public override void _UnhandledInput(InputEvent this_event)
@@ -59,5 +62,28 @@ public partial class PauseMenu : CanvasLayer
         GetTree().Paused = false;
         Visible = false;
         IsPaused = false;
+    }
+
+    public void OnSavePressed()
+    {
+        if(IsPaused == false)
+        {
+            return;
+        }
+        GlobalSaveManager.Instance.SaveGame();
+        HidePauseMenu();
+    }
+
+    public async void OnLoadPressed()
+    {
+        if(IsPaused == false)
+        {
+            return;
+        }
+        GlobalSaveManager.Instance.LoadGame();
+        
+        await ToSignal(GlobalLevelManager.Instance, "LevelLoadStarted");
+
+        HidePauseMenu();
     }
 }

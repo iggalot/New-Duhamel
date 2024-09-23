@@ -39,6 +39,14 @@ public partial class GlobalPlayerManager : Node
         _instance = this;
     }
 
+    public void SetHealth(float hp, float max_hp)
+    {
+        player.MaxHitPoints = max_hp;
+        player.HitPoints = hp;
+        player.UpdateHitPoints(0); // force an update so that the HUD is updated -- passing a zero so nothing changes
+        return;
+    }
+
     public void SetPlayerPosition(Vector2 new_pos)
     {
         player.GlobalPosition = new_pos;
