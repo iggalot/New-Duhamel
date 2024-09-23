@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://fkmefcffcnyu"]
+
+[ext_resource type="Script" path="res://scenes/ui/inventory/scripts/InventoryData.cs" id="1_3oq12"]
+
+[resource]
+script = ExtResource("1_3oq12")
+slots = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]

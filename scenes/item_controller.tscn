@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ctv8m3ld3irys"]
+[gd_scene load_steps=5 format=3 uid="uid://ctv8m3ld3irys"]
 
 [ext_resource type="Script" path="res://scripts/ItemController.cs" id="1_6ows0"]
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_hng88"]
-[ext_resource type="PackedScene" uid="uid://dtsj4jh63pnbj" path="res://scenes/data/item_data.tscn" id="2_j1emb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mxjwx"]
 radius = 6.0
@@ -24,9 +23,6 @@ region_rect = Rect2(144.349, 128.486, 15.54, 16.0805)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_mxjwx")
-
-[node name="ItemData" parent="." instance=ExtResource("2_j1emb")]
-ItemType = "Potion"
 
 [node name="InteractionBox" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(10, 10)

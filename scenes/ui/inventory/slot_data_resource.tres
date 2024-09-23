@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dflpyrxfj46sr"]
+
+[ext_resource type="Script" path="res://scenes/ui/inventory/scripts/SlotData.cs" id="1_wh32r"]
+
+[resource]
+script = ExtResource("1_wh32r")
+item_quantity = 0

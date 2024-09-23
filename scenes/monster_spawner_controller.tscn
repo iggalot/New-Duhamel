@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bm8bv2g7cv4v3"]
+[gd_scene load_steps=7 format=3 uid="uid://bm8bv2g7cv4v3"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_3i2ac"]
 [ext_resource type="Script" path="res://scripts/MonsterSpawnerController.cs" id="1_m1ui5"]
-[ext_resource type="PackedScene" uid="uid://dtsj4jh63pnbj" path="res://scenes/data/item_data.tscn" id="3_3ihvk"]
 [ext_resource type="PackedScene" uid="uid://c67btl4crsql7" path="res://scenes/state_machine.tscn" id="4_afptq"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3unld"]
@@ -51,7 +50,5 @@ shape = SubResource("RectangleShape2D_sq14p")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 visible = false
 shape = SubResource("CircleShape2D_wpmq7")
-
-[node name="ItemData" parent="." instance=ExtResource("3_3ihvk")]
 
 [node name="StateMachine" parent="." instance=ExtResource("4_afptq")]

@@ -1,3 +1,5 @@
+res://scenes/ui/inventory
+res://items/scripts
 res://globals
 res://scenes/ui/pause_menu
 res://scenes/ui/scene_transition
@@ -11,7 +13,6 @@ res://scenes/ui
 res://resources/graphics
 res://scripts/states
 res://scripts/ui/inventory
-res://scenes/ui/inventory
 res://resources/fonts/kirifont
 res://scripts/ui
 res://scenes/interface
