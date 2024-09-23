@@ -52,3 +52,5 @@ res://levels/Area00/00.tscn
 res://levels/Area01/01.tscn
 res://levels/level_transition.tscn
 res://scenes/junk scene.tscn
+res://scenes/ui/pause_menu/pause_menu.tscn
+res://scenes/ui/pause_menu/PauseMenu.cs

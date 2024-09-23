@@ -1,7 +1,10 @@
-AnimationPlayer
+Label
+Button
+VBoxContainer
 ColorRect
-Control
 CanvasLayer
+AnimationPlayer
+Control
 Sprite2D
 TileMapLayer
 CollisionShape2D
@@ -10,5 +13,3 @@ HFlowContainer
 Node
 AudioStreamPlayer2D
 Node2D
-StaticBody2D
-Label
