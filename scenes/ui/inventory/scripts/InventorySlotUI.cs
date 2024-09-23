@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class InventorySlotUI : Button
 {
@@ -23,6 +24,9 @@ public partial class InventorySlotUI : Button
 
         textureRect.Texture = null;
         label.Text = "";
+
+        FocusEntered += OnItemFocused;
+        FocusExited += OnItemUnfocused;
     }
 
     public void SetSlotData(SlotData value)
@@ -35,8 +39,34 @@ public partial class InventorySlotUI : Button
         }
 
         textureRect.Texture = _slotData.item_data.ItemTexture;
-        label.Text = _slotData.item_quantity.ToString();
+
+        // hide the quanity label if there is no quantity
+        if (_slotData.item_quantity <= 0)
+        {
+            label.Text = "";
+
+        } else
+        {
+            label.Text = _slotData.item_quantity.ToString();
+        }
     }
 
 
+    private void OnItemUnfocused()
+    {
+        PauseMenu.Instance.UpdateItemDescription("");
+        return;
+    }
+
+    private void OnItemFocused()
+    {
+        if(slotData != null)
+        {
+            if(slotData.item_data != null)
+            {
+                PauseMenu.Instance.UpdateItemDescription(slotData.item_data.ItemDescription);
+            }
+        }
+        return;
+    }
 }

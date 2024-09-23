@@ -6,8 +6,12 @@ public partial class PauseMenu : CanvasLayer
     [Signal] public delegate void ShownEventHandler();
     [Signal] public delegate void HiddenEventHandler();
 
+    // nodes on our tree
     Button buttonSave { get; set; }
     Button buttonLoad { get; set; }
+    Label itemDescription { get; set; }
+
+
 
     bool IsPaused = false;
 
@@ -31,6 +35,7 @@ public partial class PauseMenu : CanvasLayer
         // setup the getters for our button nodes
         buttonSave = GetNode<Button>("Control/HBoxContainer/Button_Save");
         buttonLoad = GetNode<Button>("Control/HBoxContainer/Button_Load");
+        itemDescription = GetNode<Label>("Control/ItemDescription");
 
         buttonSave.Pressed += OnSavePressed;
         buttonLoad.Pressed += OnLoadPressed;
@@ -89,5 +94,10 @@ public partial class PauseMenu : CanvasLayer
         await ToSignal(GlobalLevelManager.Instance, "LevelLoadStarted");
 
         HidePauseMenu();
+    }
+
+    public void UpdateItemDescription(string new_text)
+    {
+        itemDescription.Text = new_text;
     }
 }

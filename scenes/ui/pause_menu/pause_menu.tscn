@@ -42,6 +42,27 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.152941, 0.152941, 0.152941, 0.588235)
 
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.533333)
+text = "[paused]"
+
+[node name="ItemDescription" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 57.0
+offset_top = 272.0
+offset_right = 282.0
+offset_bottom = 342.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.533333)
+theme_override_font_sizes/font_size = 12
+text = "This red drink restores your health. asdasdasdasda asd asd asd adaads asd"
+horizontal_alignment = 1
+autowrap_mode = 2
+
 [node name="PanelContainer" type="PanelContainer" parent="Control"]
 layout_mode = 0
 offset_left = 55.0
@@ -73,15 +94,6 @@ layout_mode = 2
 
 [node name="InventorySlot6" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_faeo2")]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="Control"]
-layout_mode = 0
-offset_left = 53.0
-offset_top = 55.0
-offset_right = 121.0
-offset_bottom = 78.0
-theme_override_colors/font_color = Color(1, 1, 1, 0.533333)
-text = "[paused]"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control"]
 layout_mode = 1
