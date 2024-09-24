@@ -8,7 +8,7 @@ public partial class GlobalPlayerManager : Node
     private static GlobalPlayerManager _instance;
     public static GlobalPlayerManager Instance => _instance;
 
-    public InventoryUI inventory { get; set; }
+    //public InventoryUI inventory { get; set; }
 
     public PlayerController player { get; set; }
     public PlayerHud playerHud { get; set; }

@@ -4,7 +4,7 @@ using System;
 [Tool]
 public partial class ItemPickup : Node2D
 {
-    private ItemData _itemData;
+    private ItemData _itemData = new ItemData();
 
     [Export]
     public ItemData itemData
@@ -12,6 +12,8 @@ public partial class ItemPickup : Node2D
         get => _itemData;
         set
         {
+            //_itemData = value;
+            //UpdateTexture();
             SetItemData(value);
         }
     }
@@ -40,6 +42,7 @@ public partial class ItemPickup : Node2D
 
     private void OnBodyEntered(Node2D body)
     {
+        GD.Print(body.Name + " has entered the interaction area");
         if (body is PlayerController)
         {
             if(itemData != null)

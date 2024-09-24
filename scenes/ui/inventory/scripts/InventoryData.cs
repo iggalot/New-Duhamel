@@ -29,7 +29,7 @@ public partial class InventoryData : Resource
                 SlotData new_slot = new SlotData();
                 new_slot.item_data = item;
                 new_slot.item_quantity = count;
-                slots[i] = new_slot;
+                this.slots[i] = new_slot;
                 return true;
             }
         }

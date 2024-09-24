@@ -27,8 +27,8 @@ public partial class ItemData : Resource
     [Export]
     public int ItemMaxStackSize { get; set; } = 1;
 
-    public ItemData()
-    {
-        GD.Print("Item created");
-    }
+    //public ItemData()
+    //{
+    //    GD.Print("Item created");
+    //}
 }

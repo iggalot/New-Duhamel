@@ -1,3 +1,14 @@
-[gd_resource type="Resource" format=3 uid="uid://b5jxdbmbkrefi"]
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://b5jxdbmbkrefi"]
+
+[ext_resource type="Script" path="res://items/scripts/ItemData.cs" id="1_rwsmu"]
 
 [resource]
+script = ExtResource("1_rwsmu")
+ItemName = ""
+ItemDescription = ""
+ItemType = ""
+ItemIcon = ""
+ItemPrice = 0
+ItemWeight = 0
+ItemHitPoints = 100
+ItemMaxStackSize = 1

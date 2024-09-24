@@ -30,7 +30,9 @@ public partial class InventoryUI : Control
 
     public void UdateInventory()
     {
-        foreach (var s in data.slots)
+        foreach (var s in GlobalPlayerManager.Instance.INVENTORY_DATA.slots)
+
+            //foreach (var s in data.slots)
         {
             Node new_slot = INVENTORY_SLOT.Instantiate();
             AddChild(new_slot);
