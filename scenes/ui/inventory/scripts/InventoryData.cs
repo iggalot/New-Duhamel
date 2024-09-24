@@ -127,7 +127,7 @@ public partial class InventoryData : Resource
     public void ParseSaveData(Dictionary<string, Dictionary<string, int>> save_data)
     {
         // get our number of items
-        int array_size = save_data.Count;
+        //int array_size = save_data.Count;
 
         // clear all of the slots data
         for(int i = 0; i < slots.Length; i++)
@@ -135,7 +135,7 @@ public partial class InventoryData : Resource
             slots[i] = null;
         }
 
-        SlotData[] new_slot_arr = new SlotData[array_size];
+        //SlotData[] new_slot_arr = new SlotData[array_size];
         
         // now update the items in the inventory
         for (int i = 0; i < slots.Length; i++)

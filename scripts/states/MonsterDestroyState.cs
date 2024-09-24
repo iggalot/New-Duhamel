@@ -61,9 +61,9 @@ public partial class MonsterDestroyState : State
         controllerOwner.UpdateAnimation(animName);
         controllerOwner.UpdateStatusSpriteAnimation(spriteStatusName);
         controllerOwner.animationPlayer.AnimationFinished += OnAnimationFinished;
+        DisableHurtBox();
         return;
     }
-
 
     // What happens when the player exits this State?
     public override void ExitState()
@@ -100,5 +100,14 @@ public partial class MonsterDestroyState : State
     private void OnAnimationFinished(StringName animName)
     {
         controllerOwner.QueueFree();
+    }
+
+    private void DisableHurtBox()
+    {
+        HurtBox hurt_box = controllerOwner.GetNodeOrNull<HurtBox>("HurtBox");
+        if(hurt_box != null)
+        {
+            hurt_box.Monitoring = false;
+        }
     }
 }

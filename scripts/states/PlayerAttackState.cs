@@ -73,12 +73,17 @@ public partial class PlayerAttackState : State
         // connect the signal so we can detect when the animation is finished
         // remember to disconnect in ExitState()
         animPlayer.AnimationFinished += EndAttack;
+
         attacking = true;
 
         // create a small delay when attacking
         await ToSignal(GetTree().CreateTimer(0.075f), SceneTreeTimer.SignalName.Timeout);
 
-        hurtBox.Monitoring = true;  // turn on the hurtbox monitoring
+        if(attacking is true)
+        {
+            hurtBox.Monitoring = true;  // turn on the hurtbox monitoring
+        }
+
         return;
     }
 

@@ -68,3 +68,4 @@ res://items/item_effects/item_effect_heal.tres
 res://items/scripts/item_resource.tres
 res://items/item_effects/item_effect_heal_20.tres
 res://items/item_effects/item_effect_heal_100.tres
+res://scenes/monster_controller.tscn
