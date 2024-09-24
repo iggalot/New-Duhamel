@@ -58,6 +58,9 @@ public partial class InventoryUI : Control
         }
 
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame); // wait a frame so that the inventory is updated before we grab focus
+
+
+        // set the focus to the appropriate element
         ((Control)GetChild(focusIndex)).GrabFocus();
     }
 

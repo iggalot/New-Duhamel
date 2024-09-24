@@ -1,7 +1,5 @@
 using Godot;
 using Godot.Collections;
-using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 public partial class InventoryData : Resource
@@ -128,20 +126,25 @@ public partial class InventoryData : Resource
 
     public void ParseSaveData(Dictionary<string, Dictionary<string, int>> save_data)
     {
-        int array_size = slots.Length;
+        // get our number of items
+        int array_size = save_data.Count;
 
-        // clear the slots array
-        for(int i = 0; i < array_size; i++)
+        // clear all of the slots data
+        for(int i = 0; i < slots.Length; i++)
         {
             slots[i] = null;
         }
 
         SlotData[] new_slot_arr = new SlotData[array_size];
         
-        // clear the slots array
-        for (int i = 0; i < array_size; i++)
+        // now update the items in the inventory
+        for (int i = 0; i < slots.Length; i++)
         {
-            slots[i] = ItemFromSave(save_data["item"+i.ToString()]);
+            string dict_key = "item"+i.ToString();  // look for our unique item identifiers
+            if (save_data.ContainsKey(dict_key))
+            {
+                slots[i] = ItemFromSave(save_data[dict_key]);
+            }
         }
 
         ConnectSlots();
@@ -156,9 +159,14 @@ public partial class InventoryData : Resource
             return null;
         }
 
+        // create the new inventory slot
         SlotData new_slot = new SlotData();
-        new_slot.item_data = GD.Load<ItemData>(save_obj.First().Key);
-        new_slot.item_quantity = (int)save_obj.First().Value;
+        
+        var dict_keys = save_obj.Keys.ToArray();
+        var filepath = dict_keys[0];
+
+        new_slot.item_data = GD.Load<ItemData>(filepath);
+        new_slot.item_quantity = (int)save_obj[filepath];
 
         return new_slot;
     }

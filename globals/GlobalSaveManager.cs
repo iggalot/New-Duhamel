@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Linq;
 
 public partial class GlobalSaveManager : Node
 {
@@ -12,24 +13,31 @@ public partial class GlobalSaveManager : Node
     [Signal] public delegate void GameLoadedEventHandler();
     [Signal] public delegate void GameSavedEventHandler();
 
-    public static Godot.Collections.Dictionary playerDict;
+    public static Dictionary<string, Dictionary<string, int>> scenePathDict;
+
+    public static Dictionary<string, Dictionary<string, int>> playerDict;
 
     public static Dictionary<string, Dictionary<string, int>> itemDict;
 
-    public static Godot.Collections.Dictionary persistenceDict;
+    public static Dictionary<string, Dictionary<string, int>> persistenceDict;
 
-    static Godot.Collections.Dictionary questDict;
+    static Dictionary<string, Dictionary<string, int>> questDict;
 
-    Godot.Collections.Dictionary currentSave;
+    Dictionary<string, Dictionary<string, Dictionary<string, int>>> currentSave;
 
     public override void _Ready()
     {
-        playerDict = new Godot.Collections.Dictionary
+        scenePathDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "hp", 1 },
-            { "max_hp", 1} ,
-            { "pos_x" , 0 },
-            { "pos_y" , 0 }
+            //{ "scene_path", new Dictionary<string, int>() { { "scene_path1", 1 } } },
+        };
+
+        playerDict = new Dictionary<string, Dictionary<string, int>>()
+        {
+            { "stat1", new Dictionary<string, int>() { { "hp", 1 } } },
+            { "stat2", new Dictionary<string, int>() { { "max_hp", 1 } } },
+            { "stat3", new Dictionary<string, int>() { { "pos_x", 0 } } },
+            { "stat4", new Dictionary<string, int>() { { "pos_y", 0 } } }
         };
 
         itemDict = new Dictionary<string, Dictionary<string, int>>()
@@ -40,24 +48,24 @@ public partial class GlobalSaveManager : Node
             { "item4", new Dictionary<string, int>() { { "wand", 4 } } }
         };
 
-        persistenceDict = new Godot.Collections.Dictionary
+        persistenceDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "bless", 0 },
-            { "health_up", 1 }
+            { "effect1", new Dictionary<string, int>() { { "bless", 0 } } } ,
+            { "effect2", new Dictionary<string, int>() { { "health_up", 1 } } }
         };
 
-        questDict = new Godot.Collections.Dictionary
+        questDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "quest_1", 0 },
-            { "quest_2", 1 },
-            { "quest_3", 2 },
-            { "quest_4", 3 },
-            { "quest_5", 4 }
+            { "quest1", new Dictionary<string, int>() { { "quest_1", 0 } } } ,
+            { "quest2", new Dictionary<string, int>() { { "quest_2", 1 } } } ,
+            { "quest3", new Dictionary<string, int>() { { "quest_3", 2 } } } ,
+            { "quest4", new Dictionary<string, int>() { { "quest_4", 3 } } } ,
+            { "quest5", new Dictionary<string, int>() { { "quest_5", 4 } } }
         };
 
-        currentSave = new Godot.Collections.Dictionary
+        currentSave = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>()
         {
-            { "scene_path", 1 },
+            { "scene_path", scenePathDict },
             { "player", playerDict },
             { "items", itemDict },
             { "persistence", persistenceDict },
@@ -97,27 +105,31 @@ public partial class GlobalSaveManager : Node
         var parseResult = json.Parse(file.GetLine());
 
         // convert the json data to a dictionary
-        Dictionary<string, Variant> data = new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
-        currentSave = (Dictionary)data;
+        Dictionary<string, Dictionary<string, Dictionary<string, int>>> data = (Dictionary<string, Dictionary<string, Dictionary<string, int>>>)json.Data;
+        currentSave = (Dictionary<string, Dictionary<string, Dictionary<string, int>>>)data;
 
-        GlobalLevelManager.Instance.LoadNewLevel(currentSave["scene_path"].ToString(), "", Vector2.Zero);
+        // Parse the scene path from our dictionary of dictionaries mess in the JSON file
+        Dictionary<string, Dictionary<string, int>> level_path = currentSave["scene_path"];
+        Dictionary<string, int> inner_dict = level_path["scene_path1"];
+        var dict_keys = inner_dict.Keys.ToArray();
+        var filepath = dict_keys[0];
+        GlobalLevelManager.Instance.LoadNewLevel(filepath, "", Vector2.Zero);
 
         // start the level loading (fade to black)
         await ToSignal(GlobalLevelManager.Instance, "LevelLoadStarted");
 
         // Set the player position
         float pos_x = (float)((Godot.Collections.Dictionary)currentSave["player"])["pos_x"];
+        float pos_y = (float)((Godot.Collections.Dictionary)currentSave["player"])["pos_y"];
         GlobalPlayerManager.Instance.SetPlayerPosition(
-            new Vector2(
-                (float)((Godot.Collections.Dictionary)currentSave["player"])["pos_x"],
-                (float)((Godot.Collections.Dictionary)currentSave["player"])["pos_y"]));
+            new Vector2(pos_x, pos_y));
 
         // set the player health
         GlobalPlayerManager.Instance.SetHealth(
             (float)((Godot.Collections.Dictionary)currentSave["player"])["hp"],
             (float)((Godot.Collections.Dictionary)currentSave["player"])["max_hp"]);
 
- //       GlobalPlayerManager.Instance.INVENTORY_DATA.ParseSaveData((Godot.Collections.Dictionary)currentSave["items"]);
+        GlobalPlayerManager.Instance.INVENTORY_DATA.ParseSaveData(currentSave["items"]);
 
 
         // finally await for the level to finish loaded
@@ -155,7 +167,7 @@ public partial class GlobalSaveManager : Node
         }
 
         // this is how you update a key value pair in a dictionary
-        currentSave["scene_path"] = p;
+        currentSave["scene_path"]["scene_path1"] = new Dictionary<string, int>() { { p, 1 } };
     }
 
     public void UpdateItemData()
