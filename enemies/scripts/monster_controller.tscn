@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=73 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
@@ -20,8 +20,10 @@
 [ext_resource type="Script" path="res://enemies/scripts/states/MonsterDeadState.cs" id="9_c6thw"]
 [ext_resource type="Script" path="res://enemies/scripts/states/MonsterStunState.cs" id="16_eoxqr"]
 [ext_resource type="Script" path="res://enemies/scripts/states/MonsterDestroyState.cs" id="17_d3npy"]
-[ext_resource type="Resource" uid="uid://b6jtqjgra2lt" path="res://enemies/scripts/drop_data_resource.tres" id="18_36cwn"]
+[ext_resource type="Resource" uid="uid://u8s5r76goeew" path="res://enemies/scripts/drop_data_resource1.tres" id="18_hddk7"]
+[ext_resource type="Resource" uid="uid://c472jwx00tksm" path="res://enemies/scripts/drop_data_resource2.tres" id="19_ew0by"]
 [ext_resource type="Texture2D" uid="uid://db05e5y0m7b1g" path="res://resources/graphics/DestroySmoke (1).png" id="20_1kio5"]
+[ext_resource type="Resource" uid="uid://bp2p44vh5jidu" path="res://enemies/scripts/drop_data_resource3.tres" id="20_o31hk"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lt8og"]
 radius = 19.2354
@@ -1484,7 +1486,7 @@ script = ExtResource("16_eoxqr")
 
 [node name="MonsterDestroy" type="Node" parent="StateMachine"]
 script = ExtResource("17_d3npy")
-drops = Array[Resource]([ExtResource("18_36cwn"), null])
+drops = Array[Resource]([ExtResource("18_hddk7"), ExtResource("19_ew0by"), ExtResource("20_o31hk"), null, null])
 
 [node name="StatusAnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

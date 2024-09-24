@@ -428,7 +428,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cebmk"]
-radius = 15.0
+radius = 21.0
 
 [sub_resource type="Animation" id="Animation_3rn4y"]
 length = 2.0
@@ -845,7 +845,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_igmax"]
-radius = 27.074
+radius = 13.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7mu78"]
 size = Vector2(23, 16.5)

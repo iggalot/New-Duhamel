@@ -81,3 +81,8 @@ res://enemies/scripts/states/MonsterStunState.cs
 res://enemies/scripts/states/MonsterDestroyState.cs
 res://enemies/scripts/DropData.cs
 res://enemies/scripts/drop_data_resource.tres
+res://enemies/scripts/drop_data_resource1.tres
+res://enemies/scripts/drop_data_resource2.tres
+res://enemies/scripts/drop_data_resource3.tres
+res://enemies/scripts/drop_data_resource5.tres
+res://enemies/scripts/drop_data_resource4.tres

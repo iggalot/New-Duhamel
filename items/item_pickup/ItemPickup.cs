@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class ItemPickup : Node2D
+public partial class ItemPickup : CharacterBody2D
 {
     private ItemData _itemData = new ItemData();
 
@@ -37,6 +37,17 @@ public partial class ItemPickup : Node2D
         }
 
         area_2d.BodyEntered += OnBodyEntered;
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        var collision_info = MoveAndCollide(Velocity * (float)delta);
+        if(collision_info != null)
+        {
+            Velocity = Velocity.Bounce(collision_info.GetNormal());
+        }
+
+        Velocity -= Velocity *(float)( delta * 4);
     }
 
     private void OnBodyEntered(Node2D body)

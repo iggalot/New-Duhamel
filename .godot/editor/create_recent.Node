@@ -1,3 +1,5 @@
+AnimationPlayer
+CharacterBody2D
 AudioStreamPlayer
 AudioStreamPlayer2D
 Sprite2D
@@ -11,5 +13,3 @@ Button
 GridContainer
 PanelContainer
 HBoxContainer
-VBoxContainer
-ColorRect

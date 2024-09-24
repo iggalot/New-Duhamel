@@ -144,8 +144,8 @@ public partial class MonsterDestroyState : State
                 ItemPickup drop = PICKUP.Instantiate() as ItemPickup;
                 drop.itemData = drops[i].item;
                 controllerOwner.GetParent().CallDeferred("add_child", drop);
-                Vector2 offset = new Vector2(rng.Randf() * 32, rng.Randf() * 32);
-                drop.GlobalPosition = controllerOwner.GlobalPosition + offset;
+                drop.GlobalPosition = controllerOwner.GlobalPosition;
+                drop.Velocity = controllerOwner.Velocity.Rotated(rng.RandfRange(-1.5f, 1.5f)) * rng.RandfRange(0.9f, 1.5f);
             }
 
         }

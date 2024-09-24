@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://c472jwx00tksm"]
+
+[ext_resource type="Resource" uid="uid://e3idbcgtngrc" path="res://items/potion.tres" id="1_x0gdu"]
+[ext_resource type="Script" path="res://enemies/scripts/DropData.cs" id="2_ywgx0"]
+
+[resource]
+script = ExtResource("2_ywgx0")
+item = ExtResource("1_x0gdu")
+probability = 100.0
+minAmount = 1
+maxAmount = 4

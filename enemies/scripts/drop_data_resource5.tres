@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://d0n6jxmog0ke2"]
+
+[ext_resource type="Script" path="res://enemies/scripts/DropData.cs" id="2_24yxm"]
+
+[resource]
+script = ExtResource("2_24yxm")
+probability = 100.0
+minAmount = 1
+maxAmount = 4
