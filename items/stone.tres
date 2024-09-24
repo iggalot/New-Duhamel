@@ -18,3 +18,4 @@ ItemPrice = 0
 ItemWeight = 0
 ItemHitPoints = 100
 ItemMaxStackSize = 1
+effects = [null, null, null, null, null]

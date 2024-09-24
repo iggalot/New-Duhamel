@@ -3,7 +3,7 @@ using Godot;
 public partial class GlobalPlayerManager : Node
 {
     public PackedScene PLAYER_SCENE { get; set; }
-    public InventoryData INVENTORY_DATA { get; set; }
+    public InventoryData INVENTORY_DATA { get; set; } = new InventoryData();
 
     private static GlobalPlayerManager _instance;
     public static GlobalPlayerManager Instance => _instance;

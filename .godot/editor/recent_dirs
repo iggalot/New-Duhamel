@@ -1,3 +1,4 @@
+res://items/item_effects
 res://items
 res://scenes/ui/inventory
 res://items/scripts
@@ -19,4 +20,3 @@ res://scripts/ui
 res://scenes/interface
 res://scripts/inventory
 res://
-res://resources/data

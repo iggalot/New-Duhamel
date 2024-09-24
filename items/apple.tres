@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://bwebgk4e30x46"]
+
+[ext_resource type="Texture2D" uid="uid://dxv12ndl5xk7o" path="res://items/sprites/items.png" id="1_dm57k"]
+[ext_resource type="Script" path="res://items/scripts/ItemData.cs" id="2_5jpem"]
+[ext_resource type="Resource" uid="uid://icbe4tlq65g4" path="res://items/item_effects/item_effect_heal_20.tres" id="2_m8cgq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vtgu"]
+atlas = ExtResource("1_dm57k")
+region = Rect2(196, 0, 32, 32)
+
+[resource]
+script = ExtResource("2_5jpem")
+ItemName = "spear"
+ItemDescription = "a pointy stick"
+ItemTexture = SubResource("AtlasTexture_3vtgu")
+ItemType = ""
+ItemIcon = ""
+ItemPrice = 0
+ItemWeight = 0
+ItemHitPoints = 100
+ItemMaxStackSize = 1
+effects = [ExtResource("2_m8cgq")]

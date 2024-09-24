@@ -1,7 +1,6 @@
 using Godot;
 using System;
 
-[Tool]
 public partial class ItemPickup : Node2D
 {
     private ItemData _itemData = new ItemData();

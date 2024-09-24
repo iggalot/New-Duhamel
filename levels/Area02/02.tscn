@@ -114,7 +114,7 @@ texture = ExtResource("2_ptiub")
 [sub_resource type="TileSet" id="TileSet_tv8sh"]
 sources/0 = SubResource("TileSetAtlasSource_3hvvb")
 
-[node name="01" type="Node2D"]
+[node name="02" type="Node2D"]
 script = ExtResource("1_ve8no")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]

@@ -59,7 +59,6 @@ offset_right = 282.0
 offset_bottom = 342.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.533333)
 theme_override_font_sizes/font_size = 12
-text = "This red drink restores your health. asdasdasdasda asd asd asd adaads asd"
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -115,3 +114,6 @@ text = "SAVE"
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 text = "LOAD"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+max_polyphony = 4

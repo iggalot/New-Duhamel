@@ -7,6 +7,7 @@ public partial class PauseMenu : CanvasLayer
     [Signal] public delegate void HiddenEventHandler();
 
     // nodes on our tree
+    AudioStreamPlayer audioStreamPlayer { get; set; }
     Button buttonSave { get; set; }
     Button buttonLoad { get; set; }
     Label itemDescription { get; set; }
@@ -33,6 +34,7 @@ public partial class PauseMenu : CanvasLayer
         HidePauseMenu();  // hide the menu as soon as this node loads
 
         // setup the getters for our button nodes
+        audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
         buttonSave = GetNode<Button>("Control/HBoxContainer/Button_Save");
         buttonLoad = GetNode<Button>("Control/HBoxContainer/Button_Load");
         itemDescription = GetNode<Label>("Control/ItemDescription");
@@ -99,5 +101,11 @@ public partial class PauseMenu : CanvasLayer
     public void UpdateItemDescription(string new_text)
     {
         itemDescription.Text = new_text;
+    }
+
+    public void PlayAudio(AudioStream audio)
+    {
+        audioStreamPlayer.Stream = audio;
+        audioStreamPlayer.Play();
     }
 }

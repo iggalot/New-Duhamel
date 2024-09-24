@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://items/scripts/ItemData.cs" id="1_rwsmu"]
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_rwsmu")
 ItemName = ""
 ItemDescription = ""
@@ -12,3 +13,4 @@ ItemPrice = 0
 ItemWeight = 0
 ItemHitPoints = 100
 ItemMaxStackSize = 1
+effects = [null, null, null, null, null]

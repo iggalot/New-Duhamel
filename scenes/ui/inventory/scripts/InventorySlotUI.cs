@@ -27,6 +27,7 @@ public partial class InventorySlotUI : Button
 
         FocusEntered += OnItemFocused;
         FocusExited += OnItemUnfocused;
+        Pressed += OnItemPressed;
     }
 
     public void SetSlotData(SlotData value)
@@ -68,5 +69,29 @@ public partial class InventorySlotUI : Button
             }
         }
         return;
+    }
+
+    private void OnItemPressed()
+    {
+        if(slotData != null)
+        {
+            if(slotData.item_data != null)
+            {
+                bool was_used = slotData.item_data.Use();
+                if(was_used == false)
+                {
+                    return;
+                }
+
+                slotData.item_quantity -= 1;
+
+                if(slotData.item_quantity <= 0)
+                {
+                    SetSlotData(new SlotData());
+                    //slotData.item_data = null;
+                    //label.Text = slotData.item_quantity.ToString();
+                }
+            }
+        }
     }
 }

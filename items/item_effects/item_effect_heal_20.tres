@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://icbe4tlq65g4"]
+
+[ext_resource type="AudioStream" uid="uid://gcc3tyya3lhe" path="res://items/item_effects/hp-up.wav" id="1_3qemp"]
+[ext_resource type="Script" path="res://items/item_effects/ItemEffectHeal.cs" id="2_dm5rl"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("2_dm5rl")
+healAmount = 20.0
+audio = ExtResource("1_3qemp")
+useDescription = ""

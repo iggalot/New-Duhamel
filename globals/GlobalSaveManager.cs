@@ -14,7 +14,7 @@ public partial class GlobalSaveManager : Node
 
     public static Godot.Collections.Dictionary playerDict;
 
-    public static Godot.Collections.Dictionary itemDict;
+    public static Dictionary<string, Dictionary<string, int>> itemDict;
 
     public static Godot.Collections.Dictionary persistenceDict;
 
@@ -32,12 +32,12 @@ public partial class GlobalSaveManager : Node
             { "pos_y" , 0 }
         };
 
-        itemDict = new Godot.Collections.Dictionary
+        itemDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "sword", 0 },
-            { "axe", 1 },
-            { "spear", 2 },
-            { "shield", 3 }
+            { "item1", new Dictionary<string, int>() { {"sword", 1 } } } ,
+            { "item2", new Dictionary<string, int>() { { "axe", 2 } } } ,
+            { "item3", new Dictionary<string, int>() { { "spear", 3 } } },
+            { "item4", new Dictionary<string, int>() { { "wand", 4 } } }
         };
 
         persistenceDict = new Godot.Collections.Dictionary
@@ -78,6 +78,8 @@ public partial class GlobalSaveManager : Node
     {
         UpdatePlayerData();
         UpdateScenePath();
+        UpdateItemData();
+
         var file = FileAccess.Open( SAVE_PATH + "save.sav", FileAccess.ModeFlags.Write );
         string save_json = Json.Stringify( currentSave );
         file.StoreLine( save_json );
@@ -115,6 +117,9 @@ public partial class GlobalSaveManager : Node
             (float)((Godot.Collections.Dictionary)currentSave["player"])["hp"],
             (float)((Godot.Collections.Dictionary)currentSave["player"])["max_hp"]);
 
+ //       GlobalPlayerManager.Instance.INVENTORY_DATA.ParseSaveData((Godot.Collections.Dictionary)currentSave["items"]);
+
+
         // finally await for the level to finish loaded
         await ToSignal(GlobalLevelManager.Instance, "LevelLoaded");
 
@@ -151,5 +156,12 @@ public partial class GlobalSaveManager : Node
 
         // this is how you update a key value pair in a dictionary
         currentSave["scene_path"] = p;
+    }
+
+    public void UpdateItemData()
+    {
+ //       itemDict = GlobalPlayerManager.Instance.INVENTORY_DATA.GetSaveData();
+        currentSave["items"] = GlobalPlayerManager.Instance.INVENTORY_DATA.GetSaveData();
+
     }
 }

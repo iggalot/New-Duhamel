@@ -1,7 +1,8 @@
-[gd_resource type="Resource" load_steps=4 format=3 uid="uid://e3idbcgtngrc"]
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://e3idbcgtngrc"]
 
 [ext_resource type="Script" path="res://items/scripts/ItemData.cs" id="1_3pkpg"]
 [ext_resource type="Texture2D" uid="uid://dxv12ndl5xk7o" path="res://items/sprites/items.png" id="1_q7fwa"]
+[ext_resource type="Resource" uid="uid://dn7m86rvwx36s" path="res://items/item_effects/item_effect_heal_100.tres" id="2_ykdmq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_uxujh"]
 atlas = ExtResource("1_q7fwa")
@@ -18,3 +19,4 @@ ItemPrice = 0
 ItemWeight = 0
 ItemHitPoints = 100
 ItemMaxStackSize = 1
+effects = [ExtResource("2_ykdmq")]

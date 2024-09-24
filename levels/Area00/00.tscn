@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://di8f5mdx72br1"]
+[gd_scene load_steps=25 format=4 uid="uid://di8f5mdx72br1"]
 
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_dc8fm"]
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_f66at"]
@@ -10,8 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="8_8h4lv"]
 [ext_resource type="PackedScene" uid="uid://bpqiml3cwfeh6" path="res://levels/level_transition.tscn" id="10_wi38v"]
 [ext_resource type="PackedScene" uid="uid://dx0nie3xcpboq" path="res://items/item_pickup/item_pickup.tscn" id="11_5wd3g"]
-[ext_resource type="Texture2D" uid="uid://dxv12ndl5xk7o" path="res://items/sprites/items.png" id="12_60qsf"]
-[ext_resource type="Script" path="res://items/scripts/ItemData.cs" id="13_6kxgb"]
+[ext_resource type="Resource" uid="uid://cydfao5w13jfq" path="res://items/gem.tres" id="11_oaumu"]
+[ext_resource type="Resource" uid="uid://bwebgk4e30x46" path="res://items/apple.tres" id="12_jkj2d"]
+[ext_resource type="Resource" uid="uid://dki83om7y48bv" path="res://items/stone.tres" id="13_6c5hm"]
+[ext_resource type="Resource" uid="uid://e3idbcgtngrc" path="res://items/potion.tres" id="13_6lr4s"]
+[ext_resource type="Resource" uid="uid://doa1ooc13oigk" path="res://items/key.tres" id="15_bkm2g"]
+[ext_resource type="Resource" uid="uid://vtf1acisply7" path="res://items/twig.tres" id="16_82bv5"]
+[ext_resource type="Resource" uid="uid://osbmhrt0n44s" path="res://items/spear.tres" id="17_y0qtb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsq5f"]
 texture = ExtResource("1_dc8fm")
@@ -147,22 +152,6 @@ physics_layer_0/collision_layer = 16
 physics_layer_0/collision_mask = 253346067
 sources/1 = SubResource("TileSetAtlasSource_ukvse")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vx3pc"]
-atlas = ExtResource("12_60qsf")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="Resource" id="Resource_iduht"]
-script = ExtResource("13_6kxgb")
-ItemName = "gem"
-ItemDescription = "a green gem"
-ItemTexture = SubResource("AtlasTexture_vx3pc")
-ItemType = ""
-ItemIcon = ""
-ItemPrice = 0
-ItemWeight = 0
-ItemHitPoints = 100
-ItemMaxStackSize = 1
-
 [node name="00" type="Node2D"]
 script = ExtResource("1_f66at")
 metadata/_edit_lock_ = true
@@ -257,15 +246,30 @@ level = "res://levels/Area01/01.tscn"
 size = 4
 side = 1
 
-[node name="ItemPickup" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(269, 294)
-itemData = SubResource("Resource_iduht")
-
 [node name="ItemPickup2" parent="." instance=ExtResource("11_5wd3g")]
 position = Vector2(293, 414)
+itemData = ExtResource("12_jkj2d")
 
 [node name="ItemPickup3" parent="." instance=ExtResource("11_5wd3g")]
 position = Vector2(360, 370)
+itemData = ExtResource("13_6c5hm")
 
 [node name="ItemPickup4" parent="." instance=ExtResource("11_5wd3g")]
 position = Vector2(381, 313)
+itemData = ExtResource("13_6lr4s")
+
+[node name="ItemPickup5" parent="." instance=ExtResource("11_5wd3g")]
+position = Vector2(196, 412)
+itemData = ExtResource("15_bkm2g")
+
+[node name="ItemPickup6" parent="." instance=ExtResource("11_5wd3g")]
+position = Vector2(405, 409)
+itemData = ExtResource("16_82bv5")
+
+[node name="ItemPickup7" parent="." instance=ExtResource("11_5wd3g")]
+position = Vector2(300, 347)
+itemData = ExtResource("17_y0qtb")
+
+[node name="ItemPickup" parent="." instance=ExtResource("11_5wd3g")]
+position = Vector2(258, 298)
+itemData = ExtResource("11_oaumu")
