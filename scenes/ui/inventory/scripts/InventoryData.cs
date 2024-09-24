@@ -6,34 +6,36 @@ public partial class InventoryData : Resource
 
     [Export] public SlotData[] slots { get; set; } = new SlotData[SLOT_COUNT];
 
-
-    public InventoryData()
+    public bool AddItem(ItemData item, int count = 1)
     {
-        //// need to return a duplicate of the slots_array since the resources seem to be internconnected and will duplicate at 
-        //// all instances of the same resouce when using C#
-        //SlotData[] new_slots = new SlotData[SLOT_COUNT];
-        //for (int i = 0; i < slots.Length; i++)
-        //{
-        //    SlotData new_slot = new SlotData();
-        //    new_slot.item_quantity = 0;
-        //    new_slot.item_data = null;
-        //    if (slots[i] != null)
-        //    {
-        //        if (slots[i].item_data != null)
-        //        {
-        //            new_slot.item_data = slots[i].item_data;
-        //            new_slot.item_quantity = slots[i].item_quantity;
-        //        }
-        //    }
+        // does the item already exist in the inventory
+        foreach (var s in slots)
+        {
+            if (s != null)
+            {
+                if (s.item_data == item)
+                {
+                    s.item_quantity += count;
+                    return true;
+                }
+            }
+        }
 
-        //    new_slots[i] = new_slot;
-        //}
+        // search for an empty slot -- if found, add the item to the slot at that index
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i] == null)
+            {
+                SlotData new_slot = new SlotData();
+                new_slot.item_data = item;
+                new_slot.item_quantity = count;
+                slots[i] = new_slot;
+                return true;
+            }
+        }
 
-        //slots = new_slots;
+        GD.Print("Inventory is full");  
 
-    }
-    public void AddItem()
-    {
-
+        return false;
     }
 }

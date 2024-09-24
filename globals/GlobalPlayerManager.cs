@@ -3,8 +3,12 @@ using Godot;
 public partial class GlobalPlayerManager : Node
 {
     public PackedScene PLAYER_SCENE { get; set; }
+    public InventoryData INVENTORY_DATA { get; set; }
+
     private static GlobalPlayerManager _instance;
     public static GlobalPlayerManager Instance => _instance;
+
+    public InventoryUI inventory { get; set; }
 
     public PlayerController player { get; set; }
     public PlayerHud playerHud { get; set; }
@@ -15,12 +19,15 @@ public partial class GlobalPlayerManager : Node
     {
         // set our player controller scene so we can quickly reload when we transition to other areas
         PLAYER_SCENE = GD.Load<PackedScene>("res://scenes/player_controller.tscn");
+        
 
         AddPlayerInstance();
 
         // set a small delay before we declare a player spawned, in case we are loading from another scene
         await ToSignal(GetTree().CreateTimer(0.2), SceneTreeTimer.SignalName.Timeout);
         PlayerSpawned = true;
+
+        INVENTORY_DATA = GD.Load("res://scenes/ui/inventory/player_inventory.tres") as InventoryData;
     }
 
     public void AddPlayerInstance()

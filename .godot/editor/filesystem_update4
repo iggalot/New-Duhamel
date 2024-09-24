@@ -82,3 +82,6 @@ res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource12.tres
 res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource13.tres
 res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource14.tres
 res://scenes/ui/inventory/inventory_slot_scenes/slot_data_resource15.tres
+res://items/item_pickup/item_pickup.tscn
+res://items/item_pickup/ItemPickup.cs
+res://scenes/ui/inventory/InventoryData.tres

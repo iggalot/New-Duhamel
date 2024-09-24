@@ -8,6 +8,7 @@ atlas = ExtResource("1_o1mpt")
 region = Rect2(0, 0, 33, 32)
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_o1u14")
 ItemName = "Gem"
 ItemDescription = "A valuable gem!"
