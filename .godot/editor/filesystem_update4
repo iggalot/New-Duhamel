@@ -69,3 +69,15 @@ res://items/scripts/item_resource.tres
 res://items/item_effects/item_effect_heal_20.tres
 res://items/item_effects/item_effect_heal_100.tres
 res://scenes/monster_controller.tscn
+res://enemies/scripts/monster_controller.tscn
+res://enemies/scripts/states/MonsterFleeState.cs
+res://enemies/scripts/states/MonsterIdleState.cs
+res://enemies/scripts/states/MonsterAttackState.cs
+res://enemies/scripts/states/MonsterDeadState.cs
+res://enemies/scripts/states/MonsterWalkState.cs
+res://enemies/scripts/states/MonsterWanderState.cs
+res://enemies/scripts/states/MonsterChaseState.cs
+res://enemies/scripts/states/MonsterStunState.cs
+res://enemies/scripts/states/MonsterDestroyState.cs
+res://enemies/scripts/DropData.cs
+res://enemies/scripts/drop_data_resource.tres

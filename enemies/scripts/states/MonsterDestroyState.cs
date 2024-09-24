@@ -7,6 +7,8 @@ using System;
 /// </summary>
 public partial class MonsterDestroyState : State
 {
+    PackedScene PICKUP = GD.Load("res://items/item_pickup/item_pickup.tscn") as PackedScene;
+
     // who owns this specific state machine
     MonsterController controllerOwner;
 
@@ -17,6 +19,11 @@ public partial class MonsterDestroyState : State
     [Export] float decelerateSpeed = 50.0f;
 
     [ExportCategory("AI")]
+    [Export] string aiStateNameai_NO_USE = "does nothing"; // a bogus placeholder that does nothing...allows us to define the AI category for later
+
+    [ExportCategory("Item Drops")]
+    [Export] public DropData[] drops { get; set; }
+
 
     public Vector2 damagePosition { get; set; }
     private Vector2 direction { get; set; } = Vector2.Zero;
@@ -62,6 +69,8 @@ public partial class MonsterDestroyState : State
         controllerOwner.UpdateStatusSpriteAnimation(spriteStatusName);
         controllerOwner.animationPlayer.AnimationFinished += OnAnimationFinished;
         DisableHurtBox();
+        DropItems();
+
         return;
     }
 
@@ -108,6 +117,37 @@ public partial class MonsterDestroyState : State
         if(hurt_box != null)
         {
             hurt_box.Monitoring = false;
+        }
+    }
+
+    public void DropItems()
+    {
+        var rng = new RandomNumberGenerator();
+
+        if(drops.Length == 0)
+        {
+            return;
+        }
+
+        for(int i = 0; i < drops.Length; i++)
+        {
+            // check for nulls
+            if (drops[i] == null || drops[i].item == null)
+            {
+                continue;
+            }
+
+            int drop_count = drops[i].GetDropCount();
+
+            for (int j = 0; j < drop_count; j++)
+            {
+                ItemPickup drop = PICKUP.Instantiate() as ItemPickup;
+                drop.itemData = drops[i].item;
+                controllerOwner.GetParent().CallDeferred("add_child", drop);
+                Vector2 offset = new Vector2(rng.Randf() * 32, rng.Randf() * 32);
+                drop.GlobalPosition = controllerOwner.GlobalPosition + offset;
+            }
+
         }
     }
 }

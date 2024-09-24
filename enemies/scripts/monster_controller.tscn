@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=71 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
@@ -7,19 +7,20 @@
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="3_vf2ub"]
 [ext_resource type="Script" path="res://scripts/states/StateMachine.cs" id="3_xlxll"]
 [ext_resource type="Texture2D" uid="uid://nchetx006578" path="res://resources/graphics/duhamel_reaction_sprites.png" id="4_44mec"]
-[ext_resource type="Script" path="res://scripts/states/MonsterIdleState.cs" id="4_a7ia8"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterIdleState.cs" id="4_a7ia8"]
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="5_ixmue"]
-[ext_resource type="Script" path="res://scripts/states/MonsterWalkState.cs" id="5_qkqkv"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterWalkState.cs" id="5_qkqkv"]
 [ext_resource type="PackedScene" uid="uid://d4bxcy4uq47dk" path="res://scenes/ui/health_bar.tscn" id="6_f1s16"]
-[ext_resource type="Script" path="res://scripts/states/MonsterChaseState.cs" id="6_g5jfc"]
-[ext_resource type="Script" path="res://scripts/states/MonsterWanderState.cs" id="6_qvdva"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterChaseState.cs" id="6_g5jfc"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterWanderState.cs" id="6_qvdva"]
 [ext_resource type="AudioStream" uid="uid://cejjl6gawgwqf" path="res://resources/audio/michael_games/hit_01.wav" id="6_rp655"]
-[ext_resource type="Script" path="res://scripts/states/MonsterAttackState.cs" id="7_84jll"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterAttackState.cs" id="7_84jll"]
 [ext_resource type="AudioStream" uid="uid://buadn47d5bteb" path="res://resources/audio/michael_games/hit_00.wav" id="7_qtnq6"]
-[ext_resource type="Script" path="res://scripts/states/MonsterFleeState.cs" id="8_5vnuy"]
-[ext_resource type="Script" path="res://scripts/states/MonsterDeadState.cs" id="9_c6thw"]
-[ext_resource type="Script" path="res://scripts/states/MonsterStunState.cs" id="16_eoxqr"]
-[ext_resource type="Script" path="res://scripts/states/MonsterDestroyState.cs" id="17_d3npy"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterFleeState.cs" id="8_5vnuy"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterDeadState.cs" id="9_c6thw"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterStunState.cs" id="16_eoxqr"]
+[ext_resource type="Script" path="res://enemies/scripts/states/MonsterDestroyState.cs" id="17_d3npy"]
+[ext_resource type="Resource" uid="uid://b6jtqjgra2lt" path="res://enemies/scripts/drop_data_resource.tres" id="18_36cwn"]
 [ext_resource type="Texture2D" uid="uid://db05e5y0m7b1g" path="res://resources/graphics/DestroySmoke (1).png" id="20_1kio5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lt8og"]
@@ -1483,6 +1484,7 @@ script = ExtResource("16_eoxqr")
 
 [node name="MonsterDestroy" type="Node" parent="StateMachine"]
 script = ExtResource("17_d3npy")
+drops = Array[Resource]([ExtResource("18_36cwn"), null])
 
 [node name="StatusAnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="3_gbxlj"]
 [ext_resource type="PackedScene" uid="uid://v5xun7lg8778" path="res://props/plants/plant.tscn" id="4_us75b"]
 [ext_resource type="PackedScene" uid="uid://j302rqwol1ll" path="res://scenes/ui/player_hud.tscn" id="5_wdeb4"]
-[ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://scenes/monster_controller.tscn" id="6_yg1s0"]
+[ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://enemies/scripts/monster_controller.tscn" id="6_yg1s0"]
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="8_8h4lv"]
 [ext_resource type="PackedScene" uid="uid://bpqiml3cwfeh6" path="res://levels/level_transition.tscn" id="10_wi38v"]
 [ext_resource type="PackedScene" uid="uid://dx0nie3xcpboq" path="res://items/item_pickup/item_pickup.tscn" id="11_5wd3g"]
