@@ -105,7 +105,8 @@ public partial class PlayerWalkState : State
 
         if (input_event.IsActionPressed("interact"))
         {
-            EmitSignal("InteractPressed");
+            // emit our global player interaction signal
+            GlobalPlayerManager.Instance.EmitInteractPressedSignal();
         }
 
         return null;

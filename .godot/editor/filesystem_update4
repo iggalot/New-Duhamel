@@ -82,3 +82,4 @@ res://player/scripts/states/PlayerDeadState.cs
 res://player/scripts/states/PlayerAttackState.cs
 res://interactables/treasure_chest/treasure_chest.tscn
 res://interactables/treasure_chest/scripts/TreasureChest.cs
+res://props/plants/plant.tscn

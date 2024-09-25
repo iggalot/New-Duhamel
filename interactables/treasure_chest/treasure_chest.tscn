@@ -197,10 +197,12 @@ size = Vector2(30, 11)
 size = Vector2(36, 17)
 
 [node name="TreasureChest" type="Node2D"]
+z_as_relative = false
+y_sort_enabled = true
 script = ExtResource("1_0chqt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -10)
+position = Vector2(-1, -10)
 texture = ExtResource("2_4bohb")
 hframes = 2
 

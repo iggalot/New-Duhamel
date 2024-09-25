@@ -7,6 +7,12 @@ public partial class GlobalPlayerManager : Node
 
     [Signal] public delegate void InteractPressedEventHandler();
 
+    // a function that can be called from outside of the GlobalPlayerManager to emit a signal for player ineraction pressed
+    public void EmitInteractPressedSignal()
+    {
+        EmitSignal(SignalName.InteractPressed);
+    }
+
     private static GlobalPlayerManager _instance;
     public static GlobalPlayerManager Instance => _instance;
 
@@ -35,6 +41,8 @@ public partial class GlobalPlayerManager : Node
     public void AddPlayerInstance()
     {
         player = PLAYER_SCENE.Instantiate() as PlayerController;
+        player.ZIndex = 2;
+        player.YSortEnabled = true;
         AddChild(player);
         return;
     }

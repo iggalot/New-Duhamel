@@ -920,7 +920,9 @@ _data = {
 }
 
 [node name="PlayerController" type="CharacterBody2D"]
+z_index = 2
 z_as_relative = false
+y_sort_enabled = true
 position = Vector2(274, 162)
 collision_mask = 886
 motion_mode = 1
@@ -1050,6 +1052,7 @@ collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactions/Area2D"]
+z_index = 2
 position = Vector2(0, 18)
 shape = SubResource("RectangleShape2D_o3h88")
 debug_color = Color(0.12549, 0.627451, 0.443137, 0.611765)
