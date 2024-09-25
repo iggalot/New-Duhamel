@@ -31,6 +31,7 @@ public partial class TreasureChest : Node2D
     public Label label { get; set; }
     public AnimationPlayer animation_player { get; set; }
     public Area2D interact_area { get; set; }
+    public PersistentDataHandler is_open_data { get; set; }
 
     public override void _Ready()
     {
@@ -39,6 +40,7 @@ public partial class TreasureChest : Node2D
         label = GetNode<Label>("ItemSprite/Label");
         animation_player = GetNode<AnimationPlayer>("AnimationPlayer");
         interact_area = GetNode<Area2D>("Area2D");
+        is_open_data = GetNode<PersistentDataHandler>("PersistentDataIsOpen");
 
         UpdateTexture();
         UpdateLabel();
@@ -50,8 +52,21 @@ public partial class TreasureChest : Node2D
 
         interact_area.AreaEntered += OnAreaEnter;
         interact_area.AreaExited += OnAreaExit;
+        is_open_data.DataLoaded += SetChestState;
 
+        SetChestState();
+    }
 
+    private void SetChestState()
+    {
+        isOpen = is_open_data.Value;
+        if(isOpen is true)
+        {
+            animation_player.Play("opened");
+        } else
+        {
+            animation_player.Play("closed");
+        }
     }
 
     private void OnAreaEnter(Area2D area)
@@ -75,6 +90,8 @@ public partial class TreasureChest : Node2D
             return;
         }
         isOpen = true;
+        is_open_data.SetValue();
+
         animation_player.Play("open_chest");
 
         if(itemData != null && itemQuantity > 0)

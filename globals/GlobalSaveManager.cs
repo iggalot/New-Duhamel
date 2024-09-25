@@ -34,33 +34,33 @@ public partial class GlobalSaveManager : Node
 
         playerDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "stat1", new Dictionary<string, int>() { { "hp", 1 } } },
-            { "stat2", new Dictionary<string, int>() { { "max_hp", 1 } } },
-            { "stat3", new Dictionary<string, int>() { { "pos_x", 0 } } },
-            { "stat4", new Dictionary<string, int>() { { "pos_y", 0 } } }
+            { "stat0", new Dictionary<string, int>() { { "hp", 1 } } },
+            { "stat1", new Dictionary<string, int>() { { "max_hp", 1 } } },
+            { "stat2", new Dictionary<string, int>() { { "pos_x", 0 } } },
+            { "stat3", new Dictionary<string, int>() { { "pos_y", 0 } } }
         };
 
         itemDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "item1", new Dictionary<string, int>() { {"sword", 1 } } } ,
-            { "item2", new Dictionary<string, int>() { { "axe", 2 } } } ,
-            { "item3", new Dictionary<string, int>() { { "spear", 3 } } },
-            { "item4", new Dictionary<string, int>() { { "wand", 4 } } }
+            { "item0", new Dictionary<string, int>() { {"sword", 1 } } } ,
+            { "item1", new Dictionary<string, int>() { { "axe", 2 } } } ,
+            { "item2", new Dictionary<string, int>() { { "spear", 3 } } },
+            { "item3", new Dictionary<string, int>() { { "wand", 4 } } }
         };
 
         persistenceDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "effect1", new Dictionary<string, int>() { { "bless", 0 } } } ,
-            { "effect2", new Dictionary<string, int>() { { "health_up", 1 } } }
+            { "persistence0", new Dictionary<string, int>() { { "bless", 0 } } } ,
+            { "persistence1", new Dictionary<string, int>() { { "health_up", 1 } } }
         };
 
         questDict = new Dictionary<string, Dictionary<string, int>>()
         {
-            { "quest1", new Dictionary<string, int>() { { "quest_1", 0 } } } ,
-            { "quest2", new Dictionary<string, int>() { { "quest_2", 1 } } } ,
-            { "quest3", new Dictionary<string, int>() { { "quest_3", 2 } } } ,
-            { "quest4", new Dictionary<string, int>() { { "quest_4", 3 } } } ,
-            { "quest5", new Dictionary<string, int>() { { "quest_5", 4 } } }
+            { "quest0", new Dictionary<string, int>() { { "quest_0", 0 } } } ,
+            { "quest1", new Dictionary<string, int>() { { "quest_1", 1 } } } ,
+            { "quest2", new Dictionary<string, int>() { { "quest_2", 2 } } } ,
+            { "quest3", new Dictionary<string, int>() { { "quest_3", 3 } } } ,
+            { "quest4", new Dictionary<string, int>() { { "quest_4", 4 } } }
         };
 
         currentSave = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>()
@@ -172,8 +172,47 @@ public partial class GlobalSaveManager : Node
 
     public void UpdateItemData()
     {
- //       itemDict = GlobalPlayerManager.Instance.INVENTORY_DATA.GetSaveData();
         currentSave["items"] = GlobalPlayerManager.Instance.INVENTORY_DATA.GetSaveData();
 
+    }
+
+    public void AddPersistentValue(string value)
+    {
+        if(CheckPersistentValue(value) is false)
+        {
+            Dictionary<string, Dictionary<string, int>> dict = new Dictionary<string, Dictionary<string, int>>();
+            Dictionary<string, int> sub_dict = new Dictionary<string, int>();
+            int index = currentSave["persistence"].Count;
+            string index_name = "persistence"+index.ToString();
+            sub_dict.Add(value, 1);
+
+            // write the persistence data to the save file subdictionary
+            currentSave["persistence"].Add(index_name, sub_dict);
+        }
+    }
+
+    public bool CheckPersistentValue(string value)
+    {
+        var p = currentSave["persistence"];
+        string[] keys = p.Keys.ToArray();
+
+        for (int i = 0; i < keys.Length; i++)
+        {
+            // get the current subdictionary key "persitence0, persistence1, etc."
+            string key = keys[i];
+
+            // get the dictionary related to the subdictionary key
+            Dictionary<string, int> dict = p[key];
+
+            // and search each subdictionary for the matching value
+            foreach (var item in dict)
+            {
+                if (item.Key == value)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

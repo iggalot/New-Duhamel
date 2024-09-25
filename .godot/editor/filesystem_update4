@@ -63,3 +63,5 @@ res://items/item_effects/ItemEffect.cs
 res://enemies/scripts/DropData.cs
 res://enemies/scripts/states/MonsterWalkState.cs
 res://scripts/ProjectileController.cs
+res://general_nodes/persistent_data_handler/persistent_data_handler.tscn
+res://general_nodes/persistent_data_handler/PersistentDataHandler.cs

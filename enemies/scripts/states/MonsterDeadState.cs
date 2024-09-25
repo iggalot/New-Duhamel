@@ -74,9 +74,6 @@ public partial class MonsterDeadState : State
 
             return this;
         }
-
-
-        return null;
     }
 
     private void UpdateVelocityAndSpeed(float speed)

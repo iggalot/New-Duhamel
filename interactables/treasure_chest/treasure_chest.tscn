@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://ditc03m3kew18"]
+[gd_scene load_steps=14 format=3 uid="uid://ditc03m3kew18"]
 
 [ext_resource type="Script" path="res://interactables/treasure_chest/scripts/TreasureChest.cs" id="1_0chqt"]
 [ext_resource type="Texture2D" uid="uid://ca4kos4puirvv" path="res://interactables/treasure_chest/treasure-chest.png" id="2_4bohb"]
 [ext_resource type="Texture2D" uid="uid://dxv12ndl5xk7o" path="res://items/sprites/items.png" id="3_0hnt7"]
 [ext_resource type="AudioStream" uid="uid://c3c1gvbwg51c2" path="res://interactables/treasure_chest/treasure-open.wav" id="4_s7lju"]
+[ext_resource type="PackedScene" uid="uid://c21juji3573da" path="res://general_nodes/persistent_data_handler/persistent_data_handler.tscn" id="5_wpbxo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_as2vb"]
 atlas = ExtResource("3_0hnt7")
@@ -251,3 +252,5 @@ monitorable = false
 position = Vector2(0, 4.5)
 shape = SubResource("RectangleShape2D_om7f4")
 debug_color = Color(0.163443, 0.626241, 0.438295, 0.42)
+
+[node name="PersistentDataIsOpen" parent="." instance=ExtResource("5_wpbxo")]
