@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://di8f5mdx72br1"]
+[gd_scene load_steps=19 format=4 uid="uid://di8f5mdx72br1"]
 
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_dc8fm"]
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_f66at"]
@@ -9,14 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://enemies/scripts/monster_controller.tscn" id="6_yg1s0"]
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="8_8h4lv"]
 [ext_resource type="PackedScene" uid="uid://bpqiml3cwfeh6" path="res://levels/level_transition.tscn" id="10_wi38v"]
-[ext_resource type="PackedScene" uid="uid://dx0nie3xcpboq" path="res://items/item_pickup/item_pickup.tscn" id="11_5wd3g"]
-[ext_resource type="Resource" uid="uid://cydfao5w13jfq" path="res://items/gem.tres" id="11_oaumu"]
-[ext_resource type="Resource" uid="uid://bwebgk4e30x46" path="res://items/apple.tres" id="12_jkj2d"]
-[ext_resource type="Resource" uid="uid://dki83om7y48bv" path="res://items/stone.tres" id="13_6c5hm"]
-[ext_resource type="Resource" uid="uid://e3idbcgtngrc" path="res://items/potion.tres" id="13_6lr4s"]
-[ext_resource type="Resource" uid="uid://doa1ooc13oigk" path="res://items/key.tres" id="15_bkm2g"]
-[ext_resource type="Resource" uid="uid://vtf1acisply7" path="res://items/twig.tres" id="16_82bv5"]
-[ext_resource type="Resource" uid="uid://osbmhrt0n44s" path="res://items/spear.tres" id="17_y0qtb"]
+[ext_resource type="PackedScene" uid="uid://ditc03m3kew18" path="res://interactables/treasure_chest/treasure_chest.tscn" id="11_wkuar"]
 [ext_resource type="PackedScene" uid="uid://byyjaay07k25i" path="res://enemies/scripts/monster_controller_boss1.tscn" id="18_b5r4g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsq5f"]
@@ -247,33 +240,14 @@ level = "res://levels/Area01/01.tscn"
 size = 4
 side = 1
 
-[node name="ItemPickup2" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(293, 414)
-itemData = ExtResource("12_jkj2d")
-
-[node name="ItemPickup3" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(360, 370)
-itemData = ExtResource("13_6c5hm")
-
-[node name="ItemPickup4" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(381, 313)
-itemData = ExtResource("13_6lr4s")
-
-[node name="ItemPickup5" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(196, 412)
-itemData = ExtResource("15_bkm2g")
-
-[node name="ItemPickup6" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(405, 409)
-itemData = ExtResource("16_82bv5")
-
-[node name="ItemPickup7" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(300, 347)
-itemData = ExtResource("17_y0qtb")
-
-[node name="ItemPickup" parent="." instance=ExtResource("11_5wd3g")]
-position = Vector2(258, 298)
-itemData = ExtResource("11_oaumu")
-
 [node name="MonsterController3" parent="." instance=ExtResource("18_b5r4g")]
 position = Vector2(447, 104)
+
+[node name="TreasureChest" parent="." instance=ExtResource("11_wkuar")]
+position = Vector2(322, 186)
+
+[node name="TreasureChest2" parent="." instance=ExtResource("11_wkuar")]
+position = Vector2(247, 185)
+
+[node name="TreasureChest3" parent="." instance=ExtResource("11_wkuar")]
+position = Vector2(167, 185)

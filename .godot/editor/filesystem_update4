@@ -71,3 +71,14 @@ res://enemies/scripts/DropData.cs
 res://enemies/scripts/states/MonsterWalkState.cs
 res://scenes/ui/pause_menu/pause_menu.tscn
 res://scenes/ui/inventory/player_inventory.tres
+res://player/player_controller.tscn
+res://scenes/data/character_data.tscn
+res://scenes/data/item_data.tscn
+res://player/scripts/states/PlayerIdleState.cs
+res://player/scripts/states/PlayerWalkState.cs
+res://player/scripts/states/PlayerStunState.cs
+res://player/scripts/PlayerCamera.cs
+res://player/scripts/states/PlayerDeadState.cs
+res://player/scripts/states/PlayerAttackState.cs
+res://interactables/treasure_chest/treasure_chest.tscn
+res://interactables/treasure_chest/scripts/TreasureChest.cs

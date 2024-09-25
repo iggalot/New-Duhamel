@@ -1,0 +1,251 @@
+[gd_scene load_steps=13 format=3 uid="uid://ditc03m3kew18"]
+
+[ext_resource type="Script" path="res://interactables/treasure_chest/scripts/TreasureChest.cs" id="1_0chqt"]
+[ext_resource type="Texture2D" uid="uid://ca4kos4puirvv" path="res://interactables/treasure_chest/treasure-chest.png" id="2_4bohb"]
+[ext_resource type="Texture2D" uid="uid://dxv12ndl5xk7o" path="res://items/sprites/items.png" id="3_0hnt7"]
+[ext_resource type="AudioStream" uid="uid://c3c1gvbwg51c2" path="res://interactables/treasure_chest/treasure-open.wav" id="4_s7lju"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_as2vb"]
+atlas = ExtResource("3_0hnt7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="Animation" id="Animation_oey0s"]
+resource_name = "closed"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_71r14"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ItemSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -9)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ItemSprite:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_844on"]
+resource_name = "opened"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_igk48"]
+resource_name = "open_chest"
+length = 1.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer2D")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("4_s7lju")
+}],
+"times": PackedFloat32Array(0.1)
+}
+tracks/2/use_blend = true
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ItemSprite:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1, 0.3, 0.5, 1.5),
+"transitions": PackedFloat32Array(0.5, -2, 2, 1),
+"update": 0,
+"values": [Vector2(0, -9), Vector2(0, -64), Vector2(0, -48), Vector2(0, -48)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ItemSprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2, 0.3, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(2, 2, 2, 1), Color(1, 1, 1, 1), Color(2, 2, 2, 1), Color(2, 2, 2, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_33s0h"]
+_data = {
+"RESET": SubResource("Animation_71r14"),
+"closed": SubResource("Animation_oey0s"),
+"open_chest": SubResource("Animation_igk48"),
+"opened": SubResource("Animation_844on")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cmvx5"]
+size = Vector2(30, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_om7f4"]
+size = Vector2(36, 17)
+
+[node name="TreasureChest" type="Node2D"]
+script = ExtResource("1_0chqt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -10)
+texture = ExtResource("2_4bohb")
+hframes = 2
+
+[node name="ItemSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -9)
+texture = SubResource("AtlasTexture_as2vb")
+
+[node name="Label" type="Label" parent="ItemSprite"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 18.0
+offset_top = -27.0
+offset_right = 58.0
+offset_bottom = -4.0
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 10
+text = "x99"
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_33s0h")
+}
+autoplay = "closed"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = -26.804
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_cmvx5")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_om7f4")
+debug_color = Color(0.163443, 0.626241, 0.438295, 0.42)

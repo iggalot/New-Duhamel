@@ -5,6 +5,8 @@ public partial class GlobalPlayerManager : Node
     public PackedScene PLAYER_SCENE { get; set; }
     public InventoryData INVENTORY_DATA { get; set; } = new InventoryData();
 
+    [Signal] public delegate void InteractPressedEventHandler();
+
     private static GlobalPlayerManager _instance;
     public static GlobalPlayerManager Instance => _instance;
 
@@ -18,7 +20,7 @@ public partial class GlobalPlayerManager : Node
     public async override void _Ready()
     {
         // set our player controller scene so we can quickly reload when we transition to other areas
-        PLAYER_SCENE = GD.Load<PackedScene>("res://scenes/player_controller.tscn");
+        PLAYER_SCENE = GD.Load<PackedScene>("res://player/player_controller.tscn");
         
 
         AddPlayerInstance();

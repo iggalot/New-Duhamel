@@ -85,6 +85,11 @@ public partial class PlayerIdleState : State
             return attackState;
         }
 
+        if (input_event.IsActionPressed("interact"))
+        {
+            EmitSignal("InteractPressed");
+        }
+
         return null;
     }
 }

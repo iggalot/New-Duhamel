@@ -103,6 +103,11 @@ public partial class PlayerWalkState : State
             return attackState;
         }
 
+        if (input_event.IsActionPressed("interact"))
+        {
+            EmitSignal("InteractPressed");
+        }
+
         return null;
     }
 }
