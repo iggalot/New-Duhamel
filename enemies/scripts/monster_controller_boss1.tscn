@@ -1,8 +1,8 @@
 [gd_scene load_steps=73 format=3 uid="uid://byyjaay07k25i"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_de4jf"]
-[ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://scenes/hitbox/hurt_box.tscn" id="2_n8ptp"]
-[ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://scenes/hitbox/hit_box.tscn" id="3_vvmyy"]
+[ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="2_n8ptp"]
+[ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="3_vvmyy"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="4_ug065"]
 [ext_resource type="Texture2D" uid="uid://imm8d47rqvpy" path="res://resources/graphics/enemies/64x64_boss1.png" id="5_10edv"]
 [ext_resource type="AudioStream" uid="uid://cejjl6gawgwqf" path="res://resources/audio/michael_games/hit_01.wav" id="6_pv5tp"]

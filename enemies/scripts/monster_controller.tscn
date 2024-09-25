@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
-[ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://scenes/hitbox/hurt_box.tscn" id="2_61smt"]
-[ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://scenes/hitbox/hit_box.tscn" id="3_4nxh3"]
+[ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="2_61smt"]
+[ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="3_4nxh3"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="3_vf2ub"]
 [ext_resource type="Script" path="res://scripts/states/StateMachine.cs" id="3_xlxll"]
 [ext_resource type="Texture2D" uid="uid://nchetx006578" path="res://resources/graphics/duhamel_reaction_sprites.png" id="4_44mec"]

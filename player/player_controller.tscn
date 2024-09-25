@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bibaxd28kg4mr" path="res://resources/graphics/320x320_Duhamel_Tileset_1.png" id="3_t3wk4"]
 [ext_resource type="Texture2D" uid="uid://jes1x0om2kdh" path="res://resources/graphics/player/AttackSprite01.png" id="4_jlnkn"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="5_gb533"]
-[ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://scenes/hitbox/hurt_box.tscn" id="6_p6cpo"]
+[ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="6_p6cpo"]
 [ext_resource type="Script" path="res://player/scripts/PlayerCamera.cs" id="7_dxttv"]
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="8_deof1"]
 [ext_resource type="PackedScene" uid="uid://c67btl4crsql7" path="res://scenes/state_machine.tscn" id="9_gwkrn"]
@@ -16,7 +16,7 @@
 [ext_resource type="Script" path="res://player/scripts/states/PlayerDeadState.cs" id="14_trp7c"]
 [ext_resource type="Script" path="res://player/scripts/states/PlayerStunState.cs" id="15_0holu"]
 [ext_resource type="Script" path="res://scripts/PlayerInteractionsHost.cs" id="16_v40j0"]
-[ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://scenes/hitbox/hit_box.tscn" id="17_fwi7f"]
+[ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="17_fwi7f"]
 [ext_resource type="AudioStream" uid="uid://coymc6f8hkl0e" path="res://resources/audio/michael_games/hit_player.wav" id="18_x8esv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x5nm2"]
