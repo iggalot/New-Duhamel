@@ -11,6 +11,21 @@
 atlas = ExtResource("3_sy0qj")
 region = Rect2(0, 0, 32, 32)
 
+[sub_resource type="Animation" id="Animation_tcagu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_a67kd"]
 resource_name = "default"
 step = 0.025
@@ -25,21 +40,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(-2, -2, -2, -2, -2, -2, -2),
 "update": 0,
 "values": [Vector2(0, -6), Vector2(0, 0), Vector2(0, -3), Vector2(0, -6), Vector2(0, -1), Vector2(0, 0), Vector2(0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_tcagu"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_clo3v"]
@@ -73,6 +73,7 @@ texture = SubResource("AtlasTexture_ccstr")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_2k2tj")
+volume_db = -22.583
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

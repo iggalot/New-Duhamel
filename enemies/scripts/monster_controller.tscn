@@ -1519,7 +1519,7 @@ offset_right = -14.0
 offset_bottom = -30.0
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-volume_db = -28.299
+volume_db = -31.27
 max_polyphony = 4
 
 [node name="DestroyEffectSprite" type="Sprite2D" parent="."]

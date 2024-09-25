@@ -1,23 +1,24 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1727214649
+::res://::1727222811
 export_presets.cfg::TextFile::-1::1725911922::0::1::::<><>::
 icon.svg::CompressedTexture2D::3380631997270736192::1725633215::1725633221::1::::<><>::
 README.md::TextFile::-1::1725632457::0::1::::<><>::
 ::res://enemies/::1727214534
-::res://enemies/scripts/::1727216803
+::res://enemies/scripts/::1727218724
 DropData.cs::CSharpScript::-1::1727216052::0::1::::<>Resource<>::
-drop_data_resource1.tres::Resource::1473048762079328478::1727216771::0::1::::<><>::uid://bwebgk4e30x46::::res://items/apple.tres<>res://enemies/scripts/DropData.cs
-drop_data_resource2.tres::Resource::6876034544183150368::1727216782::0::1::::<><>::uid://bwebgk4e30x46::::res://items/apple.tres<>res://enemies/scripts/DropData.cs
-drop_data_resource3.tres::Resource::3495955636514487778::1727216793::0::1::::<><>::uid://bwebgk4e30x46::::res://items/apple.tres<>res://enemies/scripts/DropData.cs
-drop_data_resource4.tres::Resource::5174252815210427118::1727216803::0::1::::<><>::uid://bwebgk4e30x46::::res://items/apple.tres<>res://enemies/scripts/DropData.cs
+drop_data_resource1.tres::Resource::1473048762079328478::1727217043::0::1::::<><>::uid://doa1ooc13oigk::::res://items/key.tres<>res://enemies/scripts/DropData.cs
+drop_data_resource2.tres::Resource::6876034544183150368::1727217043::0::1::::<><>::uid://e3idbcgtngrc::::res://items/potion.tres<>res://enemies/scripts/DropData.cs
+drop_data_resource3.tres::Resource::3495955636514487778::1727217043::0::1::::<><>::uid://cydfao5w13jfq::::res://items/gem.tres<>res://enemies/scripts/DropData.cs
+drop_data_resource4.tres::Resource::5174252815210427118::1727217043::0::1::::<><>::res://enemies/scripts/DropData.cs
+drop_data_resource5.tres::Resource::8942719578973608883::1727217043::0::1::::<><>::res://enemies/scripts/DropData.cs
 drop_data_resource.tres::Resource::134765791605180549::1727216299::0::1::::<><>::uid://bwebgk4e30x46::::res://items/apple.tres<>res://enemies/scripts/DropData.cs
-monster_controller.tscn::PackedScene::8252329953364902728::1727216403::0::1::::<><>::uid://bofurrov8se4w::::res://icon.svg<>res://scripts/MonsterController.cs<>uid://cngf2m40cvc5j::::res://scenes/hitbox/hurt_box.tscn<>uid://dpgyjhpcpir6s::::res://scenes/hitbox/hit_box.tscn<>uid://dfkvkgjn3j14v::::res://resources/graphics/player/michael_games/Shadow.png<>res://scripts/states/StateMachine.cs<>uid://nchetx006578::::res://resources/graphics/duhamel_reaction_sprites.png<>res://enemies/scripts/states/MonsterIdleState.cs<>uid://dgqraaf12cfmn::::res://scenes/data/character_data.tscn<>res://enemies/scripts/states/MonsterWalkState.cs<>uid://d4bxcy4uq47dk::::res://scenes/ui/health_bar.tscn<>res://enemies/scripts/states/MonsterChaseState.cs<>res://enemies/scripts/states/MonsterWanderState.cs<>uid://cejjl6gawgwqf::::res://resources/audio/michael_games/hit_01.wav<>res://enemies/scripts/states/MonsterAttackState.cs<>uid://buadn47d5bteb::::res://resources/audio/michael_games/hit_00.wav<>res://enemies/scripts/states/MonsterFleeState.cs<>res://enemies/scripts/states/MonsterDeadState.cs<>res://enemies/scripts/states/MonsterStunState.cs<>res://enemies/scripts/states/MonsterDestroyState.cs<>uid://b6jtqjgra2lt::::res://enemies/scripts/drop_data_resource.tres<>uid://db05e5y0m7b1g::::res://resources/graphics/DestroySmoke (1).png
-drop_data_resource5.tres::Resource::8942719578973608883::1727216810::0::1::::<><>::uid://bwebgk4e30x46::::res://items/apple.tres<>res://enemies/scripts/DropData.cs
-::res://enemies/scripts/states/::1727216397
+monster_controller.tscn::PackedScene::8252329953364902728::1727218724::0::1::::<><>::uid://bofurrov8se4w::::res://icon.svg<>res://scripts/MonsterController.cs<>uid://cngf2m40cvc5j::::res://scenes/hitbox/hurt_box.tscn<>uid://dpgyjhpcpir6s::::res://scenes/hitbox/hit_box.tscn<>uid://dfkvkgjn3j14v::::res://resources/graphics/player/michael_games/Shadow.png<>res://scripts/states/StateMachine.cs<>uid://nchetx006578::::res://resources/graphics/duhamel_reaction_sprites.png<>res://enemies/scripts/states/MonsterIdleState.cs<>uid://dgqraaf12cfmn::::res://scenes/data/character_data.tscn<>res://enemies/scripts/states/MonsterWalkState.cs<>uid://d4bxcy4uq47dk::::res://scenes/ui/health_bar.tscn<>res://enemies/scripts/states/MonsterChaseState.cs<>res://enemies/scripts/states/MonsterWanderState.cs<>uid://cejjl6gawgwqf::::res://resources/audio/michael_games/hit_01.wav<>res://enemies/scripts/states/MonsterAttackState.cs<>uid://buadn47d5bteb::::res://resources/audio/michael_games/hit_00.wav<>res://enemies/scripts/states/MonsterFleeState.cs<>res://enemies/scripts/states/MonsterDeadState.cs<>res://enemies/scripts/states/MonsterStunState.cs<>res://enemies/scripts/states/MonsterDestroyState.cs<>uid://u8s5r76goeew::::res://enemies/scripts/drop_data_resource1.tres<>uid://c472jwx00tksm::::res://enemies/scripts/drop_data_resource2.tres<>uid://db05e5y0m7b1g::::res://resources/graphics/DestroySmoke (1).png<>uid://bp2p44vh5jidu::::res://enemies/scripts/drop_data_resource3.tres
+monster_controller_boss1.tscn::PackedScene::4121044488292590688::1727223019::0::1::::<><>::res://scripts/MonsterController.cs<>uid://cngf2m40cvc5j::::res://scenes/hitbox/hurt_box.tscn<>uid://dpgyjhpcpir6s::::res://scenes/hitbox/hit_box.tscn<>uid://dfkvkgjn3j14v::::res://resources/graphics/player/michael_games/Shadow.png<>uid://bofurrov8se4w::::res://icon.svg<>uid://cejjl6gawgwqf::::res://resources/audio/michael_games/hit_01.wav<>uid://buadn47d5bteb::::res://resources/audio/michael_games/hit_00.wav<>res://scripts/states/StateMachine.cs<>res://enemies/scripts/states/MonsterIdleState.cs<>res://enemies/scripts/states/MonsterWanderState.cs<>res://enemies/scripts/states/MonsterWalkState.cs<>res://enemies/scripts/states/MonsterChaseState.cs<>res://enemies/scripts/states/MonsterAttackState.cs<>res://enemies/scripts/states/MonsterFleeState.cs<>res://enemies/scripts/states/MonsterDeadState.cs<>res://enemies/scripts/states/MonsterStunState.cs<>res://enemies/scripts/states/MonsterDestroyState.cs<>uid://u8s5r76goeew::::res://enemies/scripts/drop_data_resource1.tres<>uid://c472jwx00tksm::::res://enemies/scripts/drop_data_resource2.tres<>uid://bp2p44vh5jidu::::res://enemies/scripts/drop_data_resource3.tres<>uid://nchetx006578::::res://resources/graphics/duhamel_reaction_sprites.png<>uid://dgqraaf12cfmn::::res://scenes/data/character_data.tscn<>uid://d4bxcy4uq47dk::::res://scenes/ui/health_bar.tscn<>uid://db05e5y0m7b1g::::res://resources/graphics/DestroySmoke (1).png
+::res://enemies/scripts/states/::1727217626
 MonsterAttackState.cs::CSharpScript::-1::1726800626::0::1::::<>Node<>::
 MonsterChaseState.cs::CSharpScript::-1::1726800600::0::1::::<>Node<>::
 MonsterDeadState.cs::CSharpScript::-1::1726800685::0::1::::<>Node<>::
-MonsterDestroyState.cs::CSharpScript::-1::1727216397::0::1::::<>Node<>::
+MonsterDestroyState.cs::CSharpScript::-1::1727217626::0::1::::<>Node<>::
 MonsterFleeState.cs::CSharpScript::-1::1726800666::0::1::::<>Node<>::
 MonsterIdleState.cs::CSharpScript::-1::1726586376::0::1::::<>Node<>::
 MonsterStunState.cs::CSharpScript::-1::1726631974::0::1::::<>Node<>::
@@ -44,9 +45,9 @@ ItemEffectHeal.cs::CSharpScript::-1::1727198052::0::1::::<>Resource<>::
 item_effect_heal.tres::Resource::3285182290362935309::1727198052::0::1::::<><>::uid://gcc3tyya3lhe::::res://items/item_effects/hp-up.wav<>res://items/item_effects/ItemEffectHeal.cs
 item_effect_heal_20.tres::Resource::565708917831627129::1727198627::0::1::::<><>::uid://gcc3tyya3lhe::::res://items/item_effects/hp-up.wav<>res://items/item_effects/ItemEffectHeal.cs
 item_effect_heal_100.tres::Resource::8138566297085706392::1727198627::0::1::::<><>::uid://gcc3tyya3lhe::::res://items/item_effects/hp-up.wav<>res://items/item_effects/ItemEffectHeal.cs
-::res://items/item_pickup/::1727204146
-ItemPickup.cs::CSharpScript::-1::1727194201::0::1::::<>Node2D<>::
-item_pickup.tscn::PackedScene::8826018760258948456::1727204146::0::1::::<><>::res://items/item_pickup/ItemPickup.cs<>uid://baiuifmeaqgb4::::res://items/audio/item_pickup.wav
+::res://items/item_pickup/::1727218724
+ItemPickup.cs::CSharpScript::-1::1727217448::0::1::::<>CharacterBody2D<>::
+item_pickup.tscn::PackedScene::8826018760258948456::1727218724::0::1::::<><>::res://items/item_pickup/ItemPickup.cs<>uid://baiuifmeaqgb4::::res://items/audio/item_pickup.wav<>uid://dfkvkgjn3j14v::::res://resources/graphics/player/michael_games/Shadow.png<>uid://dxv12ndl5xk7o::::res://items/sprites/items.png
 ::res://items/scripts/::1727198052
 ItemData.cs::CSharpScript::-1::1727157610::0::1::::<>Resource<>::
 item_resource.tres::Resource::4512067311956428810::1727198052::0::1::::<><>::res://items/scripts/ItemData.cs
@@ -55,12 +56,12 @@ items.png::CompressedTexture2D::8818584933815425070::1727108286::1727108322::1::
 ::res://levels/::1727068923
 level_transition.tscn::PackedScene::3472791168929380581::1727068923::0::1::::<><>::res://levels/scripts/LevelTransition.cs
 player_spawn.tscn::PackedScene::1223312088899079937::1726851915::0::1::::<><>::uid://bibaxd28kg4mr::::res://resources/graphics/320x320_Duhamel_Tileset_1.png<>res://levels/scripts/PlayerSpawn.cs
-::res://levels/Area00/::1727216403
-00.tscn::PackedScene::7789255060851969496::1727216403::0::1::::<><>::uid://byq1wt0drml5y::::res://resources/graphics/Dungeon_Tileset.png<>res://levels/scripts/Level.cs<>uid://ei667r4b0lv8::::res://resources/graphics/light.png<>uid://bofurrov8se4w::::res://icon.svg<>uid://v5xun7lg8778::::res://props/plants/plant.tscn<>uid://j302rqwol1ll::::res://scenes/ui/player_hud.tscn<>uid://dptqwy7w78t6w::::res://enemies/scripts/monster_controller.tscn<>uid://rot1hyfthcov::::res://levels/player_spawn.tscn<>uid://bpqiml3cwfeh6::::res://levels/level_transition.tscn<>uid://dx0nie3xcpboq::::res://items/item_pickup/item_pickup.tscn<>uid://cydfao5w13jfq::::res://items/gem.tres<>uid://bwebgk4e30x46::::res://items/apple.tres<>uid://dki83om7y48bv::::res://items/stone.tres<>uid://e3idbcgtngrc::::res://items/potion.tres<>uid://doa1ooc13oigk::::res://items/key.tres<>uid://vtf1acisply7::::res://items/twig.tres<>uid://osbmhrt0n44s::::res://items/spear.tres
-::res://levels/Area01/::1727216403
-01.tscn::PackedScene::4382524312460437797::1727216403::0::1::::<><>::res://levels/scripts/Level.cs<>uid://byq1wt0drml5y::::res://resources/graphics/Dungeon_Tileset.png<>uid://j302rqwol1ll::::res://scenes/ui/player_hud.tscn<>uid://dptqwy7w78t6w::::res://enemies/scripts/monster_controller.tscn<>uid://ctv8m3ld3irys::::res://scenes/item_controller.tscn<>uid://rot1hyfthcov::::res://levels/player_spawn.tscn<>uid://bpqiml3cwfeh6::::res://levels/level_transition.tscn
-::res://levels/Area02/::1727216403
-02.tscn::PackedScene::6095956254535461747::1727216403::0::1::::<><>::res://levels/scripts/Level.cs<>uid://byq1wt0drml5y::::res://resources/graphics/Dungeon_Tileset.png<>uid://j302rqwol1ll::::res://scenes/ui/player_hud.tscn<>uid://dptqwy7w78t6w::::res://enemies/scripts/monster_controller.tscn<>uid://ctv8m3ld3irys::::res://scenes/item_controller.tscn<>uid://rot1hyfthcov::::res://levels/player_spawn.tscn<>uid://bpqiml3cwfeh6::::res://levels/level_transition.tscn
+::res://levels/Area00/::1727218724
+00.tscn::PackedScene::7789255060851969496::1727218724::0::1::::<><>::uid://byq1wt0drml5y::::res://resources/graphics/Dungeon_Tileset.png<>res://levels/scripts/Level.cs<>uid://ei667r4b0lv8::::res://resources/graphics/light.png<>uid://bofurrov8se4w::::res://icon.svg<>uid://v5xun7lg8778::::res://props/plants/plant.tscn<>uid://j302rqwol1ll::::res://scenes/ui/player_hud.tscn<>uid://dptqwy7w78t6w::::res://enemies/scripts/monster_controller.tscn<>uid://rot1hyfthcov::::res://levels/player_spawn.tscn<>uid://bpqiml3cwfeh6::::res://levels/level_transition.tscn<>uid://dx0nie3xcpboq::::res://items/item_pickup/item_pickup.tscn<>uid://cydfao5w13jfq::::res://items/gem.tres<>uid://bwebgk4e30x46::::res://items/apple.tres<>uid://dki83om7y48bv::::res://items/stone.tres<>uid://e3idbcgtngrc::::res://items/potion.tres<>uid://doa1ooc13oigk::::res://items/key.tres<>uid://vtf1acisply7::::res://items/twig.tres<>uid://osbmhrt0n44s::::res://items/spear.tres
+::res://levels/Area01/::1727218724
+01.tscn::PackedScene::4382524312460437797::1727218724::0::1::::<><>::res://levels/scripts/Level.cs<>uid://byq1wt0drml5y::::res://resources/graphics/Dungeon_Tileset.png<>uid://j302rqwol1ll::::res://scenes/ui/player_hud.tscn<>uid://dptqwy7w78t6w::::res://enemies/scripts/monster_controller.tscn<>uid://ctv8m3ld3irys::::res://scenes/item_controller.tscn<>uid://rot1hyfthcov::::res://levels/player_spawn.tscn<>uid://bpqiml3cwfeh6::::res://levels/level_transition.tscn
+::res://levels/Area02/::1727218724
+02.tscn::PackedScene::6095956254535461747::1727218724::0::1::::<><>::res://levels/scripts/Level.cs<>uid://byq1wt0drml5y::::res://resources/graphics/Dungeon_Tileset.png<>uid://j302rqwol1ll::::res://scenes/ui/player_hud.tscn<>uid://dptqwy7w78t6w::::res://enemies/scripts/monster_controller.tscn<>uid://ctv8m3ld3irys::::res://scenes/item_controller.tscn<>uid://rot1hyfthcov::::res://levels/player_spawn.tscn<>uid://bpqiml3cwfeh6::::res://levels/level_transition.tscn
 ::res://levels/scripts/::1727060412
 Level.cs::CSharpScript::-1::1727059786::0::1::::<>Node2D<>::
 LevelTransition.cs::CSharpScript::-1::1727060412::0::1::::<>Area2D<>::
@@ -182,7 +183,7 @@ LICENSE.txt::TextFile::-1::1726254935::0::1::::<><>::
 ::res://resources/fonts/xolonium/xolonium-fonts-4.1/ttf/::1726255034
 Xolonium-Bold.ttf::FontFile::5242580843265118294::1726254935::1726255034::1::::<><>::
 Xolonium-Regular.ttf::FontFile::2956380266090642897::1726254935::1726255034::1::::<><>::
-::res://resources/graphics/::1726632434
+::res://resources/graphics/::1727222757
 320x320_Duhamel_Tileset_1.png::CompressedTexture2D::2950037084604004301::1725632921::1725641375::1::::<><>::
 DestroySmoke (1).png::CompressedTexture2D::7282890605456435166::1726608770::1726608794::1::::<><>::
 duhamel_reaction_sprites.png::CompressedTexture2D::917016919572227905::1725850670::1725850670::1::::<><>::
@@ -190,6 +191,8 @@ Dungeon_Character.png::CompressedTexture2D::7608565670110633090::1725641777::172
 Dungeon_Tileset.png::CompressedTexture2D::4105601941071942992::1725641732::1725641732::1::::<><>::
 gui-health.png::CompressedTexture2D::1747042786774343691::1726632362::1726632362::1::::<><>::
 light.png::CompressedTexture2D::299209691300259279::1726109501::1726109501::1::::<><>::
+::res://resources/graphics/enemies/::1727222800
+64x64_boss1.png::CompressedTexture2D::587071021111718970::1727222699::1727222813::1::::<><>::
 ::res://resources/graphics/GUI/::1726632446
 ::res://resources/graphics/GUI/hud/::1726632446
 gui-health.png::CompressedTexture2D::3479371210151281175::1726632317::1726632446::1::::<><>::
@@ -203,12 +206,12 @@ PlayerSprite02.png::CompressedTexture2D::3985094014550061408::1726511251::172651
 ::res://resources/graphics/player/michael_games/::1726518006
 Shadow.png::CompressedTexture2D::7532143291269010879::1726517972::1726518006::1::::<><>::
 ::res://resources/models/::1725638944
-::res://scenes/::1727216403
-game_manager.tscn::PackedScene::8267793434843180980::1727216403::0::1::::<><>::res://scripts/GameManager.cs
+::res://scenes/::1727218724
+game_manager.tscn::PackedScene::8267793434843180980::1727218724::0::1::::<><>::res://scripts/GameManager.cs
 item_controller.tscn::PackedScene::6151807907452935974::1727108687::0::1::::<><>::res://scripts/ItemController.cs<>uid://byq1wt0drml5y::::res://resources/graphics/Dungeon_Tileset.png
 junk scene.tscn::PackedScene::4882918912477698280::1727068923::0::1::::<><>::res://levels/scripts/Level.cs<>uid://j302rqwol1ll::::res://scenes/ui/player_hud.tscn
 monster_spawner_controller.tscn::PackedScene::3296910920754977826::1727108687::0::1::::<><>::uid://bofurrov8se4w::::res://icon.svg<>res://scripts/MonsterSpawnerController.cs<>uid://c67btl4crsql7::::res://scenes/state_machine.tscn
-player_controller.tscn::PackedScene::415687568745031342::1727216403::0::1::::<><>::uid://bibaxd28kg4mr::::res://resources/graphics/320x320_Duhamel_Tileset_1.png<>res://scripts/PlayerController.cs<>uid://ei667r4b0lv8::::res://resources/graphics/light.png<>uid://jes1x0om2kdh::::res://resources/graphics/player/AttackSprite01.png<>uid://dgqraaf12cfmn::::res://scenes/data/character_data.tscn<>uid://c67btl4crsql7::::res://scenes/state_machine.tscn<>uid://dfkvkgjn3j14v::::res://resources/graphics/player/michael_games/Shadow.png<>res://scripts/states/PlayerIdleState.cs<>res://scripts/player/PlayerCamera.cs<>res://scripts/states/PlayerWalkState.cs<>res://scripts/states/PlayerAttackState.cs<>res://scripts/states/PlayerDeadState.cs<>uid://c4j2rkdor8d3m::::res://resources/audio/michael_games/SwordSwoosh.wav<>res://scripts/PlayerInteractionsHost.cs<>uid://cngf2m40cvc5j::::res://scenes/hitbox/hurt_box.tscn<>res://scripts/states/PlayerStunState.cs<>uid://dpgyjhpcpir6s::::res://scenes/hitbox/hit_box.tscn<>uid://coymc6f8hkl0e::::res://resources/audio/michael_games/hit_player.wav
+player_controller.tscn::PackedScene::415687568745031342::1727218724::0::1::::<><>::uid://bibaxd28kg4mr::::res://resources/graphics/320x320_Duhamel_Tileset_1.png<>res://scripts/PlayerController.cs<>uid://ei667r4b0lv8::::res://resources/graphics/light.png<>uid://jes1x0om2kdh::::res://resources/graphics/player/AttackSprite01.png<>uid://dgqraaf12cfmn::::res://scenes/data/character_data.tscn<>uid://c67btl4crsql7::::res://scenes/state_machine.tscn<>uid://dfkvkgjn3j14v::::res://resources/graphics/player/michael_games/Shadow.png<>res://scripts/states/PlayerIdleState.cs<>res://scripts/player/PlayerCamera.cs<>res://scripts/states/PlayerWalkState.cs<>res://scripts/states/PlayerAttackState.cs<>res://scripts/states/PlayerDeadState.cs<>uid://c4j2rkdor8d3m::::res://resources/audio/michael_games/SwordSwoosh.wav<>res://scripts/PlayerInteractionsHost.cs<>uid://cngf2m40cvc5j::::res://scenes/hitbox/hurt_box.tscn<>res://scripts/states/PlayerStunState.cs<>uid://dpgyjhpcpir6s::::res://scenes/hitbox/hit_box.tscn<>uid://coymc6f8hkl0e::::res://resources/audio/michael_games/hit_player.wav
 projectile_controller.tscn::PackedScene::4881544104060510313::1726248903::0::1::::<><>::uid://bofurrov8se4w::::res://icon.svg<>res://scripts/ProjectileController.cs
 state_machine.tscn::PackedScene::7014850878042572918::1726504353::0::1::::<><>::res://scripts/states/StateMachine.cs
 ::res://scenes/data/::1727114008
