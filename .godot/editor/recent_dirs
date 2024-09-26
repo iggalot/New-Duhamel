@@ -1,3 +1,4 @@
+res://interactables/locked_door
 res://levels/Area00
 res://levels/Area01
 res://levels/Area02
@@ -19,4 +20,3 @@ res://scripts/ui/inventory
 res://resources/fonts/kirifont
 res://scripts/ui
 res://scenes/interface
-res://scripts/inventory

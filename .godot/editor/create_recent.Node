@@ -1,9 +1,9 @@
+CollisionShape2D
 AnimationPlayer
 StaticBody2D
 AudioStreamPlayer2D
 Area2D
 Sprite2D
-CollisionShape2D
 CollisionPolygon2D
 Node
 Label
