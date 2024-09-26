@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=59 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_8k0os"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="2_q8qlb"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://player/scripts/states/PlayerDeadState.cs" id="14_trp7c"]
 [ext_resource type="Script" path="res://player/scripts/states/PlayerStunState.cs" id="15_0holu"]
 [ext_resource type="Script" path="res://scripts/PlayerInteractionsHost.cs" id="16_v40j0"]
+[ext_resource type="Script" path="res://scripts/PushArea.cs" id="17_05xjw"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="17_fwi7f"]
 [ext_resource type="AudioStream" uid="uid://coymc6f8hkl0e" path="res://resources/audio/michael_games/hit_player.wav" id="18_x8esv"]
 
@@ -849,6 +850,9 @@ radius = 13.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o3h88"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ep5op"]
+size = Vector2(20, 13)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7mu78"]
 size = Vector2(23, 16.5)
 
@@ -1056,6 +1060,18 @@ z_index = 2
 position = Vector2(0, 18)
 shape = SubResource("RectangleShape2D_o3h88")
 debug_color = Color(0.12549, 0.627451, 0.443137, 0.611765)
+
+[node name="PushArea" type="Area2D" parent="Interactions"]
+collision_layer = 0
+collision_mask = 16
+monitorable = false
+script = ExtResource("17_05xjw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactions/PushArea"]
+z_index = 2
+position = Vector2(0, 14.5)
+shape = SubResource("RectangleShape2D_ep5op")
+debug_color = Color(0.741161, 0.265091, 0.937576, 0.611765)
 
 [node name="HitBox" parent="." instance=ExtResource("17_fwi7f")]
 collision_layer = 3

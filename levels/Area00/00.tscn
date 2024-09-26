@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://di8f5mdx72br1"]
+[gd_scene load_steps=25 format=4 uid="uid://di8f5mdx72br1"]
 
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_dc8fm"]
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_f66at"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="3_gbxlj"]
 [ext_resource type="PackedScene" uid="uid://v5xun7lg8778" path="res://props/plants/plant.tscn" id="4_us75b"]
 [ext_resource type="PackedScene" uid="uid://j302rqwol1ll" path="res://scenes/ui/player_hud.tscn" id="5_wdeb4"]
+[ext_resource type="PackedScene" uid="uid://k3p523c4ev1h" path="res://interactables/pushable_statue/PushableStatue.tscn" id="6_ortiv"]
 [ext_resource type="PackedScene" uid="uid://pl4elp0yqktx" path="res://interactables/barred_door/barred_door.tscn" id="6_rjvxg"]
 [ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://enemies/scripts/monster_controller.tscn" id="6_yg1s0"]
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="8_8h4lv"]
@@ -264,10 +265,13 @@ itemData = ExtResource("13_6c5hm")
 itemQuantity = 50
 
 [node name="PressurePlate" parent="." instance=ExtResource("13_ud64f")]
-position = Vector2(170, 253)
+position = Vector2(315, 250)
 
 [node name="BarredDoor" parent="." instance=ExtResource("6_rjvxg")]
 position = Vector2(49, 267)
+
+[node name="PushableStatue" parent="." instance=ExtResource("6_ortiv")]
+position = Vector2(270, 256)
 
 [connection signal="Activated" from="PressurePlate" to="BarredDoor" method="OnOpenDoor"]
 [connection signal="Deactivated" from="PressurePlate" to="BarredDoor" method="OnCloseDoor"]

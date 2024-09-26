@@ -70,3 +70,6 @@ res://scenes/ui/inventory/scripts/SlotData.cs
 res://enemies/scripts/states/MonsterWalkState.cs
 res://scripts/interfaces/Usable.cs
 res://globals/GlobalSaveManager.cs
+res://interactables/pushable_statue/PushableStatue.tscn
+res://interactables/pushable_statue/PushableStatue.cs
+res://scripts/PushArea.cs
