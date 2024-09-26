@@ -69,3 +69,6 @@ res://enemies/scripts/monster_controller_boss1.tscn
 res://enemies/scripts/monster_controller.tscn
 res://enemies/vision_area.tscn
 res://enemies/scripts/VisionArea.cs
+res://interactables/pressure_plate/pressure_plate.tscn
+res://interactables/pressure_plate/PressurePlate.cs
+res://interactables/locked_door/locked_door.tscn
