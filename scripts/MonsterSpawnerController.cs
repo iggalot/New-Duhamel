@@ -177,11 +177,11 @@ public partial class MonsterSpawnerController : MonsterController
     }
 
 
-    public override void Die()
-    {
-        GD.Print("--Monster spawner destroyed");
+    //public override void Die()
+    //{
+    //    GD.Print("--Monster spawner destroyed");
 
-        // TODO:  Award rewards, drop loot, gain experience and so on.
-        QueueFree();
-    }
+    //    // TODO:  Award rewards, drop loot, gain experience and so on.
+    //    QueueFree();
+    //}
 }

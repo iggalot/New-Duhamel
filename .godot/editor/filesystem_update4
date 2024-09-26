@@ -65,3 +65,7 @@ res://enemies/scripts/states/MonsterWalkState.cs
 res://scripts/ProjectileController.cs
 res://general_nodes/persistent_data_handler/persistent_data_handler.tscn
 res://general_nodes/persistent_data_handler/PersistentDataHandler.cs
+res://enemies/scripts/monster_controller_boss1.tscn
+res://enemies/scripts/monster_controller.tscn
+res://enemies/vision_area.tscn
+res://enemies/scripts/VisionArea.cs

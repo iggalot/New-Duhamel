@@ -1,6 +1,7 @@
+CollisionPolygon2D
+Area2D
 Node
 CollisionShape2D
-Area2D
 StaticBody2D
 AudioStreamPlayer2D
 AnimationPlayer

@@ -63,7 +63,7 @@ public partial class PlayerWalkState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        GD.Print("player is walking");
+        //GD.Print("player is walking");
 
         var speed = controllerOwner.WalkSpeed;
 

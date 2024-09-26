@@ -211,23 +211,25 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_gbxlj")
 
 [node name="Plant" parent="." instance=ExtResource("4_us75b")]
-position = Vector2(160, 245)
+position = Vector2(-2, 346)
 
 [node name="Plant2" parent="." instance=ExtResource("4_us75b")]
-position = Vector2(166, 348)
+position = Vector2(22, 346)
 
 [node name="Plant3" parent="." instance=ExtResource("4_us75b")]
-position = Vector2(316, 280)
+position = Vector2(27, 376)
 
 [node name="Plant4" parent="." instance=ExtResource("4_us75b")]
-position = Vector2(219, 349)
+position = Vector2(-3, 374)
 
 [node name="PlayerHUD" parent="." instance=ExtResource("5_wdeb4")]
 
 [node name="MonsterController" parent="." instance=ExtResource("6_yg1s0")]
+visible = false
 position = Vector2(716, 333)
 
 [node name="MonsterController2" parent="." instance=ExtResource("6_yg1s0")]
+visible = false
 position = Vector2(721, 207)
 
 [node name="LevelTransition" parent="." instance=ExtResource("10_wi38v")]
@@ -244,17 +246,17 @@ size = 4
 side = 1
 
 [node name="MonsterController3" parent="." instance=ExtResource("18_b5r4g")]
-position = Vector2(447, 104)
+position = Vector2(650, 77)
 
 [node name="TreasureChest" parent="." instance=ExtResource("11_wkuar")]
-position = Vector2(322, 186)
+position = Vector2(4, 176)
 itemData = ExtResource("13_6lr4s")
 
 [node name="TreasureChest2" parent="." instance=ExtResource("11_wkuar")]
-position = Vector2(247, 185)
+position = Vector2(130, 98)
 itemData = ExtResource("11_oaumu")
 
 [node name="TreasureChest3" parent="." instance=ExtResource("11_wkuar")]
-position = Vector2(167, 184)
+position = Vector2(60, 96)
 itemData = ExtResource("13_6c5hm")
 itemQuantity = 50

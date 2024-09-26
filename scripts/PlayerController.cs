@@ -82,11 +82,11 @@ public partial class PlayerController : CharacterBody2D
             GD.Print("Player movement allowed: " + attributesManager.IsPlayerMoveable);
         }
 
-        // if the player is shooting
-        if (Input.IsActionJustPressed("shoot"))
-        {
-            Shoot();
-        }
+        //// if the player is shooting
+        //if (Input.IsActionJustPressed("shoot"))
+        //{
+        //    Shoot();
+        //}
     }
 
     public override void _Ready()

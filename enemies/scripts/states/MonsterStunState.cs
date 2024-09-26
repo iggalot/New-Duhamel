@@ -91,6 +91,7 @@ public partial class MonsterStunState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
+        GD.Print("monster is stunned");
         if (animationFinished is true)
         {
             return nextState;

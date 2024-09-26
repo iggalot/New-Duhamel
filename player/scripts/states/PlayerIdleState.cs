@@ -52,7 +52,7 @@ public partial class PlayerIdleState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        GD.Print("player is idle");
+        //GD.Print("player is idle");
         if (controllerOwner.IsDead)
         {
             return deadState;

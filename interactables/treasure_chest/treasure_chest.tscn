@@ -198,6 +198,7 @@ size = Vector2(30, 11)
 size = Vector2(36, 17)
 
 [node name="TreasureChest" type="Node2D"]
+process_mode = 3
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_0chqt")

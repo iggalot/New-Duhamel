@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public partial class StateMachine : Node
 {
     private List<State> states = new List<State>();
-    State previousState;
-    State currentState;
+    public State previousState { get; set; }
+    public State currentState { get; set; }
 
     public override void _Ready()
     {
@@ -57,7 +57,7 @@ public partial class StateMachine : Node
 
         // otherwise
 
-        ChangeState(states[0]);
+        ChangeState(states[0]); // this will set the state to the first one in the list -- maybe Idle?
         ProcessMode = Node.ProcessModeEnum.Inherit; // turn back on the process mode now that we are established
     }
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://byyjaay07k25i"]
+[gd_scene load_steps=78 format=3 uid="uid://byyjaay07k25i"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_de4jf"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="2_n8ptp"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="22_r4u7k"]
 [ext_resource type="PackedScene" uid="uid://d4bxcy4uq47dk" path="res://scenes/ui/health_bar.tscn" id="23_t5iel"]
 [ext_resource type="Texture2D" uid="uid://db05e5y0m7b1g" path="res://resources/graphics/DestroySmoke (1).png" id="24_axekl"]
+[ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="25_jffmq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lt8og"]
 radius = 56.0357
@@ -731,11 +732,131 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4]
 }
 
+[sub_resource type="Animation" id="Animation_4drc2"]
+resource_name = "chase_down"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.3, 0.466667, 0.633333),
+"transitions": PackedFloat32Array(-2, -2, -2, -2, -2),
+"update": 0,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0.815686, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ynagc"]
+resource_name = "chase_up"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.3, 0.466667, 0.633333),
+"transitions": PackedFloat32Array(-2, -2, -2, -2, -2),
+"update": 0,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0.815686, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wqd70"]
+resource_name = "chase_left"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.3, 0.466667, 0.633333),
+"transitions": PackedFloat32Array(-2, -2, -2, -2, -2),
+"update": 0,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0.815686, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_12lmu"]
+resource_name = "chase_right"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.3, 0.466667, 0.633333),
+"transitions": PackedFloat32Array(-2, -2, -2, -2, -2),
+"update": 0,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0.815686, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_iqchk"]
 _data = {
 "RESET": SubResource("Animation_vawfg"),
 "attack": SubResource("Animation_710rf"),
 "chase": SubResource("Animation_wpsxs"),
+"chase_down": SubResource("Animation_4drc2"),
+"chase_left": SubResource("Animation_wqd70"),
+"chase_right": SubResource("Animation_12lmu"),
+"chase_up": SubResource("Animation_ynagc"),
 "dead": SubResource("Animation_gah3h"),
 "destroy_down": SubResource("Animation_a0lit"),
 "destroy_left": SubResource("Animation_rmy6w"),
@@ -1016,6 +1137,11 @@ collision_layer = 256
 collision_mask = 218710289
 script = ExtResource("1_de4jf")
 
+[node name="VisionArea" parent="." instance=ExtResource("25_jffmq")]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionArea"]
+polygon = PackedVector2Array(60, 5, 235, 175, 150, 250, -150, 250, -235, 175, -60, 5)
+
 [node name="HurtBox" parent="." instance=ExtResource("2_n8ptp")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
@@ -1047,6 +1173,14 @@ region_enabled = true
 region_rect = Rect2(16, 16, 317, 256)
 region_filter_clip_enabled = true
 
+[node name="AttackHurtBox" parent="Sprite2D" instance=ExtResource("2_n8ptp")]
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/AttackHurtBox"]
+texture_filter = 1
+shape = SubResource("CircleShape2D_lt8og")
+debug_color = Color(0.665915, 0.583065, 0.239089, 0.42)
+
 [node name="MonsterBody" type="CollisionShape2D" parent="."]
 position = Vector2(0, 7.5)
 shape = SubResource("RectangleShape2D_0v7yi")
@@ -1060,17 +1194,24 @@ autoplay = "idle_down"
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("8_53t3n")
 
-[node name="MonsterIdle" type="Node" parent="StateMachine"]
+[node name="MonsterIdle" type="Node" parent="StateMachine" node_paths=PackedStringArray("visionArea", "attackArea")]
 script = ExtResource("9_h2eha")
+visionArea = NodePath("../../VisionArea")
+attackArea = NodePath("../../HurtBox")
 
-[node name="MonsterWander" type="Node" parent="StateMachine"]
+[node name="MonsterWander" type="Node" parent="StateMachine" node_paths=PackedStringArray("visionArea", "attackArea")]
 script = ExtResource("10_3riai")
+visionArea = NodePath("../../VisionArea")
+attackArea = NodePath("../../HurtBox")
 
 [node name="MonsterWalk" type="Node" parent="StateMachine"]
 script = ExtResource("11_opno2")
 
-[node name="MonsterChase" type="Node" parent="StateMachine"]
+[node name="MonsterChase" type="Node" parent="StateMachine" node_paths=PackedStringArray("visionArea", "attackArea", "nextState")]
 script = ExtResource("12_sgrlw")
+visionArea = NodePath("../../VisionArea")
+attackArea = NodePath("../../Sprite2D/AttackHurtBox")
+nextState = NodePath("../MonsterIdle")
 
 [node name="MonsterAttack" type="Node" parent="StateMachine"]
 script = ExtResource("13_k40nu")
@@ -1081,8 +1222,9 @@ script = ExtResource("14_7j5mn")
 [node name="MonsterDead" type="Node" parent="StateMachine"]
 script = ExtResource("15_lxa2j")
 
-[node name="MonsterStun" type="Node" parent="StateMachine"]
+[node name="MonsterStun" type="Node" parent="StateMachine" node_paths=PackedStringArray("nextState")]
 script = ExtResource("16_e1ts1")
+nextState = NodePath("../MonsterChase")
 
 [node name="MonsterDestroy" type="Node" parent="StateMachine"]
 script = ExtResource("17_y6l58")

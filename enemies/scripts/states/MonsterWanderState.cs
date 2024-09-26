@@ -15,6 +15,10 @@ public partial class MonsterWanderState : State
 
     [Export] float wanderSpeed = 50.0f;
 
+    [Export] public VisionArea visionArea { get; set; }
+    [Export] public HurtBox attackArea { get; set; }
+
+
     [ExportCategory("AI")]
     [Export] private float stateAnimationDuration { get; set; } = 0.7f; // this needs to match duration of the animation clip
     
@@ -27,6 +31,9 @@ public partial class MonsterWanderState : State
     private Vector2 direction { get; set; } = Vector2.Zero;
 
     private State idleState;
+    private State wanderState;
+    private State stunState;
+    private State chaseState;
     // Constructor
     public MonsterWanderState()
     {
@@ -43,13 +50,20 @@ public partial class MonsterWanderState : State
     public override void _Ready()
     {
         idleState = GetNode<State>("../MonsterIdle");  // set the reference to the idle state node in the Godot tree
+        wanderState = GetNode<State>("../MonsterWander");  // set the reference to the idle state node in the Godot tree
+        stunState = GetNode<State>("../MonsterStun");  // set the reference to the idle state node in the Godot tree
+        chaseState = GetNode<State>("../MonsterChase");  // set the reference to the idle state node in the Godot tree
+
+        visionArea = GetNode<VisionArea>("../../VisionArea");
+        attackArea = GetNode<HurtBox>("../../Sprite2D/AttackHurtBox");
     }
 
     public override void Init()
     {
         // must initialize the owner to get the casting correct.
         InitializeOwner();
-        nextState = idleState;
+
+//        nextState = idleState;
 
         return;
     }
@@ -57,6 +71,18 @@ public partial class MonsterWanderState : State
     // What happens when the player enters this State?
     public override void EnterState()
     {
+        GD.Print("monster is wandering -- before linking signals");
+        if (visionArea != null)
+        {
+            //GD.Print("-- signals linked");
+
+            visionArea.PlayerEntered += OnPlayerEnter;
+            visionArea.PlayerExited += OnPlayerExit;
+        }
+        //GD.Print("monster is wandering -- after linking signals");
+
+
+
         var rng = new RandomNumberGenerator();
         timer = rng.RandiRange(stateCyclesMin, stateCyclesMax) * stateAnimationDuration;
 
@@ -74,21 +100,38 @@ public partial class MonsterWanderState : State
     // What happens when the player exits this State?
     public override void ExitState()
     {
+        GD.Print("exiting wander state");
+
+        if (visionArea != null)
+        {
+            //GD.Print("-- signals unlinked");
+
+            visionArea.PlayerEntered -= OnPlayerEnter;
+            visionArea.PlayerExited -= OnPlayerExit;
+        }
         return;
     }
 
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
+        // countdown our timer
         timer -= (float)delta;
 
-        if (timer < 0)
+        if (visionArea != null)
+        {
+            if (visionArea.canSeePlayer == true)
+            {
+                return chaseState;
+            }
+        }
+
+        if (timer <= 0.0f)
         {
             return nextState;
         }
 
-
-        return null;
+        return this;
     }
 
     // What happens during the _PhysicsProcess() update in this State?
@@ -101,5 +144,26 @@ public partial class MonsterWanderState : State
     public override State HandleInput(InputEvent input_event)
     {
         return null;
+    }
+
+    private void OnPlayerEnter(Area2D area)
+    {
+        GD.Print("in wander state -- player entered vision area");
+
+        if (stateMachine.currentState == stunState)
+        {
+            return;
+        }
+
+        nextState = chaseState;  // change to chase state if player has entered the vision cone
+                                 //        stateMachine.ChangeState(chaseState);
+        return;
+    }
+
+    private void OnPlayerExit(Area2D area)
+    {
+        GD.Print("in wander state -- player entered");
+
+        return;
     }
 }

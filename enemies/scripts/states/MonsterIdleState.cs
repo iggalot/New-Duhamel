@@ -13,6 +13,9 @@ public partial class MonsterIdleState : State
     [Export] string animName = "idle";
     [Export] string spriteStatusName = "idle"; // name of the sprite animation to use while in this state
 
+    [Export] public VisionArea visionArea { get; set; }
+    [Export] public HurtBox attackArea { get; set; }
+
 
     [ExportCategory("AI")]
     [Export] private float stateDurationMin { get; set; } = 0.5f;
@@ -21,7 +24,11 @@ public partial class MonsterIdleState : State
 
     private float timer { get; set; } = 0.0f;
 
+
     private State wanderState;
+    private State stunState;
+    private State chaseState;
+
     // Constructor
     public MonsterIdleState()
     {
@@ -39,7 +46,13 @@ public partial class MonsterIdleState : State
     {
         // set the after idle state to be a wander state
         wanderState = GetNode<State>("../MonsterWander");  // set the reference to the idle state node in the Godot tree
+        stunState = GetNode<State>("../MonsterStun");  // set the reference to the idle state node in the Godot tree
+        chaseState = GetNode<State>("../MonsterChase");  // set the reference to the idle state node in the Godot tree
+
         nextState = wanderState;
+
+        visionArea = GetNode<VisionArea>("../../VisionArea");
+        attackArea = GetNode<HurtBox>("../../Sprite2D/AttackHurtBox");
     }
 
     public override void Init()
@@ -50,7 +63,14 @@ public partial class MonsterIdleState : State
     // What happens when the player enters this State?
     public override void EnterState()
     {
+        GD.Print("monster is idling");
         InitializeOwner();
+
+        if (visionArea != null)
+        {
+            visionArea.PlayerEntered += OnPlayerEnter;
+            visionArea.PlayerExited += OnPlayerExit;
+        }
 
         controllerOwner.Velocity = Vector2.Zero;
         var rng = new RandomNumberGenerator();
@@ -75,23 +95,22 @@ public partial class MonsterIdleState : State
         // countdown our timer
         timer -= (float)delta;
 
-        if(timer <= 0.0f)
+        if (visionArea != null)
+        {
+            if (visionArea.canSeePlayer == true)
+            {
+                return chaseState;
+            }
+        }
+
+        if (timer <= 0.0f)
         {
             return nextState;
-        }
-        //GD.Print("im idling");
+        } 
+        
+        return this;
 
-        //// check if the monster is alerted --- if so, go to walk / search mode
-        //if (controllerOwner.IsAlerted)
-        //    return walkState;
 
-        //// check the current velocity of the monster -- if its non-zero then the monster is walking
-        //if (controllerOwner.DirectionUnitVector != Vector2.Zero)
-        //    return walkState;
-
-        //// otherwise, we are not moving, so set the velocity to zero.
-        //controllerOwner.Velocity = Vector2.Zero;
-        return null;
     }
 
     // What happens during the _PhysicsProcess() update in this State?
@@ -104,5 +123,35 @@ public partial class MonsterIdleState : State
     public override State HandleInput(InputEvent input_event)
     {
         return null;
+    }
+
+    private void OnPlayerEnter(Area2D area)
+    {
+        GD.Print("in idle state -- player entered vision area");
+        if (visionArea != null)
+        {
+            visionArea.canSeePlayer = true;
+        }
+
+        if (stateMachine.currentState == stunState)
+        {
+            return;
+        }
+
+        nextState = chaseState;  // change to chase state if player has entered the vision cone
+//        stateMachine.ChangeState(chaseState);
+        return;
+    }
+
+    private void OnPlayerExit(Area2D area)
+    {
+        if (visionArea != null)
+        {
+            visionArea.canSeePlayer = false;
+        }
+
+        GD.Print("in idle state -- player entered");
+
+        return;
     }
 }

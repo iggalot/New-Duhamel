@@ -130,19 +130,44 @@ public partial class MonsterController : CharacterBody2D
         // -- applying some basic friction and acceleration for moving.
         Velocity = processMovement();
 
+        var collision_info = MoveAndCollide(Velocity * (float)delta);
 
+        if(collision_info != null)
+        {
+            // we've hit something
+            //GD.Print("Monster collided with something -- " + collision_info.GetCollider());
 
-        // if we aren't dead, or the game isn't over, then we can move the player.
-        if ((IsDead is true) || (gameManager.IsGameOver is true))
-        {
-            return;
-        } else
-        {
-            //GD.Print("I'm moving now");
-            //GD.Print("My velocity is: " + Velocity);
-            //GD.Print("My position is: " + Position);
-            MoveAndSlide();
+            bool has_bounced = false;
+            if(collision_info.GetCollider() is TileMapLayer)
+            {
+
+                Velocity = Velocity.Bounce(collision_info.GetNormal());
+                SetDirection(Velocity.Normalized()); // reset the direction vector since it's changed
+//                EmitSignal(SignalName.DirectionChanged, Velocity.Normalized()); // to notifiy that the directon has changed
+                has_bounced = true;
+            }
+
+            if (has_bounced)
+            {
+                // if he's collided, switch it to idle mode so it can choose a new direction -- a dumb method as it could choose the same direction
+                // again.
+                State stateIdle = GetNode<State>("StateMachine/MonsterIdle");
+                stateMachine.ChangeState(stateIdle);
+            }
         }
+
+
+        //// if we aren't dead, or the game isn't over, then we can move the player.
+        //if ((IsDead is true) || (gameManager.IsGameOver is true))
+        //{
+        //    return;
+        //} else
+        //{
+        //    //GD.Print("I'm moving now");
+        //    //GD.Print("My velocity is: " + Velocity);
+        //    //GD.Print("My position is: " + Position);
+        //    MoveAndSlide();
+        //}
     }
 
     /// <summary>
@@ -280,123 +305,123 @@ public partial class MonsterController : CharacterBody2D
     }
 
     // kill the monster
-    public virtual void Die()
-    {
-        GD.Print("--Monster died");
+    //public virtual void Die()
+    //{
+    //    GD.Print("--Monster died");
 
-        DropLoot();
+    //    DropLoot();
 
-        // TODO:  Award rewards, drop loot, gain experience and so on.
-        QueueFree();
-    }
+    //    // TODO:  Award rewards, drop loot, gain experience and so on.
+    //    QueueFree();
+    //}
 
-    /// <summary>
-    /// Spanws look items when a monster dies
-    /// TODO:  link loot tables into this.
-    /// </summary>
-    public virtual void DropLoot()
-    {
-        //GD.Print("Spawning monster");
+    ///// <summary>
+    ///// Spanws look items when a monster dies
+    ///// TODO:  link loot tables into this.
+    ///// </summary>
+    //public virtual void DropLoot()
+    //{
+    //    //GD.Print("Spawning monster");
 
-        //TODO: select what monster to spawn and its stats
-        Node root = GetTree().Root;
-        Node2D game_mgr = root.GetNode<Node2D>("GameManager");
-        Node2D items_node = game_mgr.GetNode<Node2D>("Items");
+    //    //TODO: select what monster to spawn and its stats
+    //    Node root = GetTree().Root;
+    //    Node2D game_mgr = root.GetNode<Node2D>("GameManager");
+    //    Node2D items_node = game_mgr.GetNode<Node2D>("Items");
 
-        //GD.Print("Monsters in room currently: " + monsters_node.GetChildren().Count);
+    //    //GD.Print("Monsters in room currently: " + monsters_node.GetChildren().Count);
 
-        // get the room's spawn area
-        Area2D spawn_area = game_mgr.GetNode<Area2D>("SpawnArea");
+    //    // get the room's spawn area
+    //    Area2D spawn_area = game_mgr.GetNode<Area2D>("SpawnArea");
 
-        if (spawn_area == null)
-        {
-            //GD.Print("Valid spawn area not found.  No monsters being spawned.");
-            return;
-        }
+    //    if (spawn_area == null)
+    //    {
+    //        //GD.Print("Valid spawn area not found.  No monsters being spawned.");
+    //        return;
+    //    }
 
-        CollisionShape2D spawn_area_shape = spawn_area.GetNode<CollisionShape2D>("CollisionShape2D");
-        // check that a spawn_area_shape was found
-        if (spawn_area_shape == null)
-        {
-            //GD.Print("Spawn area shape not found");
-            return;
-        }
+    //    CollisionShape2D spawn_area_shape = spawn_area.GetNode<CollisionShape2D>("CollisionShape2D");
+    //    // check that a spawn_area_shape was found
+    //    if (spawn_area_shape == null)
+    //    {
+    //        //GD.Print("Spawn area shape not found");
+    //        return;
+    //    }
 
-        Vector2 spawn_loc = this.GlobalPosition;
+    //    Vector2 spawn_loc = this.GlobalPosition;
 
-        // otherwise determine the position based on the shape of the spawn area collision box shape
-        if (spawn_area_shape.Shape is CircleShape2D)
-        {
-            GD.Print("Spawn area shape is circle -- not implemented yet");
-        }
-        else if (spawn_area_shape.Shape is RectangleShape2D)
-        {
-            //GD.Print("Spawn area shape is rectangle");
-            RectangleShape2D rectangle = (RectangleShape2D)spawn_area_shape.Shape;
-            Vector2 origin = spawn_area_shape.GlobalPosition - 0.5f * rectangle.Size; // global pos is at the center points of the collision shap
-            Vector2 extents = origin + rectangle.Size; // subtract half of the dimensions from the origina
+    //    // otherwise determine the position based on the shape of the spawn area collision box shape
+    //    if (spawn_area_shape.Shape is CircleShape2D)
+    //    {
+    //        GD.Print("Spawn area shape is circle -- not implemented yet");
+    //    }
+    //    else if (spawn_area_shape.Shape is RectangleShape2D)
+    //    {
+    //        //GD.Print("Spawn area shape is rectangle");
+    //        RectangleShape2D rectangle = (RectangleShape2D)spawn_area_shape.Shape;
+    //        Vector2 origin = spawn_area_shape.GlobalPosition - 0.5f * rectangle.Size; // global pos is at the center points of the collision shap
+    //        Vector2 extents = origin + rectangle.Size; // subtract half of the dimensions from the origina
 
-            //// try to spawn a mob at the location
-            int spawn_attempt_count = 1;
-            bool spawn_success = false;
-            float spawn_radius = 20.0f;
-            while (spawn_attempt_count <= 25)
-            {
-                // choose a random location within the spawn radius of the spawners origin
-                RandomNumberGenerator rng = new RandomNumberGenerator();
+    //        //// try to spawn a mob at the location
+    //        int spawn_attempt_count = 1;
+    //        bool spawn_success = false;
+    //        float spawn_radius = 20.0f;
+    //        while (spawn_attempt_count <= 25)
+    //        {
+    //            // choose a random location within the spawn radius of the spawners origin
+    //            RandomNumberGenerator rng = new RandomNumberGenerator();
 
-                //spawn_loc = new Vector2(rng.RandfRange(origin.X, extents.X), rng.RandfRange(origin.Y, extents.Y));
-                spawn_loc = new Vector2(rng.RandfRange(this.GlobalPosition.X - spawn_radius,
-                                                    this.GlobalPosition.X + spawn_radius),
-                                        rng.RandfRange(this.GlobalPosition.Y - spawn_radius,
-                                                    this.GlobalPosition.Y + spawn_radius));
+    //            //spawn_loc = new Vector2(rng.RandfRange(origin.X, extents.X), rng.RandfRange(origin.Y, extents.Y));
+    //            spawn_loc = new Vector2(rng.RandfRange(this.GlobalPosition.X - spawn_radius,
+    //                                                this.GlobalPosition.X + spawn_radius),
+    //                                    rng.RandfRange(this.GlobalPosition.Y - spawn_radius,
+    //                                                this.GlobalPosition.Y + spawn_radius));
 
-                // check that we are within the spawn area of the room
-                if (spawn_loc.X < origin.X || spawn_loc.X > extents.X || spawn_loc.Y < origin.Y || spawn_loc.Y > extents.Y)
-                {
-                    // the point is out of bounds so continue to the next iteration
-                    spawn_attempt_count++;
-                    continue;
-                }
-                // Otherwise we are within the spawn region for the room so load the monster scene
-                else
-                {
-                    // Create a new item scnee
-                    PackedScene packedScene = ItemController.GetScene();
-                    ItemController item = packedScene.Instantiate<ItemController>() as ItemController;
+    //            // check that we are within the spawn area of the room
+    //            if (spawn_loc.X < origin.X || spawn_loc.X > extents.X || spawn_loc.Y < origin.Y || spawn_loc.Y > extents.Y)
+    //            {
+    //                // the point is out of bounds so continue to the next iteration
+    //                spawn_attempt_count++;
+    //                continue;
+    //            }
+    //            // Otherwise we are within the spawn region for the room so load the monster scene
+    //            else
+    //            {
+    //                // Create a new item scnee
+    //                PackedScene packedScene = ItemController.GetScene();
+    //                ItemController item = packedScene.Instantiate<ItemController>() as ItemController;
 
-                    // check that the monster is in a valid area around the spawner
-                    CollisionShape2D item_shape_body = item.GetNode<CollisionShape2D>("CollisionShape2D");
-                    Area2D item_area = item.GetNode<Area2D>("InteractionArea");
-                    if (spawn_loc.DistanceTo(this.GlobalPosition) < spawn_radius && item_area.GetOverlappingBodies().Count == 0)
-                    {
-                        item.GlobalPosition = spawn_loc;
-                        items_node.AddChild(item);
-                        spawn_success = true;
-                    }
+    //                // check that the monster is in a valid area around the spawner
+    //                CollisionShape2D item_shape_body = item.GetNode<CollisionShape2D>("CollisionShape2D");
+    //                Area2D item_area = item.GetNode<Area2D>("InteractionArea");
+    //                if (spawn_loc.DistanceTo(this.GlobalPosition) < spawn_radius && item_area.GetOverlappingBodies().Count == 0)
+    //                {
+    //                    item.GlobalPosition = spawn_loc;
+    //                    items_node.AddChild(item);
+    //                    spawn_success = true;
+    //                }
                     
-                    if (spawn_success)
-                    {
-                        //GD.Print("Monster spawned");
-                        break;
-                    }
-                    else
-                    {
-                        // Delete the monster since we failed to find a valid spawn point
-                        item.QueueFree();
-                    }
-                }
+    //                if (spawn_success)
+    //                {
+    //                    //GD.Print("Monster spawned");
+    //                    break;
+    //                }
+    //                else
+    //                {
+    //                    // Delete the monster since we failed to find a valid spawn point
+    //                    item.QueueFree();
+    //                }
+    //            }
 
-                spawn_attempt_count++;
-            }
-        }
-        else
-        {
-            GD.Print("Spawn area shape is some other shape -- not implemented yet");
-        }
+    //            spawn_attempt_count++;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        GD.Print("Spawn area shape is some other shape -- not implemented yet");
+    //    }
 
-        GD.Print("---Spawning loot");
-    }
+    //    GD.Print("---Spawning loot");
+    //}
 
     /// <summary>
     /// routine that plays the monster animations associated with each state of the monster.  Called by the
@@ -453,13 +478,13 @@ public partial class MonsterController : CharacterBody2D
 
     public bool SetDirection(Vector2 new_direction)
     {
+        DirectionVector = new_direction;
 
         if (DirectionVector == Vector2.Zero)
         {
             return false;
         }
 
-        DirectionVector = new_direction;
 
         // convoluted method of getting the direction index
         float angle = (DirectionVector.Normalized() + CardinalDirection * 0.1f).Angle();
@@ -468,7 +493,7 @@ public partial class MonsterController : CharacterBody2D
         var final = (Math.Round(times_dir_id) + DIR_4.Length) % DIR_4.Length; // confine us to a valid index range
 
         int direction_id = (int)final;
-        Vector2 new_dir = DIR_4[direction_id];
+        Vector2 new_dir = DIR_4[direction_id]; // gets one of the four cardinal directions
 
         if (new_dir == CardinalDirection)
         {
