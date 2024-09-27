@@ -5,6 +5,11 @@ public partial class ItemPickup : CharacterBody2D
 {
     private ItemData _itemData = new ItemData();
 
+    [Signal] public delegate void PickedUpEventHandler();
+
+
+
+
     [Export]
     public ItemData itemData
     {
@@ -71,6 +76,7 @@ public partial class ItemPickup : CharacterBody2D
         area_2d.BodyEntered -= OnBodyEntered;
         audio_stream_player_2d.Play();
         Visible = false;
+        EmitSignal(SignalName.PickedUp);
         await ToSignal(audio_stream_player_2d, "finished");
         QueueFree();
 

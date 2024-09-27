@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=4 uid="uid://di8f5mdx72br1"]
+[gd_scene load_steps=30 format=4 uid="uid://di8f5mdx72br1"]
 
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_dc8fm"]
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_f66at"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="3_gbxlj"]
 [ext_resource type="PackedScene" uid="uid://v5xun7lg8778" path="res://props/plants/plant.tscn" id="4_us75b"]
 [ext_resource type="PackedScene" uid="uid://j302rqwol1ll" path="res://scenes/ui/player_hud.tscn" id="5_wdeb4"]
+[ext_resource type="PackedScene" uid="uid://xk8gkeftmfi" path="res://general_nodes/item_dropper/item_dropper.tscn" id="6_mb6fm"]
 [ext_resource type="PackedScene" uid="uid://k3p523c4ev1h" path="res://interactables/pushable_statue/PushableStatue.tscn" id="6_ortiv"]
 [ext_resource type="PackedScene" uid="uid://pl4elp0yqktx" path="res://interactables/barred_door/barred_door.tscn" id="6_rjvxg"]
 [ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://enemies/scripts/monster_controller.tscn" id="6_yg1s0"]
@@ -20,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://bhwt15a6aysku" path="res://interactables/locked_door/locked_door.tscn" id="18_cyup5"]
 [ext_resource type="PackedScene" uid="uid://dx0nie3xcpboq" path="res://items/item_pickup/item_pickup.tscn" id="19_g8hka"]
 [ext_resource type="Resource" uid="uid://doa1ooc13oigk" path="res://items/key.tres" id="20_1fnqy"]
+[ext_resource type="PackedScene" uid="uid://csfjpehfksl0v" path="res://general_nodes/enemy_counter/enemy_counter.tscn" id="21_ng4oj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsq5f"]
 texture = ExtResource("1_dc8fm")
@@ -231,11 +233,9 @@ position = Vector2(-3, 374)
 [node name="PlayerHUD" parent="." instance=ExtResource("5_wdeb4")]
 
 [node name="MonsterController" parent="." instance=ExtResource("6_yg1s0")]
-visible = false
 position = Vector2(716, 333)
 
 [node name="MonsterController2" parent="." instance=ExtResource("6_yg1s0")]
-visible = false
 position = Vector2(721, 207)
 
 [node name="LevelTransition" parent="." instance=ExtResource("10_wi38v")]
@@ -283,5 +283,19 @@ position = Vector2(162, 226)
 position = Vector2(146, 296)
 itemData = ExtResource("20_1fnqy")
 
+[node name="ItemDropper" parent="." instance=ExtResource("6_mb6fm")]
+position = Vector2(274, 377)
+itemData = ExtResource("20_1fnqy")
+
+[node name="EnemyCounter" parent="." instance=ExtResource("21_ng4oj")]
+position = Vector2(146, 296)
+
+[node name="MonsterController" parent="EnemyCounter" instance=ExtResource("6_yg1s0")]
+position = Vector2(-53, 31)
+
+[node name="MonsterController2" parent="EnemyCounter" instance=ExtResource("6_yg1s0")]
+position = Vector2(11, 49)
+
 [connection signal="Activated" from="PressurePlate" to="BarredDoor" method="OnOpenDoor"]
 [connection signal="Deactivated" from="PressurePlate" to="BarredDoor" method="OnCloseDoor"]
+[connection signal="EnemiesDefeated" from="EnemyCounter" to="ItemDropper" method="DropItem"]

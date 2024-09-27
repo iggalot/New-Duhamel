@@ -75,3 +75,7 @@ res://interactables/pushable_statue/PushableStatue.cs
 res://scripts/PushArea.cs
 res://interactables/locked_door/locked_door.tscn
 res://interactables/locked_door/LockedDoor.cs
+res://general_nodes/enemy_counter/enemy_counter.tscn
+res://general_nodes/enemy_counter/EnemyCounter.cs
+res://general_nodes/item_dropper/item_dropper.tscn
+res://general_nodes/item_dropper/ItemDropper.cs
