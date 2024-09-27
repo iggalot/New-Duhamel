@@ -34,6 +34,7 @@ public partial class MonsterChaseState : State
 
     private State idleState;
     private State stunState;
+    private State destroyState;
 
     // Constructor
     public MonsterChaseState()
@@ -52,6 +53,7 @@ public partial class MonsterChaseState : State
     {
         idleState = GetNode<State>("../MonsterIdle");  // set the reference to the idle state node in the Godot tree
         stunState = GetNode<State>("../MonsterStun");
+        destroyState = GetNode<State>("../MonsterDestroy");
 
         visionArea = GetNode<VisionArea>("../../VisionArea");
         attackArea = GetNode<HurtBox>("../../Sprite2D/AttackHurtBox");
@@ -165,7 +167,7 @@ public partial class MonsterChaseState : State
         //GD.Print("in chase state -- player entered");
         visionArea.canSeePlayer = true;
 
-        if(stateMachine.currentState == stunState)
+        if((stateMachine.currentState == stunState) || (stateMachine.currentState == destroyState))
         {
             return;
         }
