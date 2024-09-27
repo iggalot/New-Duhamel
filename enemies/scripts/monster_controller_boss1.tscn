@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://byyjaay07k25i"]
+[gd_scene load_steps=80 format=3 uid="uid://byyjaay07k25i"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_de4jf"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="2_n8ptp"]
@@ -27,7 +27,13 @@
 [ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="25_jffmq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lt8og"]
-radius = 56.0357
+radius = 88.5664
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gkyvb"]
+radius = 73.0274
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_av4x5"]
+radius = 99.0454
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0v7yi"]
 size = Vector2(58, 41)
@@ -1152,7 +1158,7 @@ debug_color = Color(0.665915, 0.583065, 0.239089, 0.42)
 [node name="HitBox" parent="." instance=ExtResource("3_vvmyy")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-shape = SubResource("CircleShape2D_lt8og")
+shape = SubResource("CircleShape2D_gkyvb")
 debug_color = Color(0.95985, 0.343659, 0.368198, 0.42)
 
 [node name="ShadowSprite2D" type="Sprite2D" parent="."]
@@ -1178,7 +1184,7 @@ scale = Vector2(0.5, 0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/AttackHurtBox"]
 texture_filter = 1
-shape = SubResource("CircleShape2D_lt8og")
+shape = SubResource("CircleShape2D_av4x5")
 debug_color = Color(0.665915, 0.583065, 0.239089, 0.42)
 
 [node name="MonsterBody" type="CollisionShape2D" parent="."]

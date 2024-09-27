@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://dptqwy7w78t6w"]
+[gd_scene load_steps=80 format=3 uid="uid://dptqwy7w78t6w"]
 
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ee25i"]
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_kntck"]
@@ -27,7 +27,13 @@
 [ext_resource type="Resource" uid="uid://bp2p44vh5jidu" path="res://enemies/scripts/drop_data_resource3.tres" id="20_o31hk"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lt8og"]
-radius = 19.2354
+radius = 21.587
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wg4yp"]
+radius = 21.587
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qu6n7"]
+radius = 57.2632
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0v7yi"]
 size = Vector2(32.5, 35.5)
@@ -1655,7 +1661,7 @@ debug_color = Color(0.665915, 0.583065, 0.239089, 0.42)
 [node name="HitBox" parent="." instance=ExtResource("3_4nxh3")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-shape = SubResource("CircleShape2D_lt8og")
+shape = SubResource("CircleShape2D_wg4yp")
 debug_color = Color(0.95985, 0.343659, 0.368198, 0.42)
 
 [node name="ShadowSprite2D" type="Sprite2D" parent="."]
@@ -1671,12 +1677,11 @@ scale = Vector2(0.296875, 0.289063)
 texture = ExtResource("1_ee25i")
 
 [node name="AttackHurtBox" parent="Sprite2D" instance=ExtResource("2_61smt")]
-position = Vector2(0, -80)
-scale = Vector2(2, 6.66667)
+scale = Vector2(2, 2)
 damage = 10.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/AttackHurtBox"]
-shape = SubResource("CircleShape2D_lt8og")
+shape = SubResource("CircleShape2D_qu6n7")
 debug_color = Color(0.665915, 0.583065, 0.239089, 0.42)
 
 [node name="MonsterBody" type="CollisionShape2D" parent="."]
@@ -1738,6 +1743,7 @@ libraries = {
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_83uyf")
 
 [node name="CharacterData" parent="." instance=ExtResource("5_ixmue")]
