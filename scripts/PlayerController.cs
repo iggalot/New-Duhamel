@@ -15,7 +15,7 @@ public partial class PlayerController : CharacterBody2D
 
 
     // this players properties
-    private Vector2 CardinalDirection { get; set; } = Vector2.Down;
+    public Vector2 CardinalDirection { get; set; } = Vector2.Down;
     public Vector2[] DIR_4 {get; set;} = new Vector2[]{ Vector2.Right, Vector2.Down, Vector2.Left, Vector2.Up };
     public Vector2 DirectionVector { get; set; } = Vector2.Zero;
 
@@ -430,7 +430,7 @@ public partial class PlayerController : CharacterBody2D
 
     public bool SetDirection()
     {
-
+        GD.Print("DirectionVector" + DirectionVector);
         if(DirectionVector == Vector2.Zero)
         {
             return false;

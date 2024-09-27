@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=60 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_8k0os"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="2_q8qlb"]
@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://scripts/PushArea.cs" id="17_05xjw"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="17_fwi7f"]
 [ext_resource type="AudioStream" uid="uid://coymc6f8hkl0e" path="res://resources/audio/michael_games/hit_player.wav" id="18_x8esv"]
+[ext_resource type="Script" path="res://scripts/abilities/Abilities.cs" id="20_6bu2b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x5nm2"]
 size = Vector2(23, 14)
@@ -1085,3 +1086,6 @@ debug_color = Color(0.513514, 0.573508, 0.175955, 0.42)
 libraries = {
 "": SubResource("AnimationLibrary_pjwce")
 }
+
+[node name="Abilities" type="Node" parent="."]
+script = ExtResource("20_6bu2b")
