@@ -170,4 +170,21 @@ public partial class InventoryData : Resource
 
         return new_slot;
     }
+
+    public bool UseItem( ItemData item, int count = 1)
+    {
+        foreach (SlotData s in slots)
+        {
+            if (s != null)
+            {
+                if(s.item_data == item && s.item_quantity >= count)
+                {
+                    s.item_quantity -= count;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

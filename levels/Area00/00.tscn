@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://di8f5mdx72br1"]
+[gd_scene load_steps=28 format=4 uid="uid://di8f5mdx72br1"]
 
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_dc8fm"]
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_f66at"]
@@ -17,6 +17,9 @@
 [ext_resource type="Resource" uid="uid://e3idbcgtngrc" path="res://items/potion.tres" id="13_6lr4s"]
 [ext_resource type="PackedScene" uid="uid://b1juyh1761tp7" path="res://interactables/pressure_plate/pressure_plate.tscn" id="13_ud64f"]
 [ext_resource type="PackedScene" uid="uid://byyjaay07k25i" path="res://enemies/scripts/monster_controller_boss1.tscn" id="18_b5r4g"]
+[ext_resource type="PackedScene" uid="uid://bhwt15a6aysku" path="res://interactables/locked_door/locked_door.tscn" id="18_cyup5"]
+[ext_resource type="PackedScene" uid="uid://dx0nie3xcpboq" path="res://items/item_pickup/item_pickup.tscn" id="19_g8hka"]
+[ext_resource type="Resource" uid="uid://doa1ooc13oigk" path="res://items/key.tres" id="20_1fnqy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsq5f"]
 texture = ExtResource("1_dc8fm")
@@ -265,13 +268,20 @@ itemData = ExtResource("13_6c5hm")
 itemQuantity = 50
 
 [node name="PressurePlate" parent="." instance=ExtResource("13_ud64f")]
-position = Vector2(315, 250)
+position = Vector2(229, 251)
 
 [node name="BarredDoor" parent="." instance=ExtResource("6_rjvxg")]
 position = Vector2(49, 267)
 
 [node name="PushableStatue" parent="." instance=ExtResource("6_ortiv")]
-position = Vector2(270, 256)
+position = Vector2(264, 258)
+
+[node name="LockedDoor" parent="." instance=ExtResource("18_cyup5")]
+position = Vector2(162, 226)
+
+[node name="ItemPickup" parent="." instance=ExtResource("19_g8hka")]
+position = Vector2(146, 296)
+itemData = ExtResource("20_1fnqy")
 
 [connection signal="Activated" from="PressurePlate" to="BarredDoor" method="OnOpenDoor"]
 [connection signal="Deactivated" from="PressurePlate" to="BarredDoor" method="OnCloseDoor"]

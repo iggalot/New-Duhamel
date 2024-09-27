@@ -73,3 +73,5 @@ res://globals/GlobalSaveManager.cs
 res://interactables/pushable_statue/PushableStatue.tscn
 res://interactables/pushable_statue/PushableStatue.cs
 res://scripts/PushArea.cs
+res://interactables/locked_door/locked_door.tscn
+res://interactables/locked_door/LockedDoor.cs
