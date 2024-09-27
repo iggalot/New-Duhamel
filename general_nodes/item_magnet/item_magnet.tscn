@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://beqh4f36ijd3a"]
+[gd_scene load_steps=3 format=3 uid="uid://beqh4f36ijd3a"]
 
 [ext_resource type="Script" path="res://general_nodes/item_magnet/ItemMagnet.cs" id="1_yusus"]
+[ext_resource type="AudioStream" uid="uid://ca0tx1oi2a0jg" path="res://projectiles/boomerang/catch.wav" id="2_h3euw"]
 
-[node name="ItemMagnet" type="Node2D"]
+[node name="ItemMagnet" type="Area2D"]
+collision_layer = 0
+monitorable = false
 script = ExtResource("1_yusus")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_h3euw")
