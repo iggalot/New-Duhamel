@@ -85,4 +85,10 @@ public partial class GlobalPlayerManager : Node
         p.RemoveChild(player);
         return;
     }
+
+    public void PlayAudio(AudioStream audio)
+    {
+        player.audio.Stream = audio;
+        player.audio.Play();
+    }
 }

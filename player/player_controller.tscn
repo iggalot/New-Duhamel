@@ -1046,7 +1046,7 @@ script = ExtResource("15_0holu")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Audio"]
 volume_db = -30.308
-max_polyphony = 4
+max_polyphony = 7
 
 [node name="Interactions" type="Node2D" parent="."]
 script = ExtResource("16_v40j0")

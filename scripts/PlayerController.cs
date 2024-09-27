@@ -10,7 +10,6 @@ public partial class PlayerController : CharacterBody2D
 
     // property flags for moveable pickable and other things -- used by all objects -- sort of an interface hack
     private AttributesManager attributesManager = new AttributesManager();
-    private StateMachine stateMachine;
  //   private GameManager gameManager;
 
 
@@ -43,12 +42,15 @@ public partial class PlayerController : CharacterBody2D
     private PackedScene projectileScene;
 
     // Node getters and setter
-    public Sprite2D sprite;
     public AnimationPlayer animationPlayer { get; set; }  // for a graphical animation of the character
     public AnimationPlayer effectAnimationPlayer { get; set; }  // for handling our effect animations (blinks, warps, etc)
     public AnimationPlayer playerMessageWindowAnimationPlayer; // for a graphical animation of the player message window
     public ColorRect playerMessageWindow;
     public HitBox hitBox;
+    public Sprite2D sprite;
+    public StateMachine stateMachine;
+    public AudioStreamPlayer2D audio;
+
 
     // our attributes
     private float playerMessageAnimationTimer = 2.0f;
@@ -133,6 +135,8 @@ public partial class PlayerController : CharacterBody2D
 
         hitBox = GetNode<HitBox>("HitBox");
         hitBox.Damaged += TakeDamage;
+
+        audio = GetNode<AudioStreamPlayer2D>("Audio/AudioStreamPlayer2D");
 
         //// This is a full heal for our player
         //UpdateHitPoints(MaxHitPoints);

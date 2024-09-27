@@ -78,3 +78,4 @@ res://enemies/scripts/DropData.cs
 res://projectiles/boomerang/boomerang.tscn
 res://scripts/abilities/Abilities.cs
 res://projectiles/boomerang/Boomerang.cs
+res://general_nodes/item_magnet/item_magnet.tscn

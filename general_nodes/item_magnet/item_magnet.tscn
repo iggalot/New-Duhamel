@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://beqh4f36ijd3a"]
+
+[ext_resource type="Script" path="res://general_nodes/item_magnet/ItemMagnet.cs" id="1_yusus"]
+
+[node name="ItemMagnet" type="Node2D"]
+script = ExtResource("1_yusus")
