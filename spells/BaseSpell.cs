@@ -10,7 +10,7 @@ public partial class BaseSpell : Node2D
     // poisonstream
     // earth
 
-    private string spell_prefix = "poisonstream";
+    private string spell_prefix = "fireball";
     Sprite2D spellSprite { get; set; }
     Area2D spellArea { get; set; }
     AnimationPlayer animationPlayer { get; set; }

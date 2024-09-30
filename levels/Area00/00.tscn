@@ -166,7 +166,10 @@ music = ExtResource("2_0r0ss")
 metadata/_edit_lock_ = true
 
 [node name="PlayerSpawn" parent="." instance=ExtResource("8_8h4lv")]
-position = Vector2(918, 140)
+position = Vector2(918, 71)
+
+[node name="PlayerSpawn2" parent="." instance=ExtResource("8_8h4lv")]
+position = Vector2(918, 71)
 
 [node name="TML_Background" type="TileMapLayer" parent="."]
 z_index = -1

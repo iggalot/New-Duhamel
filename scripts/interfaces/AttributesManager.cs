@@ -6,7 +6,7 @@ namespace scripts.interfaces
     public class AttributesManager
     {
         public bool IsEquippable { get; set; } = false;
-        public bool IsIneraactable { get; set; } = false;
+        public bool IsIneractable { get; set; } = false;
         public bool IsPickable { get; set; } = false;
         public bool IsPlayerMoveable { get; set; } = false;
         public bool IsUsable { get; set; } = false;
@@ -23,7 +23,7 @@ namespace scripts.interfaces
         public Pickable DoPickable { get => IsPickable ? _pickable : null; }
         public Equippable DoEquippable { get => IsEquippable ? _equippable : null; }
         public PlayerMoveable DoPlayerMoveable { get => IsPlayerMoveable ? _playerMoveable : null; }
-        public Interactable DoInteractable { get => IsIneraactable ? _interactable : null; }
+        public Interactable DoInteractable { get => IsIneractable ? _interactable : null; }
         public Usable DoUsable { get => IsUsable ? _usable : null; }
     }
 }

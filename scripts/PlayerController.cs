@@ -434,7 +434,7 @@ public partial class PlayerController : CharacterBody2D
 
     public bool SetDirection()
     {
-        GD.Print("DirectionVector" + DirectionVector);
+        //GD.Print("DirectionVector" + DirectionVector);
         if(DirectionVector == Vector2.Zero)
         {
             return false;

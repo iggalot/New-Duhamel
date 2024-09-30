@@ -1,3 +1,10 @@
+TextureRect
+ColorRect
+TextureButton
+Button
+Label
+HBoxContainer
+VBoxContainer
 Node2D
 CharacterBody2D
 Node
@@ -6,9 +13,3 @@ AnimationPlayer
 CollisionShape2D
 Sprite2D
 Area2D
-AudioStreamPlayer
-Label
-StaticBody2D
-RigidBody2D
-CollisionPolygon2D
-Control

@@ -37,7 +37,6 @@ public partial class Abilities : Node
         if (boomerangInstance != null)
         {
             return;
-
         }
 
         Boomerang b = BOOMERANG.Instantiate() as Boomerang;
