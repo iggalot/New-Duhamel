@@ -82,6 +82,10 @@ public partial class GlobalPlayerManager : Node
 
     public void UnparentPlayer(Node2D p)
     {
+        if (player.GetParent() != p)
+        {
+            return;
+        }
         p.RemoveChild(player);
         return;
     }
