@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://crrhe2flb6e45"]
+
+[ext_resource type="Script" path="res://spells/BaseSpellData.cs" id="1_4mrbe"]
+
+[node name="SpellData" type="Node"]
+script = ExtResource("1_4mrbe")

@@ -80,3 +80,10 @@ res://enemies/scripts/states/MonsterDeadState.cs
 res://scripts/ProjectileController.cs
 res://scripts/ui/hud/PlayerHud.cs
 res://interactables/treasure_chest/scripts/TreasureChest.cs
+res://enemies/_boss2/monster_controller_boss2.tscn
+res://default_bus_layout.tres
+res://spells/base_spell.tscn
+res://spells/BaseSpellData.cs
+res://spells/SpellData.tscn
+res://spells/base_spell_controller.tscn
+res://spells/BaseSpell.cs

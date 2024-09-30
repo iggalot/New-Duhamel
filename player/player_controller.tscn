@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=63 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_8k0os"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="2_q8qlb"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="6_p6cpo"]
 [ext_resource type="Script" path="res://player/scripts/PlayerCamera.cs" id="7_dxttv"]
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="8_deof1"]
+[ext_resource type="Script" path="res://resources/data/CharacterData.cs" id="9_0epbo"]
 [ext_resource type="PackedScene" uid="uid://c67btl4crsql7" path="res://scenes/state_machine.tscn" id="9_gwkrn"]
 [ext_resource type="Script" path="res://player/scripts/states/PlayerIdleState.cs" id="10_1fcxu"]
 [ext_resource type="Script" path="res://player/scripts/states/PlayerAttackState.cs" id="11_anbav"]
@@ -1027,6 +1028,7 @@ speed_scale = 2.744
 shape = SubResource("CircleShape2D_igmax")
 
 [node name="CharacterData" parent="." instance=ExtResource("8_deof1")]
+script = ExtResource("9_0epbo")
 
 [node name="StateMachine" parent="." instance=ExtResource("9_gwkrn")]
 
