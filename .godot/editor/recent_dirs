@@ -1,3 +1,4 @@
+res://globals
 res://interactables/locked_door
 res://levels/Area00
 res://levels/Area01
@@ -7,7 +8,6 @@ res://items/item_effects
 res://items
 res://scenes/ui/inventory
 res://items/scripts
-res://globals
 res://scenes/ui/pause_menu
 res://scenes/ui/scene_transition
 res://levels/scripts

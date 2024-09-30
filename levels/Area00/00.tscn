@@ -1,7 +1,8 @@
-[gd_scene load_steps=30 format=4 uid="uid://di8f5mdx72br1"]
+[gd_scene load_steps=31 format=4 uid="uid://di8f5mdx72br1"]
 
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_dc8fm"]
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_f66at"]
+[ext_resource type="AudioStream" uid="uid://cyhfdccvmqfu" path="res://resources/audio/michael_games/example_music_01.ogg" id="2_0r0ss"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="2_hjhl1"]
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="3_gbxlj"]
 [ext_resource type="PackedScene" uid="uid://v5xun7lg8778" path="res://props/plants/plant.tscn" id="4_us75b"]
@@ -159,6 +160,7 @@ sources/1 = SubResource("TileSetAtlasSource_ukvse")
 
 [node name="00" type="Node2D"]
 script = ExtResource("1_f66at")
+music = ExtResource("2_0r0ss")
 metadata/_edit_lock_ = true
 
 [node name="PlayerSpawn" parent="." instance=ExtResource("8_8h4lv")]

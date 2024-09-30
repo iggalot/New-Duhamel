@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 LevelManager="*res://globals/GlobalLevelManager.cs"
+AudioManager="*res://globals/GlobalAudioManager.cs"
 GameManager="*res://scripts/GameManager.cs"
 ImportData="*res://scripts/ImportData.cs"
 PlayerManager="*res://globals/GlobalPlayerManager.cs"

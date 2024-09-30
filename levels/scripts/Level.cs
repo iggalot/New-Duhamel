@@ -3,6 +3,8 @@ using System;
 
 public partial class Level : Node2D
 {
+    [Export] AudioStream music { get; set; }
+
     public override void _Ready()
     {
         this.YSortEnabled = true;
@@ -14,6 +16,8 @@ public partial class Level : Node2D
         GlobalLevelManager.Instance.ChangeTileMapBounds(GlobalLevelManager.Instance.bounds);
         
         GlobalLevelManager.Instance.LevelLoadStarted += FreeLevel;
+
+        GlobalAudioManager.Instance.PlayMusic(music);
 
         return;
     }
