@@ -18,7 +18,7 @@
 [ext_resource type="Resource" uid="uid://dki83om7y48bv" path="res://items/stone.tres" id="13_6c5hm"]
 [ext_resource type="Resource" uid="uid://e3idbcgtngrc" path="res://items/potion.tres" id="13_6lr4s"]
 [ext_resource type="PackedScene" uid="uid://b1juyh1761tp7" path="res://interactables/pressure_plate/pressure_plate.tscn" id="13_ud64f"]
-[ext_resource type="PackedScene" uid="uid://byyjaay07k25i" path="res://enemies/scripts/monster_controller_boss1.tscn" id="18_b5r4g"]
+[ext_resource type="PackedScene" uid="uid://byyjaay07k25i" path="res://enemies/_boss1/monster_controller_boss1.tscn" id="18_b5r4g"]
 [ext_resource type="PackedScene" uid="uid://bhwt15a6aysku" path="res://interactables/locked_door/locked_door.tscn" id="18_cyup5"]
 [ext_resource type="PackedScene" uid="uid://dx0nie3xcpboq" path="res://items/item_pickup/item_pickup.tscn" id="19_g8hka"]
 [ext_resource type="Resource" uid="uid://doa1ooc13oigk" path="res://items/key.tres" id="20_1fnqy"]
