@@ -1,3 +1,4 @@
+Node
 TextureRect
 ColorRect
 TextureButton
@@ -7,9 +8,7 @@ HBoxContainer
 VBoxContainer
 Node2D
 CharacterBody2D
-Node
 AudioStreamPlayer2D
 AnimationPlayer
 CollisionShape2D
 Sprite2D
-Area2D

@@ -40,6 +40,10 @@ public partial class GlobalPlayerManager : Node
         // hook up to the players spell ability -- default will be lightning
         SetActiveSpell(BaseSpell.SpellsNames.SPELL_LIGHTNING);
 
+        // subscribe to the element changed event in the element selector
+        var element_selector = playerHud.GetNode<ElementSelector>("VBoxContainer") as ElementSelector;
+        element_selector.SpellSelected += SetActiveSpell;
+
     }
 
     public void AddPlayerInstance()
@@ -103,6 +107,8 @@ public partial class GlobalPlayerManager : Node
     public void SetActiveSpell(BaseSpell.SpellsNames spell)
     {
         player.activeSpell = spell;
+        GD.Print(" active spell is now: " + player.activeSpell);
+
         return;
     }
 }

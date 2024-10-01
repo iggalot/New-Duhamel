@@ -12,6 +12,8 @@ public partial class PlayerController : CharacterBody2D
     private AttributesManager attributesManager = new AttributesManager();
  //   private GameManager gameManager;
 
+    public PackedScene baseSpellScene { get; set; }
+    private string baseSpellScenePath { get; set; } = "res://spells/base_spell_controller.tscn";
     public BaseSpell.SpellsNames activeSpell { get; set; } = BaseSpell.SpellsNames.SPELL_LIGHTNING;
 
     // this players properties
@@ -51,6 +53,7 @@ public partial class PlayerController : CharacterBody2D
     public Sprite2D sprite;
     public StateMachine stateMachine;
     public AudioStreamPlayer2D audio;
+    public Node activeSpellsNode;
 
 
     // our attributes
@@ -85,11 +88,11 @@ public partial class PlayerController : CharacterBody2D
             GD.Print("Player movement allowed: " + attributesManager.IsPlayerMoveable);
         }
 
-        //// if the player is shooting
-        //if (Input.IsActionJustPressed("shoot"))
-        //{
-        //    Shoot();
-        //}
+        // if the player is shooting
+        if (Input.IsActionJustPressed("shoot"))
+        {
+            Shoot();
+        }
     }
 
     public override void _Ready()
@@ -139,6 +142,8 @@ public partial class PlayerController : CharacterBody2D
 
         audio = GetNode<AudioStreamPlayer2D>("Audio/AudioStreamPlayer2D");
 
+        baseSpellScene = GD.Load<PackedScene>(baseSpellScenePath);
+        activeSpellsNode = GetNode("ActiveSpells");
         //// This is a full heal for our player
         //UpdateHitPoints(MaxHitPoints);
 
@@ -327,34 +332,70 @@ public partial class PlayerController : CharacterBody2D
 
     public void Shoot()
     {
+        BaseSpell new_spell = (BaseSpell)baseSpellScene.Instantiate();
+        new_spell.Initialize(activeSpell);
 
-        // get the storage groups for the projectiles owned by this player
-        var projectiles_node = GetTree().Root.GetNode<Node2D>("GameManager/Projectiles");
+        // Create a unique name for the spell in the tree
+        new_spell.Name = BaseSpell.GetSpellName(activeSpell) + "_" + Guid.NewGuid().ToString();
 
-        // create the projectile data
-        ProjectileData data = new ProjectileData();
-        data.ProjectileOwner = this;
-        data.ProjectileSpeed = 500.0f;
-        data.ProjectileRangeDistance = 3000.0f;
-        data.ProjectileDirectionUnitVector = (GetGlobalMousePosition() - this.GlobalPosition).Normalized(); // must be a unit vector
-        data.ProjectileSpawnPosition = this.GlobalPosition;
-        data.ProjectileSize = 10.0f;
-        data.ProjectileDamage = 45.0f;
-        data.ProjectileKnockbackDistance = 10.0f;
+        // set the origination position as the player position
+        new_spell.GlobalPosition = GlobalPosition;
 
-        GD.Print(data.ToString());
+        // add the spell to the GODOT scene tree
+        activeSpellsNode.AddChild(new_spell);
 
-        // instantiate the projectile scene and add it as a child to the player controller tree
-        // after initializing data
-        projectileScene = (PackedScene)ResourceLoader.Load(projectileScenePath);
-        ProjectileController proj_controller_node = projectileScene.Instantiate() as ProjectileController;
-        proj_controller_node.InitializeData(data);
+        // now update the spell data node
+        BaseSpellData spell_data_node = new_spell.GetNode("SpellData") as BaseSpellData;
 
-        // set the position of this node to be the players glboal position
-        proj_controller_node.Position = data.ProjectileSpawnPosition;
+        // create the new data
+        BaseSpellData new_spell_data = new BaseSpellData();
+        new_spell_data.SpellName = BaseSpell.GetSpellName(activeSpell);
+        new_spell_data.SpellRange = 500.0f;
+        new_spell_data.SpellSpeed = 200.0f;
+        new_spell_data.SpellType = activeSpell;
 
-        // add the projectile to the scene tree
-        projectiles_node.AddChild(proj_controller_node);
+        // update the spell data in our record (not the tree node)
+        new_spell.spellData = new_spell_data;
+
+
+        Vector2 vec = GetGlobalMousePosition();
+        new_spell_data.SpellDirection = (vec - this.GlobalPosition).Normalized();
+
+        // copy the new spell data to the spell data tree node
+        spell_data_node.SpellName = new_spell_data.SpellName;
+        spell_data_node.SpellRange = new_spell_data.SpellRange;
+        spell_data_node.SpellSpeed = new_spell_data.SpellSpeed;
+        spell_data_node.SpellType = new_spell_data.SpellType;
+        spell_data_node.SpellDirection = new_spell_data.SpellDirection;
+
+
+        //// get the storage groups for the projectiles owned by this player
+        //var projectiles_node = GetTree().Root.GetNode<Node2D>("GameManager/Projectiles");
+
+        //// create the projectile data
+        //ProjectileData data = new ProjectileData();
+        //data.ProjectileOwner = this;
+        //data.ProjectileSpeed = 500.0f;
+        //data.ProjectileRangeDistance = 3000.0f;
+        //data.ProjectileDirectionUnitVector = (GetGlobalMousePosition() - this.GlobalPosition).Normalized(); // must be a unit vector
+        //data.ProjectileSpawnPosition = this.GlobalPosition;
+        //data.ProjectileSize = 10.0f;
+        //data.ProjectileDamage = 45.0f;
+        //data.ProjectileKnockbackDistance = 10.0f;
+
+        //GD.Print(data.ToString());
+
+        //// instantiate the projectile scene and add it as a child to the player controller tree
+        //// after initializing data
+        //projectileScene = (PackedScene)ResourceLoader.Load(projectileScenePath);
+        //ProjectileController proj_controller_node = projectileScene.Instantiate() as ProjectileController;
+        //proj_controller_node.InitializeData(data);
+
+        //// set the position of this node to be the players glboal position
+        //proj_controller_node.Position = data.ProjectileSpawnPosition;
+
+        //// add the projectile to the scene tree
+        //projectiles_node.AddChild(proj_controller_node);
     }
 
     public void Die()

@@ -1101,3 +1101,5 @@ script = ExtResource("20_6bu2b")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemMagnet"]
 shape = SubResource("CircleShape2D_vflo0")
 debug_color = Color(0.913725, 0.14902, 0.615686, 0.054902)
+
+[node name="ActiveSpells" type="Node" parent="."]

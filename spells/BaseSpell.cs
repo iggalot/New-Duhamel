@@ -14,17 +14,53 @@ public partial class BaseSpell : Node2D
     }
 
     private string spell_prefix = "fireball";
-    Sprite2D spellSprite { get; set; }
-    Area2D spellArea { get; set; }
-    AnimationPlayer animationPlayer { get; set; }
-    [Export] BaseSpellData spellData { get; set; }
 
-    Vector2 initialPosition { get; set; }
-    Vector2 currentPosition { get; set; }
+    private const string ELEMENT_ICON_PATH = "res://resources/graphics/spells/32x32_Moving_Fireball.png";
+    private AtlasTexture atlasTexture { get; set; } = new AtlasTexture();
+    public Texture2D spellTexture { get; set; }
+
+    [Export] public BaseSpellData spellData { get; set; } = new BaseSpellData();
+
+
+    // nodes for Godot4 tree
+    public Sprite2D spellSprite { get; set; }
+    public Area2D spellArea { get; set; }
+    public AnimationPlayer animationPlayer { get; set; }
+
+
+
+    public Vector2 initialPosition { get; set; }
+    public Vector2 currentPosition { get; set; }
 
     public bool hasImpacted { get; set; }
     private Node2D impactedBody { get; set; }
 
+    /// <summary>
+    /// Parameterless constructor for Godot4 tree construction
+    /// </summary>
+    public BaseSpell() 
+    {
+        GD.Print("In base spell");
+
+        // create the basic data -- Initialize should be called to change this after it's been created.
+        UpdateSpellTexture(spellData.SpellType);
+        spell_prefix = BaseSpell.GetSpellName(spellData.SpellType);
+
+    }
+
+    /// <summary>
+    /// An initializer function for BaseSpell -- to be used after the parameterless constructor has been called
+    /// </summary>
+    /// <param name="spell_type"></param>
+    public void Initialize(SpellsNames spell_type)
+    {
+        // update the texture first so we can tell if the spell_type is new or not
+        UpdateSpellTexture(spell_type);
+
+        spellData.SpellType = spell_type;
+        spell_prefix = BaseSpell.GetSpellName(spell_type);
+
+    }
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
@@ -41,6 +77,8 @@ public partial class BaseSpell : Node2D
         currentPosition = GlobalPosition;
 
         spellSprite.Rotation = spellData.SpellDirection.Angle();
+
+        UpdateSpellTexture(spellData.SpellType);
     }
 
     private void OnAnimationFinished(StringName animName)
@@ -88,6 +126,7 @@ public partial class BaseSpell : Node2D
                 animationPlayer.Play(spell_prefix +"_impact");
                 await ToSignal(animationPlayer, "animation_finished");
                 QueueFree();
+                hasImpacted = false;
             }
 
         } else
@@ -96,7 +135,7 @@ public partial class BaseSpell : Node2D
         }
     }
 
-    public string GetSpellName(SpellsNames spell)
+    public static string GetSpellName(SpellsNames spell)
     {
         switch (spell)
         {
@@ -115,6 +154,43 @@ public partial class BaseSpell : Node2D
             default:
                 return "lightning";
         }
+    }
+
+    public void UpdateSpellTexture(SpellsNames spell_type)
+    {
+        // if this spell is the same as the previous, don't create a new texture
+        //if (spell_type == spellData.SpellType)
+        //{
+        //    return;
+        //}
+
+        spellTexture = CreateTexture(spell_type);
+        //spellSprite.Texture = spellTexture;
+        spellData.SpellType = spell_type;
+        spell_prefix = GetSpellName(spell_type);
+    }
+
+    /// <summary>
+    /// Creates the spell icon texture from the atlas texture for spells
+    /// </summary>
+    /// <param name="spell_type"></param>
+    /// <returns></returns>
+    private Texture2D CreateTexture(SpellsNames spell_type)
+    {
+
+        // the position in the atlast texture -- for our base spell sheet, these are all contained in column 0
+        int spell_atlas_pos = (int)spell_type;
+
+        // create the atlas image
+        Image atlas_img = new Image();
+        atlas_img.Load(ELEMENT_ICON_PATH);
+        ImageTexture img_texture = ImageTexture.CreateFromImage(atlas_img);
+        atlasTexture.Atlas = img_texture;
+
+        var region = new Rect2(new Vector2(0, spell_atlas_pos * 32), new Vector2(32, 32));
+        atlasTexture.Region = region;
+
+        return atlasTexture;
     }
 
 }
