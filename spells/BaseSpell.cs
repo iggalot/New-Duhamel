@@ -3,12 +3,15 @@ using System;
 
 public partial class BaseSpell : Node2D
 {
-    // fireball
-    // poisonball
-    // lightning
-    // acidarrow
-    // poisonstream
-    // earth
+    public enum SpellsNames
+    {
+        SPELL_FIREBALL = 0,
+        SPELL_POISONBALL = 1,
+        SPELL_LIGHTNING = 2,
+        SPELL_ACIDARROW = 3,
+        SPELL_POISONSTREAM = 4,
+        SPELL_EARTH = 5
+    }
 
     private string spell_prefix = "fireball";
     Sprite2D spellSprite { get; set; }
@@ -90,6 +93,27 @@ public partial class BaseSpell : Node2D
         } else
         {
             animationPlayer.Play(spell_prefix + "_right");
+        }
+    }
+
+    public string GetSpellName(SpellsNames spell)
+    {
+        switch (spell)
+        {
+            case SpellsNames.SPELL_FIREBALL:
+                return "fireball";
+            case SpellsNames.SPELL_POISONBALL:
+                return "poisonball";
+            case SpellsNames.SPELL_LIGHTNING:
+                return "lightning";
+            case SpellsNames.SPELL_ACIDARROW:
+                return "acidarrow";
+            case SpellsNames.SPELL_POISONSTREAM:
+                return "poisonstream";
+            case SpellsNames.SPELL_EARTH:
+                return "earth";
+            default:
+                return "lightning";
         }
     }
 

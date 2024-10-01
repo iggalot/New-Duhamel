@@ -12,6 +12,7 @@ public partial class PlayerController : CharacterBody2D
     private AttributesManager attributesManager = new AttributesManager();
  //   private GameManager gameManager;
 
+    public BaseSpell.SpellsNames activeSpell { get; set; } = BaseSpell.SpellsNames.SPELL_LIGHTNING;
 
     // this players properties
     public Vector2 CardinalDirection { get; set; } = Vector2.Down;

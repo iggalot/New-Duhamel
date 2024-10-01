@@ -36,6 +36,10 @@ public partial class GlobalPlayerManager : Node
         PlayerSpawned = true;
 
         INVENTORY_DATA = GD.Load("res://scenes/ui/inventory/player_inventory.tres") as InventoryData;
+
+        // hook up to the players spell ability -- default will be lightning
+        SetActiveSpell(BaseSpell.SpellsNames.SPELL_LIGHTNING);
+
     }
 
     public void AddPlayerInstance()
@@ -94,5 +98,11 @@ public partial class GlobalPlayerManager : Node
     {
         player.audio.Stream = audio;
         player.audio.Play();
+    }
+
+    public void SetActiveSpell(BaseSpell.SpellsNames spell)
+    {
+        player.activeSpell = spell;
+        return;
     }
 }
