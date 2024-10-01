@@ -72,7 +72,7 @@ public partial class MonsterChaseState : State
     // What happens when the player enters this State?
     public override void EnterState()
     {
-        GD.Print("monster is chasing -- before linking signals");
+        //GD.Print("monster is chasing -- before linking signals");
         if (visionArea != null)
         {
             //GD.Print("-- signals linked");

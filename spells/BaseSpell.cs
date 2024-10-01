@@ -13,7 +13,7 @@ public partial class BaseSpell : Node2D
         SPELL_EARTH = 5
     }
 
-    private string spell_prefix = "fireball";
+
 
     private const string ELEMENT_ICON_PATH = "res://resources/graphics/spells/32x32_Moving_Fireball.png";
     private AtlasTexture atlasTexture { get; set; } = new AtlasTexture();
@@ -26,6 +26,7 @@ public partial class BaseSpell : Node2D
     public Sprite2D spellSprite { get; set; }
     public Area2D spellArea { get; set; }
     public AnimationPlayer animationPlayer { get; set; }
+    public SpellHurtBox spellHurtBox { get; set; }
 
 
 
@@ -40,12 +41,9 @@ public partial class BaseSpell : Node2D
     /// </summary>
     public BaseSpell() 
     {
-        GD.Print("In base spell");
-
         // create the basic data -- Initialize should be called to change this after it's been created.
         UpdateSpellTexture(spellData.SpellType);
-        spell_prefix = BaseSpell.GetSpellName(spellData.SpellType);
-
+        spellData.Update();
     }
 
     /// <summary>
@@ -58,7 +56,7 @@ public partial class BaseSpell : Node2D
         UpdateSpellTexture(spell_type);
 
         spellData.SpellType = spell_type;
-        spell_prefix = BaseSpell.GetSpellName(spell_type);
+        spellData.Update();
 
     }
     // Called when the node enters the scene tree for the first time.
@@ -67,11 +65,18 @@ public partial class BaseSpell : Node2D
         spellArea = GetNode<Area2D>("Area2D");
         spellSprite = GetNode<Sprite2D>("Sprite2D");
         spellData = GetNode<Node>("SpellData") as BaseSpellData;
+        spellHurtBox = GetNode<SpellHurtBox>("SpellHurtBox");
 
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
+        // for detecting if it hits a spell hit box area
+        spellArea.AreaEntered += OnAreaEntered;
+        spellArea.AreaExited += OnAreaExited;
+
+        // for detecting if it hits a solid body (used for wall detection)
         spellArea.BodyEntered += OnBodyEntered;
         spellArea.BodyExited += OnBodyExited;
+
 
         initialPosition = GlobalPosition;
         currentPosition = GlobalPosition;
@@ -81,31 +86,57 @@ public partial class BaseSpell : Node2D
         UpdateSpellTexture(spellData.SpellType);
     }
 
-    private void OnAnimationFinished(StringName animName)
-    {
-        throw new NotImplementedException();
-    }
 
     private void OnBodyExited(Node2D body)
     {
         hasImpacted = false;
-        GD.Print("spell data body exited -- " + body.Name);
+        GD.Print("spell body exited -- " + body.Name);
+    }
+
+    private void OnAreaExited(Area2D area)
+    {
+        if(area is SpellHitBox)
+        {
+            hasImpacted = false;
+
+            GD.Print("spell area exited -- " + area.Name + " in " + area.GetParent().Name);
+
+        }
     }
 
     private void OnBodyEntered(Node2D body)
     {
-       
-        GD.Print("spell data body entered -- " + body.Name);
+        GD.Print("spell body entered -- " + body.Name);
 
-        if(body is TileMapLayer)
+        if (body is TileMapLayer)
         {
             hasImpacted = true;
-            impactedBody = body as TileMapLayer;
 
-            spellData.SpellDirection = Vector2.Zero;
-            spellData.SpellSpeed = 0;
+            if(body is TileMapLayer)
+            {
+                impactedBody = body as TileMapLayer;
+
+                spellData.SpellDirection = Vector2.Zero;
+                spellData.SpellSpeed = 0;
+            } 
         }
     }
+
+    private void OnAreaEntered(Area2D area)
+    {
+        if(area is SpellHitBox)
+        {
+            GD.Print("-- spell has hit a spell area hit box in " + area.Name + " in " + area.GetParent().Name);
+            spellData.SpellDirection = Vector2.Zero;
+            spellData.SpellSpeed = 0;
+            hasImpacted = true;
+
+            ((SpellHitBox)area).TakeSpellDamage(spellHurtBox);
+
+            //EmitSignal(SignalName.SpellDamaged, area);
+        }
+    }
+
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public async override void _Process(double delta)
@@ -114,6 +145,9 @@ public partial class BaseSpell : Node2D
         GlobalPosition += (spellData.SpellDirection) * (float)(spellData.SpellSpeed * delta);
         currentPosition = GlobalPosition;
 
+        // rotate the spell to align with the direction vector
+        spellSprite.Rotation = spellData.SpellDirection.Angle();
+
         if (IsInstanceValid(this) is false)
         {
             return;
@@ -121,40 +155,21 @@ public partial class BaseSpell : Node2D
 
         if (hasImpacted)
         {
-            if(impactedBody is TileMapLayer)
-            {
-                animationPlayer.Play(spell_prefix +"_impact");
-                await ToSignal(animationPlayer, "animation_finished");
-                QueueFree();
-                hasImpacted = false;
-            }
+            // rotate the spell to align with the direction vector
+            spellSprite.Rotation = spellData.SpellDirection.Angle();
 
-        } else
+            animationPlayer.Play(spellData.SpellName + "_impact");
+            await ToSignal(animationPlayer, "animation_finished");
+            // now destroy the spell
+            QueueFree();
+        }
+        else
         {
-            animationPlayer.Play(spell_prefix + "_right");
+            animationPlayer.Play(spellData.SpellName + "_right");
         }
     }
 
-    public static string GetSpellName(SpellsNames spell)
-    {
-        switch (spell)
-        {
-            case SpellsNames.SPELL_FIREBALL:
-                return "fireball";
-            case SpellsNames.SPELL_POISONBALL:
-                return "poisonball";
-            case SpellsNames.SPELL_LIGHTNING:
-                return "lightning";
-            case SpellsNames.SPELL_ACIDARROW:
-                return "acidarrow";
-            case SpellsNames.SPELL_POISONSTREAM:
-                return "poisonstream";
-            case SpellsNames.SPELL_EARTH:
-                return "earth";
-            default:
-                return "lightning";
-        }
-    }
+
 
     public void UpdateSpellTexture(SpellsNames spell_type)
     {
@@ -167,7 +182,6 @@ public partial class BaseSpell : Node2D
         spellTexture = CreateTexture(spell_type);
         //spellSprite.Texture = spellTexture;
         spellData.SpellType = spell_type;
-        spell_prefix = GetSpellName(spell_type);
     }
 
     /// <summary>

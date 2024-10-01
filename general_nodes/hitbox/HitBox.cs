@@ -14,7 +14,8 @@ public partial class HitBox : Area2D
     }
 
     public void TakeDamage(HurtBox hurt_box) 
-    { 
+    {
+        GD.Print("Emitting melee damage signal");
         //GD.Print( "TakeDamage: " + damage.ToString() );
         EmitSignal(SignalName.Damaged, hurt_box);
     }

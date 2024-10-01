@@ -71,7 +71,7 @@ public partial class MonsterWanderState : State
     // What happens when the player enters this State?
     public override void EnterState()
     {
-        GD.Print("monster is wandering -- before linking signals");
+        //GD.Print("monster is wandering -- before linking signals");
         if (visionArea != null)
         {
             //GD.Print("-- signals linked");
@@ -100,7 +100,7 @@ public partial class MonsterWanderState : State
     // What happens when the player exits this State?
     public override void ExitState()
     {
-        GD.Print("exiting wander state");
+        //GD.Print("exiting wander state");
 
         if (visionArea != null)
         {
@@ -148,7 +148,7 @@ public partial class MonsterWanderState : State
 
     private void OnPlayerEnter(Area2D area)
     {
-        GD.Print("in wander state -- player entered vision area");
+        //GD.Print("in wander state -- player entered vision area");
 
         if (stateMachine.currentState == stunState)
         {
@@ -162,7 +162,7 @@ public partial class MonsterWanderState : State
 
     private void OnPlayerExit(Area2D area)
     {
-        GD.Print("in wander state -- player entered");
+        //GD.Print("in wander state -- player entered");
 
         return;
     }

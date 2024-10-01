@@ -81,3 +81,10 @@ res://levels/Area01/01.tscn
 res://enemies/_boss2/monster_controller_boss2.tscn
 res://spells/base_spell_controller.tscn
 res://scenes/ui/player_hud.tscn
+res://enemies/_basic_mob/monster_controller.tscn
+res://enemies/_boss1/monster_controller_boss1.tscn
+res://general_nodes/hitbox/hit_box.tscn
+res://general_nodes/hitbox/SpellHitBox.cs
+res://general_nodes/hitbox/spell_hit_box.tscn
+res://general_nodes/hurtbox/spell_hurt_box.tscn
+res://general_nodes/hurtbox/SpellHurtBox.cs

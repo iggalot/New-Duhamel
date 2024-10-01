@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=64 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_8k0os"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="2_q8qlb"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="17_fwi7f"]
 [ext_resource type="AudioStream" uid="uid://coymc6f8hkl0e" path="res://resources/audio/michael_games/hit_player.wav" id="18_x8esv"]
 [ext_resource type="Script" path="res://scripts/abilities/Abilities.cs" id="20_6bu2b"]
+[ext_resource type="Script" path="res://general_nodes/hitbox/SpellHitBox.cs" id="20_23ecb"]
 [ext_resource type="PackedScene" uid="uid://beqh4f36ijd3a" path="res://general_nodes/item_magnet/item_magnet.tscn" id="21_wr67j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x5nm2"]
@@ -1084,6 +1085,15 @@ debug_color = Color(0.741161, 0.265091, 0.937576, 0.611765)
 collision_layer = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(-0.5, 7.25)
+shape = SubResource("RectangleShape2D_7mu78")
+debug_color = Color(0.513514, 0.573508, 0.175955, 0.42)
+
+[node name="SpellHitBox" parent="." instance=ExtResource("17_fwi7f")]
+collision_layer = 3
+script = ExtResource("20_23ecb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitBox"]
 position = Vector2(-0.5, 7.25)
 shape = SubResource("RectangleShape2D_7mu78")
 debug_color = Color(0.513514, 0.573508, 0.175955, 0.42)

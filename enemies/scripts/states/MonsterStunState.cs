@@ -49,6 +49,7 @@ public partial class MonsterStunState : State
 
         // connect to the enemy damage signal in monster controller
         controllerOwner.EnemyDamaged += OnEnemyDamaged;
+        controllerOwner.EnemySpellDamaged += OnEnemySpellDamaged;
 
         nextState = idleState;
 
@@ -91,7 +92,7 @@ public partial class MonsterStunState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        GD.Print("monster is stunned");
+        //GD.Print("monster is stunned");
         if (animationFinished is true)
         {
             return nextState;
@@ -117,6 +118,12 @@ public partial class MonsterStunState : State
     private void OnEnemyDamaged(HurtBox hurt_box)
     {
         damagePosition = hurt_box.GlobalPosition;
+        controllerOwner.stateMachine.ChangeState(this);
+    }
+
+    private void OnEnemySpellDamaged(SpellHurtBox spell_hurt_box, BaseSpell spell)
+    {
+        damagePosition = spell_hurt_box.GlobalPosition;
         controllerOwner.stateMachine.ChangeState(this);
     }
 

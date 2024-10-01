@@ -1,10 +1,11 @@
-[gd_scene load_steps=80 format=3 uid="uid://i3n7xxy4ma06"]
+[gd_scene load_steps=82 format=3 uid="uid://i3n7xxy4ma06"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_6d1x5"]
 [ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="2_htda1"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="3_e8elk"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="4_pixwq"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="5_cdhq0"]
+[ext_resource type="PackedScene" uid="uid://ccbgc31hq2tma" path="res://general_nodes/hitbox/spell_hit_box.tscn" id="5_gqm1i"]
 [ext_resource type="Texture2D" uid="uid://37nx2f3thrqx" path="res://resources/graphics/enemies/64x64_boss2.png" id="6_7p0mu"]
 [ext_resource type="AudioStream" uid="uid://cejjl6gawgwqf" path="res://resources/audio/michael_games/hit_01.wav" id="7_m8x70"]
 [ext_resource type="AudioStream" uid="uid://buadn47d5bteb" path="res://resources/audio/michael_games/hit_00.wav" id="8_0e3j1"]
@@ -31,6 +32,9 @@ radius = 88.5664
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gkyvb"]
 radius = 73.0274
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tqe2p"]
+radius = 44.0114
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_av4x5"]
 radius = 99.0454
@@ -1159,6 +1163,12 @@ debug_color = Color(0.665915, 0.583065, 0.239089, 0.42)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 shape = SubResource("CircleShape2D_gkyvb")
+debug_color = Color(0.95985, 0.343659, 0.368198, 0.42)
+
+[node name="SpellHitBox" parent="." instance=ExtResource("5_gqm1i")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitBox"]
+shape = SubResource("CircleShape2D_tqe2p")
 debug_color = Color(0.95985, 0.343659, 0.368198, 0.42)
 
 [node name="ShadowSprite2D" type="Sprite2D" parent="."]

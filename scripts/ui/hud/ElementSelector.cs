@@ -6,7 +6,7 @@ using static BaseSpell;
 
 public partial class ElementSelector : Node
 {
-    [Signal] public delegate void SpellSelectedEventHandler(BaseSpell.SpellsNames spell);
+    [Signal] public delegate void SpellSelectedEventHandler(BaseSpell spell);
 
     // fireball
     // poisonball
@@ -25,6 +25,7 @@ public partial class ElementSelector : Node
 
         // set to the fireball instance by default
         currentSpell.Initialize(SpellsNames.SPELL_FIREBALL);
+        EmitSignal(SignalName.SpellSelected, currentSpell);
 
         var elementTexture = elementButton.TextureNormal;
         elementButton.TextureNormal = currentSpell.spellTexture;
@@ -46,6 +47,6 @@ public partial class ElementSelector : Node
         elementButton.TextureNormal = currentSpell.spellTexture;
 
         // signal to GlobalPlayerManager that a new spell has been selected
-        EmitSignal(SignalName.SpellSelected, this);
+        EmitSignal(SignalName.SpellSelected, this.currentSpell);
     }
 }

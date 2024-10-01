@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://xk8gkeftmfi" path="res://general_nodes/item_dropper/item_dropper.tscn" id="6_mb6fm"]
 [ext_resource type="PackedScene" uid="uid://k3p523c4ev1h" path="res://interactables/pushable_statue/PushableStatue.tscn" id="6_ortiv"]
 [ext_resource type="PackedScene" uid="uid://pl4elp0yqktx" path="res://interactables/barred_door/barred_door.tscn" id="6_rjvxg"]
-[ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://enemies/scripts/monster_controller.tscn" id="6_yg1s0"]
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="8_8h4lv"]
 [ext_resource type="PackedScene" uid="uid://bpqiml3cwfeh6" path="res://levels/level_transition.tscn" id="10_wi38v"]
 [ext_resource type="Resource" uid="uid://cydfao5w13jfq" path="res://items/gem.tres" id="11_oaumu"]
@@ -25,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://csfjpehfksl0v" path="res://general_nodes/enemy_counter/enemy_counter.tscn" id="21_ng4oj"]
 [ext_resource type="PackedScene" uid="uid://i3n7xxy4ma06" path="res://enemies/_boss2/monster_controller_boss2.tscn" id="24_5vd6y"]
 [ext_resource type="PackedScene" uid="uid://bmsskt6riwlxf" path="res://spells/base_spell_controller.tscn" id="25_342gl"]
+[ext_resource type="PackedScene" uid="uid://bvql6ho6fkha2" path="res://enemies/_basic_mob/monster_controller.tscn" id="26_pqmyg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsq5f"]
 texture = ExtResource("1_dc8fm")
@@ -239,12 +239,6 @@ position = Vector2(-3, 374)
 
 [node name="PlayerHUD" parent="." instance=ExtResource("5_wdeb4")]
 
-[node name="MonsterController" parent="." instance=ExtResource("6_yg1s0")]
-position = Vector2(716, 333)
-
-[node name="MonsterController2" parent="." instance=ExtResource("6_yg1s0")]
-position = Vector2(721, 207)
-
 [node name="LevelTransition" parent="." instance=ExtResource("10_wi38v")]
 position = Vector2(368, 464)
 level = "res://levels/Area02/02.tscn"
@@ -258,7 +252,10 @@ level = "res://levels/Area01/01.tscn"
 size = 4
 side = 1
 
-[node name="MonsterController3" parent="." instance=ExtResource("18_b5r4g")]
+[node name="Boss2" parent="." instance=ExtResource("24_5vd6y")]
+position = Vector2(532, 120)
+
+[node name="Boss1" parent="." instance=ExtResource("18_b5r4g")]
 position = Vector2(720, -261)
 
 [node name="TreasureChest" parent="." instance=ExtResource("11_wkuar")]
@@ -297,17 +294,20 @@ itemData = ExtResource("20_1fnqy")
 [node name="EnemyCounter" parent="." instance=ExtResource("21_ng4oj")]
 position = Vector2(146, 296)
 
-[node name="MonsterController" parent="EnemyCounter" instance=ExtResource("6_yg1s0")]
-position = Vector2(-53, 31)
+[node name="MonsterController" parent="EnemyCounter" instance=ExtResource("26_pqmyg")]
+position = Vector2(56, 31)
 
-[node name="MonsterController2" parent="EnemyCounter" instance=ExtResource("6_yg1s0")]
-position = Vector2(11, 49)
-
-[node name="MonsterController4" parent="." instance=ExtResource("24_5vd6y")]
-position = Vector2(532, 120)
+[node name="MonsterController2" parent="EnemyCounter" instance=ExtResource("26_pqmyg")]
+position = Vector2(-25, 60)
 
 [node name="BaseSpell" parent="." instance=ExtResource("25_342gl")]
 position = Vector2(646, 100)
+
+[node name="MonsterController3" parent="." instance=ExtResource("26_pqmyg")]
+position = Vector2(845, 252)
+
+[node name="MonsterController4" parent="." instance=ExtResource("26_pqmyg")]
+position = Vector2(819, 129)
 
 [connection signal="Activated" from="PressurePlate" to="BarredDoor" method="OnOpenDoor"]
 [connection signal="Deactivated" from="PressurePlate" to="BarredDoor" method="OnCloseDoor"]

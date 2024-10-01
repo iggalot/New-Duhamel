@@ -52,6 +52,7 @@ public partial class MonsterDestroyState : State
 
         // connect to the enemy damage signal in monster controller
         controllerOwner.EnemyKilled += OnEnemyKilled;
+        controllerOwner.EnemySpellKilled += OnEnemySpellKilled;
 
         return;
     }
@@ -103,6 +104,12 @@ public partial class MonsterDestroyState : State
     private void OnEnemyKilled(HurtBox hurt_box)
     {
         damagePosition = hurt_box.GlobalPosition;
+        controllerOwner.stateMachine.ChangeState(this);
+    }
+
+    private void OnEnemySpellKilled(SpellHurtBox spell_hurt_box, BaseSpell spell)
+    {
+        damagePosition = spell_hurt_box.GlobalPosition;
         controllerOwner.stateMachine.ChangeState(this);
     }
 

@@ -9,6 +9,8 @@ public partial class MonsterController : CharacterBody2D
     [Signal] public delegate void DirectionChangedEventHandler(Vector2 new_direction);
     [Signal] public delegate void EnemyDamagedEventHandler(HurtBox hurt_box);
     [Signal] public delegate void EnemyKilledEventHandler(HurtBox hurt_box);
+    [Signal] public delegate void EnemySpellKilledEventHandler(SpellHurtBox spell_hurt_box, BaseSpell spell);
+    [Signal] public delegate void EnemySpellDamagedEventHandler(SpellHurtBox spell_hurt_box, BaseSpell spell);
 
     PackedScene monsterScene;
     private static string monsterScenePath = "res://scenes/monster_controller.tscn";
@@ -33,6 +35,7 @@ public partial class MonsterController : CharacterBody2D
     public AnimationPlayer animationPlayer;
     public Sprite2D sprite;
     public HitBox hitBox;
+    public SpellHitBox spellHitBox;
 
     private const float default_speed = 100.0f;
     private float friction = 0.25f;
@@ -89,6 +92,8 @@ public partial class MonsterController : CharacterBody2D
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         sprite = GetNode<Sprite2D>("Sprite2D");
         hitBox = GetNode<HitBox>("HitBox");
+        spellHitBox = GetNode<SpellHitBox>("SpellHitBox");
+
 
         // set our Godot node and then intialize the state machine with this as the owner.
         stateMachine = GetNode<StateMachine>("StateMachine");
@@ -119,6 +124,7 @@ public partial class MonsterController : CharacterBody2D
 
         // connect to our HitBox damaged signal
         hitBox.Damaged += TakeDamage;
+        spellHitBox.SpellDamaged += TakeSpellDamage;
 
         // set up the collision layers and masks
         SetCollisionLayerAndMasks();
@@ -260,42 +266,51 @@ public partial class MonsterController : CharacterBody2D
         return GD.Load<PackedScene>(monsterScenePath);
     }
 
+    /// <summary>
+    /// For taking spell damage
+    /// </summary>
+    /// <param name="spell_hurt_box"></param>
+    /// <param name="spell"></param>
+    private void TakeSpellDamage(SpellHurtBox spell_hurt_box, BaseSpell spell)
+    {
+        // TODO: incorporate resistances or saving throws here
+        GD.Print(this.Name + " took " + spell.spellData.SpellDamage + " from spell " + spell.Name);
+
+        HitPoints -= spell.spellData.SpellDamage;
+
+        if (HitPoints > 0)
+        {
+            EmitSignal(SignalName.EnemySpellDamaged, spell_hurt_box, spell);
+        }
+        else
+        {
+            EmitSignal(SignalName.EnemySpellKilled, spell_hurt_box, spell);
+        }
+    }
+
+    /// <summary>
+    /// For taking melee damage
+    /// </summary>
+    /// <param name="hurt_box"></param>
     public void TakeDamage(HurtBox hurt_box)
     {
         // if the monster is invulnerable, don't take damage
-        if(IsInvulernable is true)
-        {
-            return;
-        }
+        //if(IsInvulernable is true)
+        //{
+        //    return;
+        //}
 
         HitPoints -= hurt_box.damage;
+        GD.Print("Monster took " + hurt_box.damage + " and has " + HitPoints + " left");
 
-        if(HitPoints > 0)
+
+        if (HitPoints > 0)
         {
             EmitSignal(SignalName.EnemyDamaged, hurt_box);
         } else
         {
             EmitSignal(SignalName.EnemyKilled, hurt_box);
         }
-
-        //GD.Print("Monster took damage of " + damage + ". It has " + HitPoints + " left.");
-
-        //if(HitPoints < FleeAtHealthPercentage * MaxHitPoints)
-        //{
-        //    ShouldFlee = true;
-        //}
-
-        ////GD.Print("Monster took damage");
-        //if (HitPoints <= 0)
-        //{
-        //    Die();
-        //} else
-        //{
-        //    // monster took damage so now its alert.
-        //    IsAlerted = true;
-        //}
-
-        //EmitSignal(SignalName.UpdateHealthBar, HitPoints, MaxHitPoints);
     }
 
     // apply a knockback effect when a monster is hit.

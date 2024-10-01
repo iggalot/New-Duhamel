@@ -1,10 +1,11 @@
-[gd_scene load_steps=80 format=3 uid="uid://byyjaay07k25i"]
+[gd_scene load_steps=82 format=3 uid="uid://byyjaay07k25i"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_de4jf"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="2_n8ptp"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="3_vvmyy"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="4_ug065"]
 [ext_resource type="Texture2D" uid="uid://imm8d47rqvpy" path="res://resources/graphics/enemies/64x64_boss1.png" id="5_10edv"]
+[ext_resource type="PackedScene" uid="uid://ccbgc31hq2tma" path="res://general_nodes/hitbox/spell_hit_box.tscn" id="5_25edk"]
 [ext_resource type="AudioStream" uid="uid://cejjl6gawgwqf" path="res://resources/audio/michael_games/hit_01.wav" id="6_pv5tp"]
 [ext_resource type="AudioStream" uid="uid://buadn47d5bteb" path="res://resources/audio/michael_games/hit_00.wav" id="7_qg6k0"]
 [ext_resource type="Script" path="res://scripts/states/StateMachine.cs" id="8_53t3n"]
@@ -31,6 +32,9 @@ radius = 88.5664
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gkyvb"]
 radius = 73.0274
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wsfgd"]
+radius = 52.0384
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_av4x5"]
 radius = 99.0454
@@ -270,7 +274,7 @@ tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "clips": PackedStringArray("destroy"),
-"times": PackedFloat32Array(0)
+"times": PackedFloat32Array(0.05)
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -351,7 +355,7 @@ tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "clips": PackedStringArray("destroy"),
-"times": PackedFloat32Array(0)
+"times": PackedFloat32Array(0.05)
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -432,7 +436,7 @@ tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "clips": PackedStringArray("destroy"),
-"times": PackedFloat32Array(0)
+"times": PackedFloat32Array(0.05)
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -513,7 +517,7 @@ tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "clips": PackedStringArray("destroy"),
-"times": PackedFloat32Array(0)
+"times": PackedFloat32Array(0.05)
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -1159,6 +1163,12 @@ debug_color = Color(0.665915, 0.583065, 0.239089, 0.42)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 shape = SubResource("CircleShape2D_gkyvb")
+debug_color = Color(0.95985, 0.343659, 0.368198, 0.42)
+
+[node name="SpellHitBox" parent="." instance=ExtResource("5_25edk")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitBox"]
+shape = SubResource("CircleShape2D_wsfgd")
 debug_color = Color(0.95985, 0.343659, 0.368198, 0.42)
 
 [node name="ShadowSprite2D" type="Sprite2D" parent="."]

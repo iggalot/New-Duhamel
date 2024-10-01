@@ -63,7 +63,7 @@ public partial class MonsterIdleState : State
     // What happens when the player enters this State?
     public override void EnterState()
     {
-        GD.Print("monster is idling");
+        //GD.Print("monster is idling");
         InitializeOwner();
 
         if (visionArea != null)

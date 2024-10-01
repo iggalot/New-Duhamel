@@ -37,8 +37,11 @@ public partial class GlobalPlayerManager : Node
 
         INVENTORY_DATA = GD.Load("res://scenes/ui/inventory/player_inventory.tres") as InventoryData;
 
-        // hook up to the players spell ability -- default will be lightning
-        SetActiveSpell(BaseSpell.SpellsNames.SPELL_LIGHTNING);
+        //// hook up to the players spell ability -- default will be lightning
+        BaseSpell new_spell = new BaseSpell();
+        new_spell.Initialize(BaseSpell.SpellsNames.SPELL_FIREBALL);
+        new_spell.spellData.Update();
+        SetActiveSpell(new_spell);
 
         // subscribe to the element changed event in the element selector
         var element_selector = playerHud.GetNode<ElementSelector>("VBoxContainer") as ElementSelector;
@@ -104,7 +107,7 @@ public partial class GlobalPlayerManager : Node
         player.audio.Play();
     }
 
-    public void SetActiveSpell(BaseSpell.SpellsNames spell)
+    public void SetActiveSpell(BaseSpell spell)
     {
         player.activeSpell = spell;
         GD.Print(" active spell is now: " + player.activeSpell);

@@ -31,9 +31,16 @@ public partial class HurtBox : Area2D
 
     public void OnAreaEntered(Area2D area)
     {
-        if(area is HitBox)
+        if (area is HitBox)
         {
-            ((HitBox)area).TakeDamage(this);
+            if (((HitBox)area).GetParent() == this.GetParent())
+            {
+                return;  // we are hitting our selves so exit
+            }
+            else
+            {
+                ((HitBox)area).TakeDamage(this);
+            }
         }
         return;
     }

@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://bmsskt6riwlxf"]
+[gd_scene load_steps=21 format=3 uid="uid://bmsskt6riwlxf"]
 
 [ext_resource type="Script" path="res://spells/BaseSpell.cs" id="1_6rw57"]
 [ext_resource type="Texture2D" uid="uid://dq6y05l7fw8vn" path="res://resources/graphics/spells/32x32_Moving_Fireball.png" id="2_qby30"]
 [ext_resource type="PackedScene" uid="uid://crrhe2flb6e45" path="res://spells/SpellData.tscn" id="3_01c5d"]
+[ext_resource type="PackedScene" uid="uid://c18amrcy3wxuc" path="res://general_nodes/hurtbox/spell_hurt_box.tscn" id="4_5nqtc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fvivq"]
 
@@ -242,6 +243,8 @@ _data = {
 "poisonstream_right": SubResource("Animation_kmwqd")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_77jr5"]
+
 [node name="BaseSpell" type="Node2D"]
 script = ExtResource("1_6rw57")
 
@@ -268,3 +271,8 @@ libraries = {
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
 [node name="SpellData" parent="." instance=ExtResource("3_01c5d")]
+
+[node name="SpellHurtBox" parent="." instance=ExtResource("4_5nqtc")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHurtBox"]
+shape = SubResource("CircleShape2D_77jr5")

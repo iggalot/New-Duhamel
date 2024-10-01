@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_ewamd"]
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_q8ywe"]
 [ext_resource type="PackedScene" uid="uid://j302rqwol1ll" path="res://scenes/ui/player_hud.tscn" id="2_uiu5j"]
-[ext_resource type="PackedScene" uid="uid://dptqwy7w78t6w" path="res://enemies/scripts/monster_controller.tscn" id="3_0fw3m"]
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="5_k6euc"]
+[ext_resource type="PackedScene" uid="uid://bvql6ho6fkha2" path="res://enemies/_basic_mob/monster_controller.tscn" id="6_xbtfv"]
 [ext_resource type="PackedScene" uid="uid://bpqiml3cwfeh6" path="res://levels/level_transition.tscn" id="7_gpkpv"]
 [ext_resource type="PackedScene" uid="uid://byyjaay07k25i" path="res://enemies/_boss1/monster_controller_boss1.tscn" id="7_huqau"]
 
@@ -124,12 +124,6 @@ tile_set = SubResource("TileSet_tv8sh")
 
 [node name="PlayerHUD" parent="." instance=ExtResource("2_uiu5j")]
 
-[node name="MonsterController" parent="." instance=ExtResource("3_0fw3m")]
-position = Vector2(393, 363)
-
-[node name="MonsterController2" parent="." instance=ExtResource("3_0fw3m")]
-position = Vector2(473, 425)
-
 [node name="PlayerSpawn" parent="." instance=ExtResource("5_k6euc")]
 position = Vector2(167, 265)
 
@@ -139,8 +133,14 @@ level = "res://levels/Area00/00.tscn"
 targetTransitionArea = "LevelTransition2"
 size = 4
 
-[node name="MonsterController3" parent="." instance=ExtResource("3_0fw3m")]
-position = Vector2(366, 261)
+[node name="MonsterController" parent="." instance=ExtResource("6_xbtfv")]
+position = Vector2(332, 218)
 
-[node name="MonsterController4" parent="." instance=ExtResource("7_huqau")]
-position = Vector2(634, 179)
+[node name="MonsterController2" parent="." instance=ExtResource("6_xbtfv")]
+position = Vector2(383, 325)
+
+[node name="MonsterController" parent="MonsterController2" instance=ExtResource("7_huqau")]
+position = Vector2(502, -318)
+
+[node name="MonsterController3" parent="." instance=ExtResource("6_xbtfv")]
+position = Vector2(247, 347)

@@ -14,7 +14,7 @@ public partial class PlayerController : CharacterBody2D
 
     public PackedScene baseSpellScene { get; set; }
     private string baseSpellScenePath { get; set; } = "res://spells/base_spell_controller.tscn";
-    public BaseSpell.SpellsNames activeSpell { get; set; } = BaseSpell.SpellsNames.SPELL_LIGHTNING;
+    public BaseSpell activeSpell { get; set; }
 
     // this players properties
     public Vector2 CardinalDirection { get; set; } = Vector2.Down;
@@ -333,10 +333,11 @@ public partial class PlayerController : CharacterBody2D
     public void Shoot()
     {
         BaseSpell new_spell = (BaseSpell)baseSpellScene.Instantiate();
-        new_spell.Initialize(activeSpell);
+        new_spell.Initialize(activeSpell.spellData.SpellType);
+        new_spell.spellData.Update();
 
         // Create a unique name for the spell in the tree
-        new_spell.Name = BaseSpell.GetSpellName(activeSpell) + "_" + Guid.NewGuid().ToString();
+        new_spell.Name = activeSpell + "_" + Guid.NewGuid().ToString();
 
         // set the origination position as the player position
         new_spell.GlobalPosition = GlobalPosition;
@@ -349,10 +350,11 @@ public partial class PlayerController : CharacterBody2D
 
         // create the new data
         BaseSpellData new_spell_data = new BaseSpellData();
-        new_spell_data.SpellName = BaseSpell.GetSpellName(activeSpell);
         new_spell_data.SpellRange = 500.0f;
         new_spell_data.SpellSpeed = 200.0f;
-        new_spell_data.SpellType = activeSpell;
+        new_spell_data.SpellType = activeSpell.spellData.SpellType;
+        new_spell_data.Update();  // sets the appropriate name
+
 
         // update the spell data in our record (not the tree node)
         new_spell.spellData = new_spell_data;
