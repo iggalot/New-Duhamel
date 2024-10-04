@@ -1,6 +1,7 @@
 using Godot;
 using scripts.interfaces;
 using System;
+using static Utilities;
 
 public partial class PlayerController : CharacterBody2D
 {
@@ -23,6 +24,9 @@ public partial class PlayerController : CharacterBody2D
     // the direction the player or monster is moving
     public Vector2 DirectionVector { get; set; } = Vector2.Zero;
 
+    // Determines the direction a player is currently aiming / facing in terms of NW, N , NE, W, E, SW, S, SE
+    // and so on.  Used for selecting the aiming arrow.
+    public Directions AimDir9Way { get; set; } = Directions.DIR_NONE;
     // the direction the player or monster is aiming / casting a spell / or shooting
     public Vector2 AimDirectionVector { get; set; } = Vector2.Zero;
 
@@ -59,6 +63,7 @@ public partial class PlayerController : CharacterBody2D
     public StateMachine stateMachine;
     public AudioStreamPlayer2D audio;
     public Node activeSpellsNode;
+    public Sprite2D aimDirectionArrowSprite { get; set; }
 
 
     // our attributes
@@ -149,10 +154,26 @@ public partial class PlayerController : CharacterBody2D
 
         baseSpellScene = GD.Load<PackedScene>(baseSpellScenePath);
         activeSpellsNode = GetNode("ActiveSpells");
+
+        aimDirectionArrowSprite = GetNode<Sprite2D>("AimDirectionArrowSprite");
         //// This is a full heal for our player
         //UpdateHitPoints(MaxHitPoints);
 
+
+        UpdateAimDirectionSprite();
+
         return;
+    }
+
+    private void UpdateAimDirectionSprite()
+    {
+        // retrieve the 9-way direction label
+        AimDir9Way = Utilities.GetDirection_9WAY(AimDirectionVector);
+
+        // Update the aim direction arrow sprite
+        int index = (int)AimDir9Way;  // retieves the index into AimDirectionArrowSprite
+        aimDirectionArrowSprite.RegionRect = new Rect2(16 * index, 0, 16, 16);
+        aimDirectionArrowSprite.Scale = new Vector2(1.0f, 1.0f);
     }
 
     public override void _Process(double delta)
@@ -179,6 +200,8 @@ public partial class PlayerController : CharacterBody2D
         DirectionVector = direction; ;
 
         AimDirectionVector = GetAimDirection();
+        AimDir9Way = Utilities.GetDirection_9WAY(AimDirectionVector);
+        UpdateAimDirectionSprite();
 
         //// is the player dead?  Show the animation then end the game
         //if (IsDead)

@@ -94,4 +94,9 @@ public partial class InventorySlotUI : Button
             }
         }
     }
+
+    public void UseItem()
+    {
+        OnItemPressed();
+    }
 }

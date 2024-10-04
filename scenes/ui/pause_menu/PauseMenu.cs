@@ -14,7 +14,7 @@ public partial class PauseMenu : CanvasLayer
 
 
 
-    bool IsPaused = false;
+    public bool IsPaused = false;
 
     private static PauseMenu _instance;
     public static PauseMenu Instance => _instance;
@@ -57,6 +57,17 @@ public partial class PauseMenu : CanvasLayer
 
             GetViewport().SetInputAsHandled();
         }
+
+        if (this_event.IsActionPressed("use_inventory_item"))
+        {
+            if (IsPaused == true)
+            {
+
+            }
+
+            GetViewport().SetInputAsHandled();
+        }
+
     }
 
     public void ShowPauseMenu()

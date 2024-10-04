@@ -84,3 +84,4 @@ res://globals/GlobalLevelManager.cs
 res://scripts/abilities/Abilities.cs
 res://general_nodes/persistent_data_handler/PersistentDataHandler.cs
 res://scripts/interfaces/Interactable.cs
+res://utilities/Utilities.cs

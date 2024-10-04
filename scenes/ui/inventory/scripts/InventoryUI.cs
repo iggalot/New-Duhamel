@@ -77,4 +77,24 @@ public partial class InventoryUI : Control
 
         return;
     }
+
+    public override void _UnhandledInput(InputEvent this_event)
+    {
+        GD.Print("trying to use inventory item");
+        // an action for the gamepad controller to use an inventory item
+        if (this_event.IsActionPressed("use_inventory_item"))
+        {
+            GD.Print("-- using inventory item");
+            if (PauseMenu.Instance.IsPaused == true)
+            {
+                GD.Print("-- Used inventory item");
+                GetTree().Paused = false;  // unpause the game so we can use the item
+                // use the item
+                ((InventorySlotUI)GetChild(focusIndex)).UseItem();
+                GetTree().Paused = true;  // repause the game after we use the item
+            }
+
+            GetViewport().SetInputAsHandled();
+        }
+    }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://f6mkwo1dmc0e"]
+[gd_scene load_steps=65 format=3 uid="uid://f6mkwo1dmc0e"]
 
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_8k0os"]
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="2_q8qlb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="5_gb533"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="6_p6cpo"]
 [ext_resource type="Script" path="res://player/scripts/PlayerCamera.cs" id="7_dxttv"]
+[ext_resource type="Texture2D" uid="uid://br53srbwy102e" path="res://resources/graphics/dir_arrows.png" id="8_2jcnv"]
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="8_deof1"]
 [ext_resource type="Script" path="res://resources/data/CharacterData.cs" id="9_0epbo"]
 [ext_resource type="PackedScene" uid="uid://c67btl4crsql7" path="res://scenes/state_machine.tscn" id="9_gwkrn"]
@@ -994,6 +995,11 @@ script = ExtResource("7_dxttv")
 libraries = {
 "": SubResource("AnimationLibrary_3df3h")
 }
+
+[node name="AimDirectionArrowSprite" type="Sprite2D" parent="."]
+texture = ExtResource("8_2jcnv")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
 
 [node name="PlayerMessageWindow" type="ColorRect" parent="."]
 offset_right = 195.0
