@@ -116,4 +116,16 @@ public partial class ElementSelector : Node
         //GD.Print("-- ES is emitting SpellSelected from OnTextureButtonPressed ");
         EmitSignal(SignalName.SpellSelected, this.currentSpell);
     }
+
+    /// <summary>
+    /// For handling input events.  This is used for detecting spell change signal from a controller.
+    /// </summary>
+    /// <param name="input_event"></param>
+    public override void _UnhandledInput(InputEvent input_event)
+    {
+        if (Input.IsActionJustPressed("change_spell_element_selector"))
+        {
+            OnTextureButtonPressed();
+        }
+    }
 }
