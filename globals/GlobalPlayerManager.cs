@@ -1,16 +1,24 @@
 using Godot;
+using System;
 
 public partial class GlobalPlayerManager : Node
 {
+    private ElementSelector _elementSelector;
     public PackedScene PLAYER_SCENE { get; set; }
     public InventoryData INVENTORY_DATA { get; set; } = new InventoryData();
 
     [Signal] public delegate void InteractPressedEventHandler();
+    [Signal] public delegate void SpellSelectorHUDChangedEventHandler(BaseSpell newSpell);
 
     // a function that can be called from outside of the GlobalPlayerManager to emit a signal for player ineraction pressed
     public void EmitInteractPressedSignal()
     {
         EmitSignal(SignalName.InteractPressed);
+    }
+
+    public void UpdateElementSelector(ElementSelector selector)
+    {
+        OnElementSelectorLoaded(selector);
     }
 
     private static GlobalPlayerManager _instance;
@@ -27,7 +35,6 @@ public partial class GlobalPlayerManager : Node
     {
         // set our player controller scene so we can quickly reload when we transition to other areas
         PLAYER_SCENE = GD.Load<PackedScene>("res://player/player_controller.tscn");
-        
 
         AddPlayerInstance();
 
@@ -41,12 +48,46 @@ public partial class GlobalPlayerManager : Node
         BaseSpell new_spell = new BaseSpell();
         new_spell.Initialize(BaseSpell.SpellsNames.SPELL_FIREBALL);
         new_spell.spellData.Update();
+        //GD.Print("Called for first time from GPM: Ready()");
         SetActiveSpell(new_spell);
 
         // subscribe to the element changed event in the element selector
         var element_selector = playerHud.GetNode<ElementSelector>("VBoxContainer") as ElementSelector;
-        element_selector.SpellSelected += SetActiveSpell;
+        element_selector.ElementSelectorLoaded += OnElementSelectorLoaded;
+        //GD.Print("GPM: Connecting to OnElementSelectorLoaded for first time...");
+        OnElementSelectorLoaded(element_selector);
+    }
 
+    private void OnElementSelectorLoaded(ElementSelector element_selector)
+    {
+        //GD.Print(" In GPM: OnElementSelectorLoaded");
+        //GD.Print("-- before detaching old signals");
+
+        if (IsInstanceValid(_elementSelector))
+        {
+            //GD.Print("-- old element selector still exists --");
+            if(_elementSelector != null)
+            {
+                //GD.Print("--- old element selector is not null");
+                _elementSelector.SpellSelected -= SetActiveSpell;  // detach the old trigger
+                _elementSelector.ElementSelectorLoaded -= OnElementSelectorLoaded;
+
+                //GD.Print("---- GPM: Detaching old links to SetActiveSpell");
+                //GD.Print("---- GPM: Detaching old links to OnElementSelectorLoaded");
+
+            }
+        }
+
+        //GD.Print("-- after detaching old signals");
+
+        // save the new element selector and set the new link to it
+        _elementSelector = element_selector;
+        // reconnect the signals for when the element selector is reloaded
+        _elementSelector.SpellSelected += SetActiveSpell;
+        _elementSelector.ElementSelectorLoaded += OnElementSelectorLoaded;
+
+        //GD.Print("---- GPM: Making new links to SetActiveSpell");
+        //GD.Print("---- GPM: Making new links to OnElementSelectorLoaded");
     }
 
     public void AddPlayerInstance()
@@ -110,7 +151,7 @@ public partial class GlobalPlayerManager : Node
     public void SetActiveSpell(BaseSpell spell)
     {
         player.activeSpell = spell;
-        GD.Print(" active spell is now: " + player.activeSpell);
+        GD.Print(" -- GPM: SetActiveSpell -- active spell is now: " + player.activeSpell.spellData.SpellName);
 
         return;
     }

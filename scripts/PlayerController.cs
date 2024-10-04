@@ -355,10 +355,8 @@ public partial class PlayerController : CharacterBody2D
         new_spell_data.SpellType = activeSpell.spellData.SpellType;
         new_spell_data.Update();  // sets the appropriate name
 
-
         // update the spell data in our record (not the tree node)
         new_spell.spellData = new_spell_data;
-
 
         Vector2 vec = GetGlobalMousePosition();
         new_spell_data.SpellDirection = (vec - this.GlobalPosition).Normalized();
@@ -369,7 +367,6 @@ public partial class PlayerController : CharacterBody2D
         spell_data_node.SpellSpeed = new_spell_data.SpellSpeed;
         spell_data_node.SpellType = new_spell_data.SpellType;
         spell_data_node.SpellDirection = new_spell_data.SpellDirection;
-
 
         //// get the storage groups for the projectiles owned by this player
         //var projectiles_node = GetTree().Root.GetNode<Node2D>("GameManager/Projectiles");
