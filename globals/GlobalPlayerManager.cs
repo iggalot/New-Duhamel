@@ -132,8 +132,27 @@ public partial class GlobalPlayerManager : Node
         return;
     }
 
+    /// <summary>
+    /// Removes all active spells case by the player -- useful for when zoning
+    /// TODO:: Monsters will need this done too once they are able to cast spells
+    /// </summary>
+    private void RemoveAllActivePlayerSpells()
+    {
+        var active_spells = player.GetNode<Node>("ActiveSpells");
+        var spells = active_spells.GetChildren();
+
+        for (int i = spells.Count-1; i>=0; i--)
+        {
+            if (spells[i] is BaseSpell)
+            {
+                spells[i].QueueFree();
+            }
+        }
+    }
     public void UnparentPlayer(Node2D p)
     {
+        RemoveAllActivePlayerSpells();
+
         if (player.GetParent() != p)
         {
             return;

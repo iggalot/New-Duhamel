@@ -26,14 +26,12 @@ public partial class Level : Node2D
 
     public void FreeLevel()
     {
-        // TODO there is a bug here that THIS can be referencing an object that is already deleted...not sure really why that is.
-
-        //if (IsInstanceIdValid(this.GetInstanceId()))
-        //    return;
-
         if(IsInstanceValid(this) == true)
         {
+            // Need to delete all current spells on screen otherwise they will repappear again.
             GlobalPlayerManager.Instance.UnparentPlayer(this);
+
+
             QueueFree();
         }
     }
