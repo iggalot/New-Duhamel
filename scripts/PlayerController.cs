@@ -19,7 +19,12 @@ public partial class PlayerController : CharacterBody2D
     // this players properties
     public Vector2 CardinalDirection { get; set; } = Vector2.Down;
     public Vector2[] DIR_4 {get; set;} = new Vector2[]{ Vector2.Right, Vector2.Down, Vector2.Left, Vector2.Up };
+    
+    // the direction the player or monster is moving
     public Vector2 DirectionVector { get; set; } = Vector2.Zero;
+
+    // the direction the player or monster is aiming / casting a spell / or shooting
+    public Vector2 AimDirectionVector { get; set; } = Vector2.Zero;
 
     public bool IsInvulnerable { get; set; } = false;
 
@@ -167,15 +172,13 @@ public partial class PlayerController : CharacterBody2D
         // need to declare DirectionVector as a variable here for some reason.  Then after the calcs we can
         // assign it back...not sure why that is.
         var direction = DirectionVector;
-        //direction.X = Input.GetActionStrength("right") - Input.GetActionStrength("left");
-        //direction.Y = Input.GetActionStrength("down") - Input.GetActionStrength("up");
         direction = new Vector2(
             Input.GetAxis("left", "right"),
             Input.GetAxis("up", "down")
         ).Normalized();
         DirectionVector = direction; ;
 
-
+        AimDirectionVector = GetAimDirection();
 
         //// is the player dead?  Show the animation then end the game
         //if (IsDead)
@@ -210,6 +213,31 @@ public partial class PlayerController : CharacterBody2D
 
         // rotate our node so its looking at the mouse position
         //LookAt(GetGlobalMousePosition());
+    }
+
+    /// <summary>
+    /// Function to return the aiming direction based on right stick gamepad movement
+    /// or otherwise, the vector from the player to the mouse position
+    /// </summary>
+    /// <returns></returns>
+    private Vector2 GetAimDirection()
+    {
+        var aim_direction = Vector2.Zero;
+
+        // check if we have any gamepad input
+        aim_direction = new Vector2(
+            Input.GetAxis("right_stick_left", "right_stick_right"),
+            Input.GetAxis("right_stick_up", "right_stick_down")
+        ).Normalized();
+
+        // if we have no gamepad input, then use the mouse position to set the ain vector
+        if (aim_direction == Vector2.Zero)
+        {
+            aim_direction = (GetGlobalMousePosition() - GlobalPosition).Normalized();
+        }
+
+
+        return aim_direction;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -359,7 +387,7 @@ public partial class PlayerController : CharacterBody2D
         new_spell.spellData = new_spell_data;
 
         Vector2 vec = GetGlobalMousePosition();
-        new_spell_data.SpellDirection = (vec - this.GlobalPosition).Normalized();
+        new_spell_data.SpellDirection = AimDirectionVector;
 
         // copy the new spell data to the spell data tree node
         spell_data_node.SpellName = new_spell_data.SpellName;
