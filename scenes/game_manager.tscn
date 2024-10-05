@@ -5,9 +5,3 @@
 [node name="GameManager" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_ibax6")
-
-[node name="Projectiles" type="Node2D" parent="."]
-
-[node name="Monsters" type="Node2D" parent="."]
-
-[node name="Items" type="Node2D" parent="."]

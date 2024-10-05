@@ -1,3 +1,5 @@
+Node2D
+TileMapLayer
 Sprite2D
 Node
 TextureRect
@@ -7,8 +9,6 @@ Button
 Label
 HBoxContainer
 VBoxContainer
-Node2D
 CharacterBody2D
 AudioStreamPlayer2D
 AnimationPlayer
-CollisionShape2D

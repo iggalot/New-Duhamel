@@ -8,15 +8,13 @@ res://items/stone.tres
 res://levels/Area02/02.tscn
 res://levels/Area00/00.tscn
 res://levels/Area01/01.tscn
-res://spells/base_spell_controller.tscn
-res://enemies/_basic_mob/monster_controller.tscn
-res://enemies/_boss1/monster_controller_boss1.tscn
-res://enemies/_boss2/monster_controller_boss2.tscn
+res://scenes/ui/player_hud.tscn
+res://levels/AreaProcedural/area_procedural.tscn
 res://enemies/scripts/states/MonsterFleeState.cs
 res://enemies/scripts/states/MonsterIdleState.cs
 res://scripts/interfaces/Pickable.cs
 res://player/scripts/states/PlayerStunState.cs
-res://items/scripts/ItemData.cs
+res://levels/AreaProcedural/AreaProceduralGeneration.cs
 res://scenes/ui/pause_menu/PauseMenu.cs
 res://player/scripts/states/PlayerAttackState.cs
 res://general_nodes/item_dropper/ItemDropper.cs
@@ -28,6 +26,7 @@ res://general_nodes/hurtbox/HurtBox.cs
 res://general_nodes/item_magnet/ItemMagnet.cs
 res://player/scripts/states/PlayerDeadState.cs
 res://interactables/treasure_chest/scripts/TreasureChest.cs
+res://items/item_pickup/ItemPickup.cs
 res://resources/data/CharacterData.cs
 res://player/scripts/states/PlayerWalkState.cs
 res://levels/scripts/PlayerSpawn.cs
@@ -43,7 +42,7 @@ res://scripts/ui/HealthBar.cs
 res://spells/BaseSpellData.cs
 res://scenes/ui/inventory/scripts/InventoryData.cs
 res://scripts/ui/hud/HeartGui.cs
-res://items/item_pickup/ItemPickup.cs
+res://items/scripts/ItemData.cs
 res://scripts/MonsterSpawnerController.cs
 res://scenes/ui/scene_transition/SceneTransition.cs
 res://player/scripts/PlayerCamera.cs
@@ -78,10 +77,10 @@ res://enemies/scripts/DropData.cs
 res://enemies/scripts/states/MonsterDestroyState.cs
 res://scripts/states/StateMachine.cs
 res://spells/BaseSpell.cs
-res://items/item_effects/ItemEffect.cs
 res://enemies/scripts/states/MonsterDeadState.cs
 res://globals/GlobalLevelManager.cs
 res://scripts/abilities/Abilities.cs
 res://general_nodes/persistent_data_handler/PersistentDataHandler.cs
 res://scripts/interfaces/Interactable.cs
+res://items/item_effects/ItemEffect.cs
 res://utilities/Utilities.cs

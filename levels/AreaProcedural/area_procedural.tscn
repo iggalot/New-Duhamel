@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://shyq8h38xwfn"]
+
+[ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="1_0q0vs"]
+[ext_resource type="Script" path="res://levels/AreaProcedural/AreaProceduralGeneration.cs" id="1_vwopq"]
+[ext_resource type="PackedScene" uid="uid://j302rqwol1ll" path="res://scenes/ui/player_hud.tscn" id="2_ppr1x"]
+
+[node name="AreaProcedural" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_vwopq")
+
+[node name="PlayerSpawn" parent="." instance=ExtResource("1_0q0vs")]
+
+[node name="TML_Floors" type="TileMapLayer" parent="."]
+
+[node name="TML_Walls" type="TileMapLayer" parent="."]
+
+[node name="PlayerHUD" parent="." instance=ExtResource("2_ppr1x")]

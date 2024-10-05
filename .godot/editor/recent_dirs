@@ -1,3 +1,5 @@
+res://levels/AreaProcedural
+res://scenes
 res://spells
 res://globals
 res://interactables/locked_door
@@ -12,11 +14,9 @@ res://items/scripts
 res://scenes/ui/pause_menu
 res://scenes/ui/scene_transition
 res://levels/scripts
-res://scenes
 res://scripts
 res://scenes/ui
 res://resources/graphics
 res://scripts/states
 res://scripts/ui/inventory
 res://resources/fonts/kirifont
-res://scripts/ui
