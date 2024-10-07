@@ -119,6 +119,7 @@ public partial class AreaProceduralGeneration : Node
 
     TileMapLayer floors;
     TileMapLayer walls;
+    PlayerSpawn playerSpawn;
 
     TileTypes[] room_map;
     int tile_size = 16;
@@ -148,6 +149,7 @@ public partial class AreaProceduralGeneration : Node
     {
         floors = GetNode<TileMapLayer>("TML_Floors");
         walls = GetNode<TileMapLayer>("TML_Walls");
+        playerSpawn = GetNode<PlayerSpawn>("PlayerSpawn");
 
         ImportData data = new ImportData();
 
@@ -183,6 +185,30 @@ public partial class AreaProceduralGeneration : Node
         GD.Print("Map Generated");
 
         PrintMap();
+
+        // Now Render the map to the scene
+        RenderMap();
+
+
+        // Set the player spawn location -- find a random tile designated as a floor
+        var rng = new RandomNumberGenerator();
+        while (true)
+        {
+            var rand_x = rng.RandiRange(0, total_width - 1);
+            var rand_y = rng.RandiRange(0, total_height - 1);
+            if (room_map[rand_y * total_width + rand_x] == TileTypes.TITLETYPE_FLOOR)
+            {
+                // set the player
+                GlobalPlayerManager.Instance.player.GlobalPosition = new Vector2(rand_x * tile_size, rand_y * tile_size);
+
+                // set the player spawn -- for future reloads
+                playerSpawn.Position = new Vector2(rand_x * tile_size, rand_y * tile_size);
+                break;
+            }
+        }
+
+
+
 
     }
 
@@ -307,7 +333,6 @@ public partial class AreaProceduralGeneration : Node
         {
             CreateFloorAreas(w_data[i], h_data[i], posx_data[i], posy_data[i]);
         }
-
     }
 
     /// <summary>
@@ -362,9 +387,6 @@ public partial class AreaProceduralGeneration : Node
         {
             for (int i = 0; i < total_width; i++)
             {
-                // create a colorrect tile
-                ColorRect color_rect = new ColorRect();
-
                 // the origin of the room
                 if(i==0 && j == 0)
                 {
@@ -380,32 +402,9 @@ public partial class AreaProceduralGeneration : Node
                 //else
                 {
                     room_map[j * total_width + i] = TileTypes.TITLETYPE_FLOOR;
-                    color_rect.Color = new Color(1, 0, 0, 0.1f);
-                    color_rect.Color = new Color(1, 0, 0, 0.1f);
-                    color_rect.Size = new Vector2(tile_size, tile_size);
-                    color_rect.Position = new Vector2(i * tile_size, j * tile_size);
-                    floors.AddChild(color_rect);
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Helper function to count the number of "TRUE" in a boolean array
-    /// </summary>
-    /// <param name="neighbors"></param>
-    private int countTrueNeighbors(bool[] arr)
-    {
-        int count = 0;
-        for (int i = 0; i < arr.Length; i++)
-        {
-            if (arr[i] == true)
-            {
-                count++;
-            }
-        }
-        return count;
-
     }
 
     /// <summary>
@@ -418,7 +417,7 @@ public partial class AreaProceduralGeneration : Node
         // Loop until there are no more changes
         while (change_made)
         {
-            if(wall_loop_counter < 0)
+            if (wall_loop_counter < 0)
             {
                 GD.Print("Looping too many times.  Breaking out of level creation loop.");
                 break;
@@ -450,19 +449,19 @@ public partial class AreaProceduralGeneration : Node
                     bool south_wall = wall_neighbors[(int)Dirs.SOUTH];
                     bool east_wall = wall_neighbors[(int)Dirs.EAST];
                     bool west_wall = wall_neighbors[(int)Dirs.WEST];
-                        
+
                     // No floor neighbors
                     if (floor_count == 0)
                     {
-                       if(wall_count == 3)
-                       {
+                        if (wall_count == 3)
+                        {
                             // this is a T junction -- stem up
-                            if(south_wall is false)
+                            if (south_wall is false)
                             {
                                 // are both upper left diagonal and upper right diagonal a floor tiles?
                                 // this is a single stem T
-                                if(room_map[(j-1) * total_width + (i-1)] == TileTypes.TITLETYPE_FLOOR && 
-                                    room_map[(j-1) * total_width + (i+1)] == TileTypes.TITLETYPE_FLOOR)
+                                if (room_map[(j - 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR &&
+                                    room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_TOP;
                                     change_made = true;
@@ -478,18 +477,19 @@ public partial class AreaProceduralGeneration : Node
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT;
                                     change_made = true;
-                                } else
+                                }
+                                else
                                 {
                                     // do nothing since we don't know for sure what it is
                                 }
-                            } 
+                            }
                             // This is a T junction -- stem down
-                            else if(north_wall is false)
+                            else if (north_wall is false)
                             {
                                 // are both lower left diagonal and lower right diagonal a floor tiles?
                                 // this is a single stem T
-                                if(room_map[(j+1) * total_width + (i-1)] == TileTypes.TITLETYPE_FLOOR &&
-                                    room_map[(j+1) * total_width + (i+1)] == TileTypes.TITLETYPE_FLOOR)
+                                if (room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR &&
+                                    room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM;
                                     change_made = true;
@@ -505,18 +505,19 @@ public partial class AreaProceduralGeneration : Node
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT;
                                     change_made = true;
-                                } else
+                                }
+                                else
                                 {
                                     // do nothing since we don't know for sure what it is
                                 }
-                            } 
+                            }
                             // Is it a T to the right?
-                            else if(west_wall is false)
+                            else if (west_wall is false)
                             {
                                 // are both right side diagonals a floor tiles?
                                 // this is a single stem T
-                                if(room_map[(j-1) * total_width + (i+1)] == TileTypes.TITLETYPE_FLOOR &&
-                                    room_map[(j+1) * total_width + (i+1)] == TileTypes.TITLETYPE_FLOOR)
+                                if (room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR &&
+                                    room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_RIGHT;
                                     change_made = true;
@@ -525,22 +526,24 @@ public partial class AreaProceduralGeneration : Node
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT;
                                     change_made = true;
-                                } else if (room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
+                                }
+                                else if (room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT;
                                     change_made = true;
-                                } else
+                                }
+                                else
                                 {
                                     // do nothing since we don't know for sure what it is
                                 }
                             }
                             // Is it a T to the left?
-                            else if(east_wall is false)
+                            else if (east_wall is false)
                             {
                                 // are both left side diagonals a floor tiles?
                                 // this is a single stem T
-                                if(room_map[(j-1) * total_width + (i-1)] == TileTypes.TITLETYPE_FLOOR &&
-                                    room_map[(j+1) * total_width + (i-1)] == TileTypes.TITLETYPE_FLOOR)
+                                if (room_map[(j - 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR &&
+                                    room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
                                 {
                                     room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_LEFT;
                                     change_made = true;
@@ -564,7 +567,7 @@ public partial class AreaProceduralGeneration : Node
                                     // do nothing since we don't know for sure what it is
                                 }
                             }
-                       }
+                        }
                     }
 
                     // A single floor neighbor -- this must be a wall
@@ -664,83 +667,17 @@ public partial class AreaProceduralGeneration : Node
                 }
             }
 
-            if(change_made is true)
+            if (change_made is true)
             {
                 // run through this again
                 FindWalls();
             }
 
-            
+
 
             change_made = false;
         }
     }
-
-    /// <summary>
-    /// Helper function to determine if a tile is a wall tile
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    private bool IsWallTile(int x, int y)
-    {
-        TileTypes tile_type = room_map[y * total_width + x];
-
-        bool is_wall = false;
-
-        is_wall =
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_RIGHT ||
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_LEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_TOP ||
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_BOTTOM ||
-
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT ||
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT ||
-
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_VERT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_HORIZ ||
-
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMLEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMRIGHT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPLEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPRIGHT ||
-
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMLEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT ||
-
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_LEFT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_RIGHT ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_TOP ||
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM ||
-
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS;
-
-
-        return is_wall;
-    }
-
-    /// <summary>
-    /// Helper function to determine if a tile is a floor tile
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    private bool IsFloorTile(int x, int y)
-    {
-        TileTypes tile_type = room_map[y * total_width + x];
-
-        bool is_floor = false;
-
-        is_floor = (tile_type == TileTypes.TITLETYPE_FLOOR);
-
-        return is_floor;
-
-    }
-
 
     private void FindWallCorners()
     {
@@ -1060,7 +997,6 @@ public partial class AreaProceduralGeneration : Node
         }
     }
 
-
     /// <summary>
     /// Determines if he neighbors of a cell are floortypes
     /// 0:  east
@@ -1089,7 +1025,6 @@ public partial class AreaProceduralGeneration : Node
         return neighbors;
     }
 
-
     /// <summary>
     /// Helper function to determine which neighbor cells are wall tiles
     /// </summary>
@@ -1110,5 +1045,383 @@ public partial class AreaProceduralGeneration : Node
         neighbors[(int)Dirs.NORTH] = IsWallTile(x, y-1);
 
         return neighbors;
+    }
+
+    /// <summary>
+    /// Helper function to count the number of "TRUE" in a boolean array
+    /// </summary>
+    /// <param name="neighbors"></param>
+    private int countTrueNeighbors(bool[] arr)
+    {
+        int count = 0;
+        for (int i = 0; i < arr.Length; i++)
+        {
+            if (arr[i] == true)
+            {
+                count++;
+            }
+        }
+        return count;
+
+    }
+
+    /// <summary>
+    /// Helper function to determine if a tile is a wall tile
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool IsWallTile(int x, int y)
+    {
+        TileTypes tile_type = room_map[y * total_width + x];
+
+        bool is_wall = false;
+
+        is_wall =
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_RIGHT ||
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_LEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_TOP ||
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_BOTTOM ||
+
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT ||
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT ||
+
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_VERT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_HORIZ ||
+
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMLEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMRIGHT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPLEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPRIGHT ||
+
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMLEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT ||
+
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_LEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_RIGHT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_TOP ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM ||
+
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS;
+
+
+        return is_wall;
+    }
+
+    /// <summary>
+    /// Helper function to determine if a tile is a floor tile
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool IsFloorTile(int x, int y)
+    {
+        TileTypes tile_type = room_map[y * total_width + x];
+
+        bool is_floor = false;
+
+        is_floor = (tile_type == TileTypes.TITLETYPE_FLOOR);
+
+        return is_floor;
+
+    }
+
+    private void RenderMap()
+    {
+        // indices (atlas coords) for the upper wall tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_upper =
+        {
+            new Vector2I(1, 0),
+            new Vector2I(2, 0),
+            new Vector2I(3, 0),
+            new Vector2I(4, 0),
+        };
+
+        // indices (atlas coords) for the lower wall tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_lower =
+        {
+            new Vector2I(1, 4),
+            new Vector2I(2, 4),
+            new Vector2I(3, 4),
+            new Vector2I(4, 4),
+        };
+
+        // indices (atlas coords) for the left wall tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_left =
+        {
+            new Vector2I(0, 1),
+            new Vector2I(0, 2),
+            new Vector2I(0, 3),
+        };
+
+        // indices (atlas coords) for the right wall tiles tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_right =
+        {
+            new Vector2I(5, 1),
+            new Vector2I(5, 2),
+            new Vector2I(5, 3),
+        };
+
+        // indices for the wall corner graphics in the tile set
+        // this is graphic specific
+        Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(0, 0) };
+        Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(5, 0) };
+        Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(0, 4) };
+        Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(5, 4) };
+
+
+
+        // Our loop for rendering the tiles
+        for (int j = 0; j < total_height; j++)
+        {
+            for (int i = 0; i < total_width; i++)
+            {
+                if (IsFloorTile(i, j))
+                { 
+                    //// create a colorrect tile
+                    //ColorRect color_rect = new ColorRect();
+
+                    //color_rect.Color = new Color(1, 0, 0, 0.1f);
+                    //color_rect.Color = new Color(1, 0, 0, 0.1f);
+                    //color_rect.Size = new Vector2(tile_size, tile_size);
+                    //color_rect.Position = new Vector2(i * tile_size, j * tile_size);
+                    //floors.AddChild(color_rect);
+
+                    RenderFloor(i, j, floors);
+                }
+                else if (IsWallTile(i, j))
+                {
+                    RenderWall(i, j, walls);
+                }
+                else
+                {
+                    //TODO: render other tiles here
+                }
+
+            }
+        }
+    }
+
+    /// <summary>
+    /// Function to render the floor tilesto the floor tilemap layer
+    /// </summary>
+    /// <param name="i"></param>
+    /// <param name="j"></param>
+    /// <param name="tilemap_layer"></param>
+    private void RenderFloor(int i, int j, TileMapLayer tilemap_layer)
+    {
+        // tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
+        int floor_tileset_source_id = 0;
+
+        // indices (atlas coords) for the floor tiles in the tileset
+        // this is graphic specific
+        Vector2I[] floor_tiles =
+        {
+            new Vector2I(6, 0),
+            new Vector2I(6, 1),
+            new Vector2I(6, 2),
+            new Vector2I(7, 0),
+            new Vector2I(7, 1),
+            new Vector2I(7, 2),
+            new Vector2I(8, 0),
+            new Vector2I(8, 1),
+            new Vector2I(8, 2),
+            new Vector2I(9, 0),
+            new Vector2I(9, 1),
+            new Vector2I(9, 2)
+        };
+
+        // setup random number generator
+        var rng = new RandomNumberGenerator();
+
+        // set a random floor type
+        var rand_number = rng.RandiRange(0, floor_tiles.Length - 1);
+        Vector2I atlas_coord = floor_tiles[rand_number];
+
+        Vector2I tile_pos = new Vector2I(i, j);
+        tilemap_layer.SetCell(tile_pos, floor_tileset_source_id, atlas_coord);
+    }
+
+    /// <summary>
+    /// Function to render the wall tilesto the wall tilemap layer
+    /// </summary>
+    /// <param name="i"></param>
+    /// <param name="j"></param>
+    /// <param name="tilemap_layer"></param>
+    private void RenderWall(int i, int j, TileMapLayer tilemap_layer)
+    {
+        // tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
+        int wall_tileset_source_id = 0;
+
+        // indices (atlas coords) for the upper wall tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_top =
+        {
+            new Vector2I(1, 0),
+            new Vector2I(2, 0),
+            new Vector2I(3, 0),
+            new Vector2I(4, 0),
+        };
+
+        // indices (atlas coords) for the lower wall tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_bottom =
+        {
+            new Vector2I(1, 4),
+            new Vector2I(2, 4),
+            new Vector2I(3, 4),
+            new Vector2I(4, 4),
+        };
+
+        // indices (atlas coords) for the left wall tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_right =
+        {
+            new Vector2I(0, 1),
+            new Vector2I(0, 2),
+            new Vector2I(0, 3),
+        };
+
+        // indices (atlas coords) for the right wall tiles tiles in the tileset
+        // this is graphic specific
+        Vector2I[] wall_tiles_left =
+        {
+            new Vector2I(5, 1),
+            new Vector2I(5, 2),
+            new Vector2I(5, 3),
+        };
+
+        // indices for the wall corner graphics in the tile set
+        // this is graphic specific
+        Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(0, 0) };
+        Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(5, 0) };
+        Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(0, 4) };
+        Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(5, 4) };
+
+        Vector2I[] wall_tiles_reentrant_upper_left_corner = { new Vector2I(0, 5) };
+        Vector2I[] wall_tiles_reentrant_upper_right_corner = { new Vector2I(3, 5) };
+        Vector2I[] wall_tiles_reentrant_lower_left_corner = { new Vector2I(0, 5) };
+        Vector2I[] wall_tiles_reentrant_lower_right_corner = { new Vector2I(0, 5) };
+
+
+
+
+        Vector2I[] wall_tiles_other = { new Vector2I(8, 7) };
+
+        Vector2I[] tile_array;
+
+        switch (room_map[j * total_width + i])
+        {
+            // 0
+            case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_LEFT:
+                tile_array = wall_tiles_left; break;
+            // 1
+            case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_RIGHT:
+                tile_array = wall_tiles_right; break;
+            // 2
+            case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_TOP:
+                tile_array = wall_tiles_top; break;
+            // 3
+            case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_BOTTOM:
+                tile_array = wall_tiles_bottom; break;
+
+            //4
+            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT:
+                tile_array = wall_tiles_upper_left_corner; break;
+            //5
+            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT:
+                tile_array = wall_tiles_upper_right_corner; break;
+            //6
+            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT:
+                tile_array = wall_tiles_lower_left_corner; break;
+            //7
+            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT:
+                tile_array = wall_tiles_lower_right_corner; break;
+
+            //8
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_VERT:
+                tile_array = wall_tiles_left; break;
+            //9
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_HORIZ:
+                tile_array = wall_tiles_top; break;
+
+            //10
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPLEFT:
+                tile_array = wall_tiles_upper_left_corner; break;
+            //11
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPRIGHT:
+                tile_array = wall_tiles_upper_right_corner; break;
+            //12
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMLEFT:
+                tile_array = wall_tiles_lower_left_corner; break;
+            //13
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMRIGHT:
+                tile_array = wall_tiles_lower_right_corner; break;
+
+            //14
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_LEFT:
+                tile_array = wall_tiles_upper_left_corner; break;
+            //15
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_RIGHT:
+                tile_array = wall_tiles_upper_right_corner; break;
+            //16
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_TOP:
+                tile_array = wall_tiles_lower_left_corner; break;
+            //17
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM:
+                tile_array = wall_tiles_lower_right_corner; break;
+            
+
+            //18
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_LEFT:
+                tile_array = wall_tiles_other; break;
+            //19
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_RIGHT:
+                tile_array = wall_tiles_other; break;
+            //20
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_TOP:
+                tile_array = wall_tiles_other; break;
+            //21
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_BOTTOM:
+                tile_array = wall_tiles_other; break;
+
+            //22
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT:
+                tile_array = wall_tiles_reentrant_upper_left_corner; break;
+            //23
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT:
+                tile_array = wall_tiles_reentrant_upper_right_corner; break;
+            //24
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMLEFT:
+                tile_array = wall_tiles_reentrant_lower_left_corner; break;
+            //25
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT:
+                tile_array = wall_tiles_reentrant_lower_right_corner; break;
+
+            //26
+            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS:
+                tile_array = wall_tiles_other; break;
+
+            default:
+                tile_array = wall_tiles_other; break;
+        }
+
+        // setup random number generator
+        var rng = new RandomNumberGenerator();
+
+        // set a random floor type
+        var rand_number = rng.RandiRange(0, tile_array.Length - 1);
+        Vector2I atlas_coord = tile_array[rand_number];
+
+        Vector2I tile_pos = new Vector2I(i, j);
+        tilemap_layer.SetCell(tile_pos, wall_tileset_source_id, atlas_coord);
     }
 }
