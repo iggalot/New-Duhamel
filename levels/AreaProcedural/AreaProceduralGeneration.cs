@@ -122,7 +122,10 @@ public partial class AreaProceduralGeneration : Node
     PlayerSpawn playerSpawn;
 
     TileTypes[] room_map;
-    int tile_size = 16;
+
+    // Remember to change the TML layer TileSize parameter in the GODOT inspector
+    //int tile_size = 16; // for the purple dungeon tileset
+    int tile_size = 32; // for the custon Duhamel ungeon tileset
 
     // number of dead cells beyond room walls -- includes impenetrable width amount
     // need to make sure it's at least 1 more than impenetrable border so we can fit the wall tiles
@@ -1132,6 +1135,68 @@ public partial class AreaProceduralGeneration : Node
 
     private void RenderMap()
     {
+        // Comment out the contents to not sure this purple dungeon tile set
+        #region TileSetVectors for 16x16 Purple dungeon set
+        //// tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
+        //int floor_tileset_source_id = 0;   // this is for the 16x16 tileset graphics
+        //int wall_tileset_source_id = 0;   // this is for the 16x16 tileset graphics
+
+
+
+        //// indices (atlas coords) for the upper wall tiles in the tileset
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_upper =
+        //{
+        //    new Vector2I(1, 0),
+        //    new Vector2I(2, 0),
+        //    new Vector2I(3, 0),
+        //    new Vector2I(4, 0),
+        //};
+
+        //// indices (atlas coords) for the lower wall tiles in the tileset
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_lower =
+        //{
+        //    new Vector2I(1, 4),
+        //    new Vector2I(2, 4),
+        //    new Vector2I(3, 4),
+        //    new Vector2I(4, 4),
+        //};
+
+        //// indices (atlas coords) for the left wall tiles in the tileset
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_left =
+        //{
+        //    new Vector2I(0, 1),
+        //    new Vector2I(0, 2),
+        //    new Vector2I(0, 3),
+        //};
+
+        //// indices (atlas coords) for the right wall tiles tiles in the tileset
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_right =
+        //{
+        //    new Vector2I(5, 1),
+        //    new Vector2I(5, 2),
+        //    new Vector2I(5, 3),
+        //};
+
+        //// indices for the wall corner graphics in the tile set
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(0, 0) };
+        //Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(5, 0) };
+        //Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(0, 4) };
+        //Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(5, 4) };
+
+        #endregion
+
+        // Comment out the contents to not sure this purple dungeon tile set
+        #region TileSetVectors for 32x80 custom Duhamel stone tile sets  -- tilesets already created in Godot
+        // tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
+        int floor_tileset_source_id = 2;   // this is for the 32x32 Duhamel tileset graphics
+        int wall_tileset_source_id = 1;   // this is for the 32x80 Duhamel tileset graphics
+
+
         // indices (atlas coords) for the upper wall tiles in the tileset
         // this is graphic specific
         Vector2I[] wall_tiles_upper =
@@ -1177,6 +1242,11 @@ public partial class AreaProceduralGeneration : Node
         Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(0, 4) };
         Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(5, 4) };
 
+        #endregion
+
+
+
+
 
 
         // Our loop for rendering the tiles
@@ -1195,11 +1265,11 @@ public partial class AreaProceduralGeneration : Node
                     //color_rect.Position = new Vector2(i * tile_size, j * tile_size);
                     //floors.AddChild(color_rect);
 
-                    RenderFloor(i, j, floors);
+                    RenderFloor(i, j, floors, floor_tileset_source_id);
                 }
                 else if (IsWallTile(i, j))
                 {
-                    RenderWall(i, j, walls);
+                    RenderWall(i, j, walls, wall_tileset_source_id);
                 }
                 else
                 {
@@ -1216,28 +1286,52 @@ public partial class AreaProceduralGeneration : Node
     /// <param name="i"></param>
     /// <param name="j"></param>
     /// <param name="tilemap_layer"></param>
-    private void RenderFloor(int i, int j, TileMapLayer tilemap_layer)
+    private void RenderFloor(int i, int j, TileMapLayer tilemap_layer, int floor_tileset_source_id = 0)
     {
-        // tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
-        int floor_tileset_source_id = 0;
 
+        #region TileSetVectors for 16x16 Purple dungeon set floor tiles
+        //// indices (atlas coords) for the floor tiles in the tileset
+        //// this is graphic specific
+        //Vector2I[] floor_tiles =
+        //{
+        //    new Vector2I(6, 0),
+        //    new Vector2I(6, 1),
+        //    new Vector2I(6, 2),
+        //    new Vector2I(7, 0),
+        //    new Vector2I(7, 1),
+        //    new Vector2I(7, 2),
+        //    new Vector2I(8, 0),
+        //    new Vector2I(8, 1),
+        //    new Vector2I(8, 2),
+        //    new Vector2I(9, 0),
+        //    new Vector2I(9, 1),
+        //    new Vector2I(9, 2)
+        //};
+        #endregion
+
+        #region TileSetVectors for 32x32 Duhamel Dungeon stone tile set
         // indices (atlas coords) for the floor tiles in the tileset
         // this is graphic specific
         Vector2I[] floor_tiles =
         {
-            new Vector2I(6, 0),
-            new Vector2I(6, 1),
-            new Vector2I(6, 2),
-            new Vector2I(7, 0),
-            new Vector2I(7, 1),
-            new Vector2I(7, 2),
-            new Vector2I(8, 0),
-            new Vector2I(8, 1),
-            new Vector2I(8, 2),
-            new Vector2I(9, 0),
-            new Vector2I(9, 1),
-            new Vector2I(9, 2)
+            new Vector2I(0, 0),
+            new Vector2I(0, 1),
+            new Vector2I(0, 2),
+            new Vector2I(0, 3),
+            new Vector2I(1, 0),
+            new Vector2I(1, 1),
+            new Vector2I(1, 2),
+            new Vector2I(1, 3),
+            new Vector2I(2, 0),
+            new Vector2I(2, 1),
+            new Vector2I(2, 2),
+            new Vector2I(2, 3),
+            new Vector2I(3, 0),
+            new Vector2I(3, 1),
+            new Vector2I(3, 2),
+            new Vector2I(3, 3)
         };
+        #endregion
 
         // setup random number generator
         var rng = new RandomNumberGenerator();
@@ -1256,47 +1350,40 @@ public partial class AreaProceduralGeneration : Node
     /// <param name="i"></param>
     /// <param name="j"></param>
     /// <param name="tilemap_layer"></param>
-    private void RenderWall(int i, int j, TileMapLayer tilemap_layer)
+    private void RenderWall(int i, int j, TileMapLayer tilemap_layer, int wall_tileset_source_id = 0)
     {
-        // tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
-        int wall_tileset_source_id = 0;
-
         // indices (atlas coords) for the upper wall tiles in the tileset
         // this is graphic specific
         Vector2I[] wall_tiles_top =
         {
-            new Vector2I(1, 0),
-            new Vector2I(2, 0),
-            new Vector2I(3, 0),
-            new Vector2I(4, 0),
+            new Vector2I(1,2)
         };
 
         // indices (atlas coords) for the lower wall tiles in the tileset
         // this is graphic specific
         Vector2I[] wall_tiles_bottom =
         {
-            new Vector2I(1, 4),
-            new Vector2I(2, 4),
-            new Vector2I(3, 4),
-            new Vector2I(4, 4),
+            new Vector2I(5,3)
         };
 
         // indices (atlas coords) for the left wall tiles in the tileset
         // this is graphic specific
         Vector2I[] wall_tiles_right =
         {
-            new Vector2I(0, 1),
-            new Vector2I(0, 2),
-            new Vector2I(0, 3),
+            new Vector2I(5, 2)
+
         };
 
         // indices (atlas coords) for the right wall tiles tiles in the tileset
         // this is graphic specific
         Vector2I[] wall_tiles_left =
         {
-            new Vector2I(5, 1),
-            new Vector2I(5, 2),
-            new Vector2I(5, 3),
+            new Vector2I(3,2)
+        };
+
+        Vector2I[] wall_tiles_undefined =
+        {
+            new Vector2I(4,2)
         };
 
         // indices for the wall corner graphics in the tile set
@@ -1411,7 +1498,7 @@ public partial class AreaProceduralGeneration : Node
                 tile_array = wall_tiles_other; break;
 
             default:
-                tile_array = wall_tiles_other; break;
+                tile_array = wall_tiles_undefined; break;
         }
 
         // setup random number generator
