@@ -129,7 +129,7 @@ public partial class AreaProceduralGeneration : Node
 
     // number of dead cells beyond room walls -- includes impenetrable width amount
     // need to make sure it's at least 1 more than impenetrable border so we can fit the wall tiles
-    int fringe = 4;  
+    int fringe = 14;  
     int impenetrable_border = 1;  // impenetrable width -- included in the fringe value
     int width;
     int height;
@@ -1109,6 +1109,11 @@ public partial class AreaProceduralGeneration : Node
             tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_TOP ||
             tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM ||
 
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_LEFT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_RIGHT ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_TOP ||
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_BOTTOM ||
+
             tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS;
 
 
@@ -1133,63 +1138,27 @@ public partial class AreaProceduralGeneration : Node
 
     }
 
+    /// <summary>
+    /// Helper function to determine if the tile below a current one is a floor tile (for detemining which wall section
+    /// to draw -- walls vs. black region)
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool HasFloorBelow(int x, int y)
+    {
+        TileTypes tile_type = room_map[(y + 1) * total_width + x];
+
+        bool is_floor_below = false;
+
+        is_floor_below = (tile_type == TileTypes.TITLETYPE_FLOOR);
+
+        return is_floor_below;
+
+    }
+
     private void RenderMap()
     {
-        // Comment out the contents to not sure this purple dungeon tile set
-        #region TileSetVectors for 16x16 Purple dungeon set
-        //// tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
-        //int floor_tileset_source_id = 0;   // this is for the 16x16 tileset graphics
-        //int wall_tileset_source_id = 0;   // this is for the 16x16 tileset graphics
-
-
-
-        //// indices (atlas coords) for the upper wall tiles in the tileset
-        //// this is graphic specific
-        //Vector2I[] wall_tiles_upper =
-        //{
-        //    new Vector2I(1, 0),
-        //    new Vector2I(2, 0),
-        //    new Vector2I(3, 0),
-        //    new Vector2I(4, 0),
-        //};
-
-        //// indices (atlas coords) for the lower wall tiles in the tileset
-        //// this is graphic specific
-        //Vector2I[] wall_tiles_lower =
-        //{
-        //    new Vector2I(1, 4),
-        //    new Vector2I(2, 4),
-        //    new Vector2I(3, 4),
-        //    new Vector2I(4, 4),
-        //};
-
-        //// indices (atlas coords) for the left wall tiles in the tileset
-        //// this is graphic specific
-        //Vector2I[] wall_tiles_left =
-        //{
-        //    new Vector2I(0, 1),
-        //    new Vector2I(0, 2),
-        //    new Vector2I(0, 3),
-        //};
-
-        //// indices (atlas coords) for the right wall tiles tiles in the tileset
-        //// this is graphic specific
-        //Vector2I[] wall_tiles_right =
-        //{
-        //    new Vector2I(5, 1),
-        //    new Vector2I(5, 2),
-        //    new Vector2I(5, 3),
-        //};
-
-        //// indices for the wall corner graphics in the tile set
-        //// this is graphic specific
-        //Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(0, 0) };
-        //Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(5, 0) };
-        //Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(0, 4) };
-        //Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(5, 4) };
-
-        #endregion
-
         // Comment out the contents to not sure this purple dungeon tile set
         #region TileSetVectors for 32x80 custom Duhamel stone tile sets  -- tilesets already created in Godot
         // tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
@@ -1274,10 +1243,29 @@ public partial class AreaProceduralGeneration : Node
                 else
                 {
                     //TODO: render other tiles here
+                    RenderBlackSpace(i, j, walls, wall_tileset_source_id);
                 }
 
             }
         }
+    }
+
+    /// <summary>
+    /// Renders the blackspace around our procedurally generated area
+    /// </summary>
+    /// <param name="i"></param>
+    /// <param name="j"></param>
+    /// <param name="walls"></param>
+    /// <param name="wall_tileset_source_id"></param>
+    private void RenderBlackSpace(int i, int j, TileMapLayer walls, int wall_tileset_source_id)
+    {
+        var rng = new RandomNumberGenerator();
+        // set a random floor type
+
+        Vector2I atlas_coord = new Vector2I(4, 2);
+
+        Vector2I tile_pos = new Vector2I(i, j);
+        walls.SetCell(tile_pos, wall_tileset_source_id, atlas_coord);
     }
 
     /// <summary>
@@ -1352,15 +1340,98 @@ public partial class AreaProceduralGeneration : Node
     /// <param name="tilemap_layer"></param>
     private void RenderWall(int i, int j, TileMapLayer tilemap_layer, int wall_tileset_source_id = 0)
     {
+        // Comment out the contents to not sure this purple dungeon tile set
+        #region TileSetVectors for 16x16 Purple dungeon set
+        //// tileset source IDs for the layers -- should be zero if only one tileset on the tilemaplayer
+        //int floor_tileset_source_id = 0;   // this is for the 16x16 tileset graphics
+        //int wall_tileset_source_id = 0;   // this is for the 16x16 tileset graphics
+
+        // indices (atlas coords) for the lower wall tiles in the tileset
+        // this is graphic specific
+        //Vector2I[] wall_tiles_top_floorbelow =
+        //{
+
+        //};
+
+        //Vector2I[] wall_tiles_top =
+        //{
+        //    new Vector2I(1, 0),
+        //    new Vector2I(2, 0),
+        //    new Vector2I(3, 0),
+        //    new Vector2I(4, 0),
+        //};
+
+        //// indices (atlas coords) for the lower wall tiles in the tileset
+        //// this is graphic specific
+        ///        //Vector2I[] wall_tiles_bottom_floorbelow =
+        //{
+
+        //};
+        //Vector2I[] wall_tiles_bottom =
+        //{
+        //    new Vector2I(1, 4),
+        //    new Vector2I(2, 4),
+        //    new Vector2I(3, 4),
+        //    new Vector2I(4, 4),
+        //};
+
+        //// indices (atlas coords) for the left wall tiles in the tileset
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_left_floorbelow =
+        //{
+
+        //};
+
+        //Vector2I[] wall_tiles_left =
+        //{
+        //    new Vector2I(0, 1),
+        //    new Vector2I(0, 2),
+        //    new Vector2I(0, 3),
+        //};
+
+        //// indices (atlas coords) for the right wall tiles tiles in the tileset
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_right_floorbelow =
+        //{
+
+        //};
+
+        //Vector2I[] wall_tiles_right =
+        //{
+        //    new Vector2I(5, 1),
+        //    new Vector2I(5, 2),
+        //    new Vector2I(5, 3),
+        //};
+
+        //// indices for the wall corner graphics in the tile set
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(0, 0) };
+        //Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(5, 0) };
+        //Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(0, 4) };
+        //Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(5, 4) };
+
+        #endregion
+
+        #region TileSetVectors for 32x32 Duhamel Dungeon stone tile set
         // indices (atlas coords) for the upper wall tiles in the tileset
         // this is graphic specific
-        Vector2I[] wall_tiles_top =
+        Vector2I[] wall_tiles_top_floorbelow =
         {
             new Vector2I(1,2)
         };
 
+        Vector2I[] wall_tiles_top =
+        {
+            new Vector2I(5,3)
+        };
+
         // indices (atlas coords) for the lower wall tiles in the tileset
         // this is graphic specific
+        Vector2I[] wall_tiles_bottom_floorbelow =
+        {
+            new Vector2I(1,2)
+        };
+
         Vector2I[] wall_tiles_bottom =
         {
             new Vector2I(5,3)
@@ -1368,17 +1439,26 @@ public partial class AreaProceduralGeneration : Node
 
         // indices (atlas coords) for the left wall tiles in the tileset
         // this is graphic specific
+        Vector2I[] wall_tiles_right_floorbelow =
+        {
+            new Vector2I(8, 2)
+        };
+
         Vector2I[] wall_tiles_right =
         {
-            new Vector2I(5, 2)
-
+            new Vector2I(8, 2)
         };
 
         // indices (atlas coords) for the right wall tiles tiles in the tileset
         // this is graphic specific
+        Vector2I[] wall_tiles_left_floorbelow =
+        {
+            new Vector2I(8,2)
+        };
+
         Vector2I[] wall_tiles_left =
         {
-            new Vector2I(3,2)
+            new Vector2I(8,2)
         };
 
         Vector2I[] wall_tiles_undefined =
@@ -1388,37 +1468,70 @@ public partial class AreaProceduralGeneration : Node
 
         // indices for the wall corner graphics in the tile set
         // this is graphic specific
-        Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(0, 0) };
-        Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(5, 0) };
-        Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(0, 4) };
-        Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(5, 4) };
+        Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(8, 2) };
 
-        Vector2I[] wall_tiles_reentrant_upper_left_corner = { new Vector2I(0, 5) };
-        Vector2I[] wall_tiles_reentrant_upper_right_corner = { new Vector2I(3, 5) };
-        Vector2I[] wall_tiles_reentrant_lower_left_corner = { new Vector2I(0, 5) };
-        Vector2I[] wall_tiles_reentrant_lower_right_corner = { new Vector2I(0, 5) };
+        Vector2I[] wall_tiles_reentrant_upper_left_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_reentrant_upper_right_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_reentrant_lower_left_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_reentrant_lower_right_corner = { new Vector2I(8, 2) };
 
+        Vector2I[] wall_tiles_other = { new Vector2I(8, 2) };
 
+        #endregion
 
+        Vector2I[] tile_array = null;
 
-        Vector2I[] wall_tiles_other = { new Vector2I(8, 7) };
-
-        Vector2I[] tile_array;
+        
 
         switch (room_map[j * total_width + i])
         {
             // 0
             case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_LEFT:
-                tile_array = wall_tiles_left; break;
+                if (HasFloorBelow(i, j))
+                {
+                    tile_array = wall_tiles_top_floorbelow;
+                } else
+                {
+                    tile_array = wall_tiles_left;
+                }
+                break;
+
             // 1
             case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_RIGHT:
-                tile_array = wall_tiles_right; break;
+                if (HasFloorBelow(i, j))
+                {
+                    tile_array = wall_tiles_right_floorbelow;
+                }
+                else
+                {
+                    tile_array = wall_tiles_right;
+                }
+                break;
             // 2
             case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_TOP:
-                tile_array = wall_tiles_top; break;
+                if (HasFloorBelow(i, j))
+                {
+                    tile_array = wall_tiles_top_floorbelow;
+                }
+                else
+                {
+                    tile_array = wall_tiles_top;
+                }
+                break;
             // 3
             case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_HORIZ_BOTTOM:
-                tile_array = wall_tiles_bottom; break;
+                if (HasFloorBelow(i, j))
+                {
+                    tile_array = wall_tiles_bottom_floorbelow;
+                }
+                else
+                {
+                    tile_array = wall_tiles_bottom;
+                }
+                break;
 
             //4
             case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT:
@@ -1435,10 +1548,10 @@ public partial class AreaProceduralGeneration : Node
 
             //8
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_VERT:
-                tile_array = wall_tiles_left; break;
+                tile_array = wall_tiles_other; break;
             //9
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_HORIZ:
-                tile_array = wall_tiles_top; break;
+                tile_array = wall_tiles_other; break;
 
             //10
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPLEFT:
@@ -1455,16 +1568,16 @@ public partial class AreaProceduralGeneration : Node
 
             //14
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_LEFT:
-                tile_array = wall_tiles_upper_left_corner; break;
+                tile_array = wall_tiles_other; break;
             //15
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_RIGHT:
-                tile_array = wall_tiles_upper_right_corner; break;
+                tile_array = wall_tiles_other; break;
             //16
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_TOP:
-                tile_array = wall_tiles_lower_left_corner; break;
+                tile_array = wall_tiles_other; break;
             //17
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM:
-                tile_array = wall_tiles_lower_right_corner; break;
+                tile_array = wall_tiles_other; break;
             
 
             //18
@@ -1480,25 +1593,31 @@ public partial class AreaProceduralGeneration : Node
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_BOTTOM:
                 tile_array = wall_tiles_other; break;
 
-            //22
-            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT:
-                tile_array = wall_tiles_reentrant_upper_left_corner; break;
-            //23
-            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT:
-                tile_array = wall_tiles_reentrant_upper_right_corner; break;
-            //24
-            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMLEFT:
-                tile_array = wall_tiles_reentrant_lower_left_corner; break;
-            //25
-            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT:
-                tile_array = wall_tiles_reentrant_lower_right_corner; break;
+            ////22
+            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT:
+            //    tile_array = wall_tiles_reentrant_upper_left_corner; break;
+            ////23
+            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT:
+            //    tile_array = wall_tiles_reentrant_upper_right_corner; break;
+            ////24
+            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMLEFT:
+            //    tile_array = wall_tiles_reentrant_lower_left_corner; break;
+            ////25
+            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT:
+            //    tile_array = wall_tiles_reentrant_lower_right_corner; break;
 
             //26
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS:
                 tile_array = wall_tiles_other; break;
 
             default:
-                tile_array = wall_tiles_undefined; break;
+                //tile_array = wall_tiles_undefined; 
+                break;
+        }
+
+        if (tile_array == null)
+        {
+            return;
         }
 
         // setup random number generator
