@@ -5,6 +5,14 @@ using static Godot.Time;
 
 public partial class AreaProceduralGeneration : Node
 {
+    // Constants for generating rooms in our generator
+    private int numRooms = 40;
+    private int minRoomWidth = 5;
+    private int maxRoomWidth = 30;
+    private int minRoomHeight = 5;
+    private int maxRoomHeight = 30;
+
+
     public enum Dirs
     {
         EAST = 0,
@@ -67,11 +75,16 @@ public partial class AreaProceduralGeneration : Node
 
         // QUADRUPLE FLOOR NEIGHBORS -- double wall
         TITLETYPE_WALL_DOUBLESIDE_CROSS = 26,
+
+        // GENERIC INTERSECTON
+        TITLETYPE_WALL_GENERIC_INTERSECTION = 27,
+        TILETYPE_WALL_CORNER = 28
+
     }
 
     // Dictionary of map symbols
     Dictionary<TileTypes, string> MapSymbols = new Dictionary<TileTypes, string>()
-    {   
+    {
         { TileTypes.TITLETYPE_UNDEFINED, "."},
 
         { TileTypes.TITLETYPE_MAP_BORDER, "*"},
@@ -114,7 +127,12 @@ public partial class AreaProceduralGeneration : Node
         { TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT, "D"},
 
         // QUADRUPLE FLOOR NEIGHBORS
-        { TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS, "+"}
+        { TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS, "+"},
+
+        // GENERIC INERSECTION
+        { TileTypes.TITLETYPE_WALL_GENERIC_INTERSECTION, "w"},
+
+        { TileTypes.TILETYPE_WALL_CORNER, "c"}
     };
 
     TileMapLayer floors;
@@ -129,14 +147,13 @@ public partial class AreaProceduralGeneration : Node
 
     // number of dead cells beyond room walls -- includes impenetrable width amount
     // need to make sure it's at least 1 more than impenetrable border so we can fit the wall tiles
-    int fringe = 14;  
+    int fringe = 14;
     int impenetrable_border = 1;  // impenetrable width -- included in the fringe value
     int width;
     int height;
     int total_width;
     int total_height;
 
-    int numRooms = 15;
 
     int wall_loop_counter = 100;  // to help us get out of our exit while loop in FindWalls if we get stuck;
     int wall_loop_counter_max = 100;
@@ -171,17 +188,15 @@ public partial class AreaProceduralGeneration : Node
         for (int i = 0; i < 2; i++)
         {
             FindWalls();  // this function will iterate until all single walls are found.
-            FindReentrantCorners();
             FindWallCorners();
-            //        FillExtraRoomHoles();  // fill in any undefined nodes in the room map that are neighbors of a floor tile
 
             // reset the loop counters
             wall_loop_counter = wall_loop_counter_max;
             reentrant_corner_loop_counter = reentrant_corner_loop_counter_max;
             wall_corner_loop_counter = wall_corner_loop_counter_max;
             fill_extra_loop_counter = fill_extra_loop_counter_max;
-            
-//            PrintMap();
+
+            //            PrintMap();
 
         }
 
@@ -235,10 +250,10 @@ public partial class AreaProceduralGeneration : Node
         // create floor areas borders
         for (int i = 0; i < numRooms; i++)
         {
-            int width = rng.RandiRange(5, 30);
-            int height = rng.RandiRange(5, 30);
-            int pos_x = rng.RandiRange(0, 50);
-            int pos_y = rng.RandiRange(0, 50);
+            int width = rng.RandiRange(minRoomWidth, maxRoomHeight);
+            int height = rng.RandiRange(minRoomHeight, maxRoomHeight);
+            int pos_x = rng.RandiRange(0, (int)2*maxRoomWidth);
+            int pos_y = rng.RandiRange(0, (int)2*maxRoomHeight);
 
             // store the randomizd parameters
             w_data[i] = width;
@@ -391,12 +406,12 @@ public partial class AreaProceduralGeneration : Node
             for (int i = 0; i < total_width; i++)
             {
                 // the origin of the room
-                if(i==0 && j == 0)
+                if (i == 0 && j == 0)
                 {
 
-                } 
+                }
                 // outside the room area
-                else if(j < pos_y || j >= pos_y + height || i < pos_x || i >= pos_x + width)
+                else if (j < pos_y || j >= pos_y + height || i < pos_x || i >= pos_x + width)
                 {
 
                 }
@@ -431,8 +446,14 @@ public partial class AreaProceduralGeneration : Node
             {
                 for (int i = 0; i < total_width; i++)
                 {
-                    // if our current tile is undefined, then it's already been set and we can continue on.
+                    // if our current tile is not undefined, then it's already been set and we can continue on.
                     if (room_map[j * total_width + i] != TileTypes.TITLETYPE_UNDEFINED)
+                    {
+                        continue;
+                    }
+
+                    // If there is not a floor tile in any of the eight directions, then this cannot be a wall so we continue on.
+                    if(HasFloorNeighbor(i, j) is false)
                     {
                         continue;
                     }
@@ -452,126 +473,6 @@ public partial class AreaProceduralGeneration : Node
                     bool south_wall = wall_neighbors[(int)Dirs.SOUTH];
                     bool east_wall = wall_neighbors[(int)Dirs.EAST];
                     bool west_wall = wall_neighbors[(int)Dirs.WEST];
-
-                    // No floor neighbors
-                    if (floor_count == 0)
-                    {
-                        if (wall_count == 3)
-                        {
-                            // this is a T junction -- stem up
-                            if (south_wall is false)
-                            {
-                                // are both upper left diagonal and upper right diagonal a floor tiles?
-                                // this is a single stem T
-                                if (room_map[(j - 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR &&
-                                    room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_TOP;
-                                    change_made = true;
-                                }
-                                // is upper left diagonal a floor tile?
-                                else if (room_map[(j - 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT;
-                                    change_made = true;
-                                }
-                                // is upper right diagonal a floor tile?
-                                else if (room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT;
-                                    change_made = true;
-                                }
-                                else
-                                {
-                                    // do nothing since we don't know for sure what it is
-                                }
-                            }
-                            // This is a T junction -- stem down
-                            else if (north_wall is false)
-                            {
-                                // are both lower left diagonal and lower right diagonal a floor tiles?
-                                // this is a single stem T
-                                if (room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR &&
-                                    room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM;
-                                    change_made = true;
-                                }
-                                // is lower left diagonal a floor tile?
-                                else if (room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT;
-                                    change_made = true;
-                                }
-                                // is lower right diagonal a floor tile?
-                                else if (room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT;
-                                    change_made = true;
-                                }
-                                else
-                                {
-                                    // do nothing since we don't know for sure what it is
-                                }
-                            }
-                            // Is it a T to the right?
-                            else if (west_wall is false)
-                            {
-                                // are both right side diagonals a floor tiles?
-                                // this is a single stem T
-                                if (room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR &&
-                                    room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_RIGHT;
-                                    change_made = true;
-                                }
-                                else if (room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT;
-                                    change_made = true;
-                                }
-                                else if (room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT;
-                                    change_made = true;
-                                }
-                                else
-                                {
-                                    // do nothing since we don't know for sure what it is
-                                }
-                            }
-                            // Is it a T to the left?
-                            else if (east_wall is false)
-                            {
-                                // are both left side diagonals a floor tiles?
-                                // this is a single stem T
-                                if (room_map[(j - 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR &&
-                                    room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_LEFT;
-                                    change_made = true;
-                                    continue;
-
-                                }
-                                else if (room_map[(j - 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT;
-                                    change_made = true;
-                                    continue;
-                                }
-                                else if (room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT;
-                                    change_made = true;
-                                    continue;
-                                }
-                                else
-                                {
-                                    // do nothing since we don't know for sure what it is
-                                }
-                            }
-                        }
-                    }
 
                     // A single floor neighbor -- this must be a wall
                     if (floor_count == 1)
@@ -604,6 +505,7 @@ public partial class AreaProceduralGeneration : Node
 
                     if (floor_count == 2)
                     {
+                        // it's a double side wall segment
                         //double sided wall north-south
                         if (north_floor && south_floor)
                         {
@@ -623,43 +525,43 @@ public partial class AreaProceduralGeneration : Node
                         // -- need to check if this is a reentrant corner with a floor tile diagonal to this cell
                         else
                         {
+                            room_map[j * total_width + i] = TileTypes.TILETYPE_WALL_CORNER;
+                            change_made = true;
+                            continue;
                             // otherwise its a corner so we'll work with that after all the single walls are in place.
                         }
                     }
 
+                    // otherwise we found a singular wall segment -- will need to keep checking until we find the end
                     if (floor_count == 3)
                     {
                         // this is a dead end wall.
                         if (north_floor is false)
                         {
                             room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_BOTTOM;
-                            change_made = true;
-
-                            continue;
                         }
                         if (east_floor is false)
                         {
                             room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_LEFT;
-                            change_made = true;
-
-                            continue;
                         }
                         if (south_floor is false)
                         {
                             room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_TOP;
-                            change_made = true;
-
-                            continue;
                         }
                         if (west_floor is false)
                         {
                             room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_RIGHT;
-                            change_made = true;
-
-                            continue;
                         }
+
+                        // if we still have an undefined tile, then we need to recheck
+                        if(floor_count + wall_count != 4)
+                        {
+                            change_made = true;
+                        }
+                        continue;
                     }
 
+                    // if it's a single whole element, lets make this a floor tile too.
                     if (floor_count == 4)
                     {
                         // make this one a floor tile too
@@ -674,6 +576,7 @@ public partial class AreaProceduralGeneration : Node
             {
                 // run through this again
                 FindWalls();
+                FindWallCorners();
             }
 
 
@@ -689,9 +592,10 @@ public partial class AreaProceduralGeneration : Node
         // Loop until there are no more changes
         while (change_made)
         {
+            change_made = false;
             if (wall_corner_loop_counter < 0)
             {
-                GD.Print("Looping too many times.  Breaking out of level creation loop.");
+                GD.Print("Looping too many times.  Breaking out of level creation for wall corners loop.");
                 break;
             }
             for (int j = 0; j < total_height; j++)
@@ -704,162 +608,12 @@ public partial class AreaProceduralGeneration : Node
                         continue;
                     }
 
-                    // count the number of known walls around this tile -- it's possible that there are more than that
-                    bool[] wall_neighbors = CheckWallNeighbors(i, j);
-                    int wall_count = countTrueNeighbors(wall_neighbors);
-
-                    bool north_wall = wall_neighbors[(int)Dirs.NORTH];
-                    bool south_wall = wall_neighbors[(int)Dirs.SOUTH];
-                    bool east_wall = wall_neighbors[(int)Dirs.EAST];
-                    bool west_wall = wall_neighbors[(int)Dirs.WEST];
-
-                    // count the number of known floors around this tile -- this will always be an accurate number since
-                    // floors are always known from the creation process
-                    bool[] floor_neighbors = CheckFloorNeighbors(i, j);
-                    int floor_count = countTrueNeighbors(floor_neighbors);
-
-                    bool north_floor = floor_neighbors[(int)Dirs.NORTH];
-                    bool south_floor = floor_neighbors[(int)Dirs.SOUTH];
-                    bool east_floor = floor_neighbors[(int)Dirs.EAST];
-                    bool west_floor = floor_neighbors[(int)Dirs.WEST];
-
-                    if (wall_count == 0)
+                    if (IsWallCornerTile(i, j))
                     {
-                        //// if floor count = 3, this is a dead end wall section
-                        //if()
-                        //// no walls adjacent -- guess would could make a column type here -- but for now dont specify that
-                        //room_map[j * total_width + i] = TileTypes.TITLETYPE_UNDEFINED;
-                        //continue;
+                        room_map[j * total_width + i] = TileTypes.TILETYPE_WALL_CORNER;
+                        change_made = true;
+                        continue;
                     }
-                    else if (wall_count == 1)
-                    {
-                        // could be a dead end if the other three are floor tiles -- but I believe these have already been set.
-
-                    }
-                    else if (wall_count == 2)
-                    {
-                        if (north_wall && east_wall)
-                        {
-                            // is north east corner a floor tile?
-                            if (room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                            {
-                                room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT;
-                                change_made = true;
-                                continue;
-                            }
-                            else
-                            {
-                                if(west_floor && south_floor)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT;
-                                    change_made = true;
-                                    continue;
-                                } else
-                                {
-                                    room_map[(j - 1) * total_width + (i + 1)] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT;
-                                    change_made = true;
-                                    continue;
-                                }
-                            }
-                        }
-
-                        if (south_wall && east_wall)
-                        {
-                            // is south east corner a floor tile?
-                            if (room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR)
-                            {
-                                room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT;
-                                change_made = true;
-                                continue;
-                            }
-                            else
-                            {
-                                if (west_floor && north_floor)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT;
-                                    change_made = true;
-                                    continue;
-                                }
-                                else
-                                {
-                                    room_map[(j + 1) * total_width + (i + 1)] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT;
-                                    change_made = true;
-                                    continue;
-                                }
-                            }
-                        }
-
-                        if (north_wall && west_wall)
-                        {
-                            // is north west corner a floor tile?
-                            if (room_map[(j - 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
-                            {
-                                room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT;
-                            }
-                            else
-                            {
-                                if (east_floor && south_floor)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT;
-                                    change_made = true;
-                                    continue;
-                                }
-                                else
-                                {
-                                    room_map[(j - 1) * total_width + (i - 1)] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT;
-                                    change_made = true;
-                                    continue;
-                                }
-
-                            }
-                        }
-
-                        if (south_wall && west_wall)
-                        {
-                            // is south west corner a floor tile?
-                            if (room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR)
-                            {
-                                room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT;
-                            }
-                            else
-                            {
-                                if (east_floor && south_floor)
-                                {
-                                    room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT;
-                                    change_made = true;
-                                    continue;
-                                }
-                                else
-                                {
-                                    room_map[(j + 1) * total_width + (i - 1)] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT;
-                                    change_made = true;
-                                    continue;
-                                }
-                            }
-                        }
-
-                        // could be a straight wall section
-
-
-                        // or could be a corner
-
-                        // check renentrant corner
-                        // -- opposite corner is not a floor tile
-
-                        // check externior corern
-                        // -- opposite corner is a floor tile
-                    }
-                    else if (wall_count == 3)
-                    {
-                        // could be a tee
-                        // -- three are wall tiles and one is not a floor tile
-
-                    }
-                    else if (wall_count == 4)
-                    {
-                        // if all four are wall tiles, then its a cross
-                    }
-
                 }
             }
 
@@ -868,135 +622,6 @@ public partial class AreaProceduralGeneration : Node
                 // run through this again
                 FindWallCorners();
             }
-
-            change_made = false;
-        }
-    }
-
-    private void FillExtraRoomHoles()
-    {
-        bool change_made = true;
-        fill_extra_loop_counter--;
-        // Loop until there are no more changes
-        while (change_made)
-        {
-            if (fill_extra_loop_counter < 0)
-            {
-                GD.Print("Looping too many times.  Breaking out of filling extra room holes loop");
-                break;
-            }
-            for (int j = 0; j < total_height; j++)
-            {
-                for (int i = 0; i < total_width; i++)
-                {
-                    // if our current tile is not undefined, then it's already been set and we can continue on.
-                    if (room_map[j * total_width + i] != TileTypes.TITLETYPE_UNDEFINED)
-                    {
-                        continue;
-                    }
-
-                    bool[] floor_neighbors = CheckFloorNeighbors(i, j);
-                    int floor_count = countTrueNeighbors(floor_neighbors);
-
-                    if(floor_count > 0)
-                    {
-                        // set the current tile to a FLOOR tile if it is touching another floor tile.
-                        room_map[j * total_width + i] = TileTypes.TITLETYPE_FLOOR;
-                        change_made = true;
-                    }
-
-                }
-            }
-
-            if (change_made is true)
-            {
-                // run through this again looking for any new holes.
-                FillExtraRoomHoles();
-            }
-
-            change_made = false;
-        }
-    }
-
-    private void FindReentrantCorners()
-    {
-        bool change_made = true;
-        reentrant_corner_loop_counter--;
-        // Loop until there are no more changes
-        while (change_made)
-        {
-            if (reentrant_corner_loop_counter < 0)
-            {
-                GD.Print("Looping too many times.  Breaking out of reeentrant corners loop");
-                break;
-            }
-            for (int j = 0; j < total_height; j++)
-            {
-                for (int i = 0; i < total_width; i++)
-                {
-                    // if our current tile is not undefined, then it's already been set and we can continue on.
-                    if (room_map[j * total_width + i] != TileTypes.TITLETYPE_UNDEFINED)
-                    {
-                        continue;
-                    }
-                    
-                    // check for L corners of floor tiles.
-                    // -upper left
-                    //     XX     where X = floor tile
-                    //     X*     * = undefined tile
-                    if((room_map[(j) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j - 1) * total_width + (i)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j-1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR))
-                    {
-                        room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT;
-                        change_made = true;
-                    }
-
-                    // Check for L corners of floor tiles.
-                    // -upper right
-                    //     XX     where X = floor tile
-                    //     *X     * = undefined tile
-                    if ((room_map[(j) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j - 1) * total_width + (i)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j - 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR))
-                    {
-                        room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT;
-                        change_made = true;
-                    }
-
-                    // Check for L corners of floor tiles.
-                    // -lower left
-                    //     X*     where X = floor tile
-                    //     XX     * = undefined tile
-                    if ((room_map[(j) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j + 1) * total_width + (i)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j + 1) * total_width + (i - 1)] == TileTypes.TITLETYPE_FLOOR))
-                    {
-                        room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT;
-                        change_made = true;
-                    }
-
-                    // Check for L corners of floor tiles.
-                    // -lower right
-                    //     *X     where X = floor tile
-                    //     XX     * = undefined tile
-                    if ((room_map[(j) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j + 1) * total_width + (i)] == TileTypes.TITLETYPE_FLOOR) &&
-                        (room_map[(j + 1) * total_width + (i + 1)] == TileTypes.TITLETYPE_FLOOR))
-                    {
-                        room_map[j * total_width + i] = TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT;
-                        change_made = true;
-                    }
-                }
-            }
-
-            if (change_made is true)
-            {
-                // run through this again looking for any new holes.
-                FindReentrantCorners();
-            }
-
-            change_made = false;
         }
     }
 
@@ -1045,7 +670,7 @@ public partial class AreaProceduralGeneration : Node
         //west
         neighbors[(int)Dirs.WEST] = IsWallTile(x - 1, y);
         //north
-        neighbors[(int)Dirs.NORTH] = IsWallTile(x, y-1);
+        neighbors[(int)Dirs.NORTH] = IsWallTile(x, y - 1);
 
         return neighbors;
     }
@@ -1114,8 +739,10 @@ public partial class AreaProceduralGeneration : Node
             tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_TOP ||
             tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_BOTTOM ||
 
-            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS;
+            tile_type == TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS ||
 
+            tile_type == TileTypes.TITLETYPE_WALL_GENERIC_INTERSECTION ||
+            tile_type == TileTypes.TILETYPE_WALL_CORNER;
 
         return is_wall;
     }
@@ -1139,6 +766,75 @@ public partial class AreaProceduralGeneration : Node
     }
 
     /// <summary>
+    /// Helper function to determine if the tile below a current one is a wall tile (for detemining which wall section
+    /// to draw -- walls vs. black region)
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool HasWallBelow(int x, int y)
+    {
+        return IsWallTile(x, y + 1);
+    }
+
+    /// <summary>
+    /// Helper function to determine if the current tile is corner tile
+    /// to draw -- walls vs. black region)
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool IsWallCornerTile(int x, int y)
+    {
+        bool north = IsWallTile(x, y - 1);
+        bool east = IsWallTile(x + 1, y);
+        bool south = IsWallTile(x, y + 1);
+        bool west = IsWallTile(x - 1, y);
+        bool ne = IsWallTile(x + 1, y - 1);
+        bool se = IsWallTile(x + 1, y + 1);
+        bool sw = IsWallTile(x - 1, y + 1);
+        bool nw = IsWallTile(x - 1, y - 1);
+
+        if ((north && east) || (east && south) || (south && west) || (west && north))
+        {
+            // must have a floor tile immediately adjacent (one of the eight directions must be a floor tile)
+            if (HasFloorNeighbor(x, y))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Helper function to determine if the tile below a current one is a floor tile (for detemining which wall section
+    /// to draw -- walls vs. black region)
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool HasFloorNeighbor(int x, int y)
+    {
+        bool floor_ne = IsFloorTile(x + 1, y - 1);
+        bool floor_se = IsFloorTile(x + 1, y + 1);
+        bool floor_sw = IsFloorTile(x - 1, y + 1);
+        bool floor_nw = IsFloorTile(x - 1, y - 1);
+        bool floor_n = IsFloorTile(x, y - 1);
+        bool floor_e = IsFloorTile(x + 1, y);
+        bool floor_s = IsFloorTile(x, y + 1);
+        bool floor_w = IsFloorTile(x - 1, y);
+
+        return floor_ne || floor_se || floor_sw || floor_nw || floor_n || floor_e || floor_s || floor_w;
+    }
+
+    /// <summary>
     /// Helper function to determine if the tile below a current one is a floor tile (for detemining which wall section
     /// to draw -- walls vs. black region)
     /// </summary>
@@ -1154,8 +850,34 @@ public partial class AreaProceduralGeneration : Node
         is_floor_below = (tile_type == TileTypes.TITLETYPE_FLOOR);
 
         return is_floor_below;
-
     }
+
+    /// <summary>
+    /// Helper function to determine if the tile above a current one is a floor tile (for detemining which wall section
+    /// to draw -- walls vs. black region)
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool HasFloorAbove(int x, int y)
+    {
+        TileTypes tile_type = room_map[(y - 1) * total_width + x];
+
+        bool is_floor_above = false;
+
+        is_floor_above = (tile_type == TileTypes.TITLETYPE_FLOOR);
+
+        return is_floor_above;
+    }
+
+
+
+
+
+
+
+
+
 
     private void RenderMap()
     {
@@ -1213,18 +935,19 @@ public partial class AreaProceduralGeneration : Node
 
         #endregion
 
-
-
-
-
-
         // Our loop for rendering the tiles
         for (int j = 0; j < total_height; j++)
         {
             for (int i = 0; i < total_width; i++)
             {
+                // if this is the impenetrable map border, we draw nothing
+                if(room_map[j * total_width + i] == TileTypes.TITLETYPE_MAP_BORDER)
+                {
+                    continue;
+                }
+
                 if (IsFloorTile(i, j))
-                { 
+                {
                     //// create a colorrect tile
                     //ColorRect color_rect = new ColorRect();
 
@@ -1333,7 +1056,7 @@ public partial class AreaProceduralGeneration : Node
     }
 
     /// <summary>
-    /// Function to render the wall tilesto the wall tilemap layer
+    /// Function to render the wall tiles to the wall tilemap layer
     /// </summary>
     /// <param name="i"></param>
     /// <param name="j"></param>
@@ -1466,17 +1189,30 @@ public partial class AreaProceduralGeneration : Node
             new Vector2I(4,2)
         };
 
+
         // indices for the wall corner graphics in the tile set
         // this is graphic specific
-        Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(8, 2) };
-        Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(8, 2) };
-        Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(8, 2) };
-        Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_corner =
+        {
+            new Vector2I(8, 2)
+        };
 
-        Vector2I[] wall_tiles_reentrant_upper_left_corner = { new Vector2I(8, 2) };
-        Vector2I[] wall_tiles_reentrant_upper_right_corner = { new Vector2I(8, 2) };
-        Vector2I[] wall_tiles_reentrant_lower_left_corner = { new Vector2I(8, 2) };
-        Vector2I[] wall_tiles_reentrant_lower_right_corner = { new Vector2I(8, 2) };
+        Vector2I[] wall_tiles_corner_floorbelow =
+        {
+            new Vector2I(8, 2)
+        };
+
+        //// indices for the wall corner graphics in the tile set
+        //// this is graphic specific
+        //Vector2I[] wall_tiles_upper_left_corner = { new Vector2I(8, 2) };
+        //Vector2I[] wall_tiles_upper_right_corner = { new Vector2I(8, 2) };
+        //Vector2I[] wall_tiles_lower_left_corner = { new Vector2I(8, 2) };
+        //Vector2I[] wall_tiles_lower_right_corner = { new Vector2I(8, 2) };
+
+        //Vector2I[] wall_tiles_reentrant_upper_left_corner = { new Vector2I(8, 2) };
+        //Vector2I[] wall_tiles_reentrant_upper_right_corner = { new Vector2I(8, 2) };
+        //Vector2I[] wall_tiles_reentrant_lower_left_corner = { new Vector2I(8, 2) };
+        //Vector2I[] wall_tiles_reentrant_lower_right_corner = { new Vector2I(8, 2) };
 
         Vector2I[] wall_tiles_other = { new Vector2I(8, 2) };
 
@@ -1484,7 +1220,7 @@ public partial class AreaProceduralGeneration : Node
 
         Vector2I[] tile_array = null;
 
-        
+
 
         switch (room_map[j * total_width + i])
         {
@@ -1492,8 +1228,9 @@ public partial class AreaProceduralGeneration : Node
             case TileTypes.TITLETYPE_WALL_SINGLE_STRAIGHT_VERT_LEFT:
                 if (HasFloorBelow(i, j))
                 {
-                    tile_array = wall_tiles_top_floorbelow;
-                } else
+                    tile_array = wall_tiles_left_floorbelow;
+                }
+                else
                 {
                     tile_array = wall_tiles_left;
                 }
@@ -1533,18 +1270,18 @@ public partial class AreaProceduralGeneration : Node
                 }
                 break;
 
-            //4
-            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT:
-                tile_array = wall_tiles_upper_left_corner; break;
-            //5
-            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT:
-                tile_array = wall_tiles_upper_right_corner; break;
-            //6
-            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT:
-                tile_array = wall_tiles_lower_left_corner; break;
-            //7
-            case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT:
-                tile_array = wall_tiles_lower_right_corner; break;
+            ////4
+            //case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPLEFT:
+            //    tile_array = wall_tiles_upper_left_corner; break;
+            ////5
+            //case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_TOPRIGHT:
+            //    tile_array = wall_tiles_upper_right_corner; break;
+            ////6
+            //case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMLEFT:
+            //    tile_array = wall_tiles_lower_left_corner; break;
+            ////7
+            //case TileTypes.TITLETYPE_WALL_SINGLE_CORNER_BOTTOMRIGHT:
+            //    tile_array = wall_tiles_lower_right_corner; break;
 
             //8
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_VERT:
@@ -1553,18 +1290,18 @@ public partial class AreaProceduralGeneration : Node
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_STRAIGHT_HORIZ:
                 tile_array = wall_tiles_other; break;
 
-            //10
-            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPLEFT:
-                tile_array = wall_tiles_upper_left_corner; break;
-            //11
-            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPRIGHT:
-                tile_array = wall_tiles_upper_right_corner; break;
-            //12
-            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMLEFT:
-                tile_array = wall_tiles_lower_left_corner; break;
-            //13
-            case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMRIGHT:
-                tile_array = wall_tiles_lower_right_corner; break;
+            ////10
+            //case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPLEFT:
+            //    tile_array = wall_tiles_upper_left_corner; break;
+            ////11
+            //case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_TOPRIGHT:
+            //    tile_array = wall_tiles_upper_right_corner; break;
+            ////12
+            //case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMLEFT:
+            //    tile_array = wall_tiles_lower_left_corner; break;
+            ////13
+            //case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CORNER_BOTTOMRIGHT:
+            //    tile_array = wall_tiles_lower_right_corner; break;
 
             //14
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_LEFT:
@@ -1578,7 +1315,7 @@ public partial class AreaProceduralGeneration : Node
             //17
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_TEE_BOTTOM:
                 tile_array = wall_tiles_other; break;
-            
+
 
             //18
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_LEFT:
@@ -1593,22 +1330,37 @@ public partial class AreaProceduralGeneration : Node
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_DEADEND_BOTTOM:
                 tile_array = wall_tiles_other; break;
 
-            ////22
-            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT:
-            //    tile_array = wall_tiles_reentrant_upper_left_corner; break;
-            ////23
-            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT:
-            //    tile_array = wall_tiles_reentrant_upper_right_corner; break;
-            ////24
-            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMLEFT:
-            //    tile_array = wall_tiles_reentrant_lower_left_corner; break;
-            ////25
-            //case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT:
-            //    tile_array = wall_tiles_reentrant_lower_right_corner; break;
+            //22
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPLEFT:
+                tile_array = wall_tiles_other; break;
+            //23
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_TOPRIGHT:
+                tile_array = wall_tiles_other; break;
+            //24
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMLEFT:
+                tile_array = wall_tiles_other; break;
+            //25
+            case TileTypes.TITLETYPE_WALL_DOUBLEWALL_REENTRANT_CORNER_BOTTOMRIGHT:
+                tile_array = wall_tiles_other; break;
 
             //26
             case TileTypes.TITLETYPE_WALL_DOUBLESIDE_CROSS:
                 tile_array = wall_tiles_other; break;
+
+            //27
+            case TileTypes.TITLETYPE_WALL_GENERIC_INTERSECTION:
+                tile_array = wall_tiles_other; break;
+
+            //28
+            case TileTypes.TILETYPE_WALL_CORNER:
+                if(HasFloorBelow(i, j))
+                {
+                    tile_array = wall_tiles_corner_floorbelow; break;
+                } else
+                {
+                    tile_array = wall_tiles_corner; break;
+                }
+                break;
 
             default:
                 //tile_array = wall_tiles_undefined; 
@@ -1617,6 +1369,7 @@ public partial class AreaProceduralGeneration : Node
 
         if (tile_array == null)
         {
+            // draw nothing
             return;
         }
 
