@@ -1,17 +1,26 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Collections.Generic;
 using static Godot.Time;
 
 public partial class AreaProceduralGeneration : Node
 {
     // Constants for generating rooms in our generator
-    private int numRooms = 40;
-    private int minRoomWidth = 5;
-    private int maxRoomWidth = 30;
-    private int minRoomHeight = 5;
-    private int maxRoomHeight = 30;
+    private int numRooms = 10;
+    private int minRoomWidth = 3;
+    private int maxRoomWidth = 25;
+    private int minRoomHeight = 3;
+    private int maxRoomHeight = 25;
 
+    int[] w_data;
+    int[] h_data;
+    int[] posx_data;
+    int[] posy_data;
+    int[] centroidx_data;  // for storing coordinates near the room center
+    int[] centroidy_data;  // for storing coordinate near the room center
+
+    List<List<int>> Islands = new List<List<int>>();  // a list to contain all of the individual islands in our map
 
     public enum Dirs
     {
@@ -83,7 +92,7 @@ public partial class AreaProceduralGeneration : Node
     }
 
     // Dictionary of map symbols
-    Dictionary<TileTypes, string> MapSymbols = new Dictionary<TileTypes, string>()
+    Godot.Collections.Dictionary<TileTypes, string> MapSymbols = new Godot.Collections.Dictionary<TileTypes, string>()
     {
         { TileTypes.TITLETYPE_UNDEFINED, "."},
 
@@ -242,28 +251,144 @@ public partial class AreaProceduralGeneration : Node
     {
         var rng = new RandomNumberGenerator();
 
-        int[] w_data = new int[numRooms];
-        int[] h_data = new int[numRooms];
-        int[] posx_data = new int[numRooms];
-        int[] posy_data = new int[numRooms];
+        // store our room data
+        w_data = new int[numRooms];
+        h_data = new int[numRooms];
+        posx_data = new int[numRooms];
+        posy_data = new int[numRooms];
+        centroidx_data = new int[numRooms];  // for storing coordinates near the room center
+        centroidy_data = new int[numRooms];  // for storing coordinate near the room center
 
-        // create floor areas borders
-        for (int i = 0; i < numRooms; i++)
-        {
-            int width = rng.RandiRange(minRoomWidth, maxRoomHeight);
-            int height = rng.RandiRange(minRoomHeight, maxRoomHeight);
-            int pos_x = rng.RandiRange(0, (int)2*maxRoomWidth);
-            int pos_y = rng.RandiRange(0, (int)2*maxRoomHeight);
 
-            // store the randomizd parameters
-            w_data[i] = width;
-            h_data[i] = height;
-            posx_data[i] = pos_x;
-            posy_data[i] = pos_y;
+        #region Standard data for testing 1
+        w_data[0] = 25;
+        w_data[1] = 11;
+        w_data[2] = 17;
+        w_data[3] = 25;
+        w_data[4] = 12;
+        w_data[5] = 22;
+        w_data[6] = 20;
+        w_data[7] = 3;
+        w_data[8] = 3;
+        w_data[9] = 10;
 
-            //GD.Print("Room (" + i + "):  w: " + width + "  h: " + height + " x: " + pos_x + " y: " + pos_y);
-        }
 
+        h_data[0] = 6;
+        h_data[1] = 10;
+        h_data[2] = 9;
+        h_data[3] = 13;
+        h_data[4] = 21;
+        h_data[5] = 12;
+        h_data[6] = 25;
+        h_data[7] = 24;
+        h_data[8] = 5;
+        h_data[9] = 7;
+
+        posx_data[0] =33;
+        posx_data[1] = 43;
+        posx_data[2] = 45;
+        posx_data[3] = 49;
+        posx_data[4] = 14;
+        posx_data[5] = 60;
+        posx_data[6] = 50;
+        posx_data[7] = 34;
+        posx_data[8] = 54;
+        posx_data[9] = 62;
+
+
+        posy_data[0] = 16;
+        posy_data[1] = 21;
+        posy_data[2] = 32;
+        posy_data[3] = 28;
+        posy_data[4] = 50;
+        posy_data[5] = 49;
+        posy_data[6] = 17;
+        posy_data[7] = 26;
+        posy_data[8] = 14;
+        posy_data[9] = 43;
+
+
+        centroidx_data[0] = posx_data[0] + (w_data[0] / 2);
+        centroidx_data[1] = posx_data[1] + (w_data[1] / 2);
+        centroidx_data[2] = posx_data[2] + (w_data[2] / 2);
+        centroidx_data[3] = posx_data[3] + (w_data[3] / 2);
+        centroidx_data[4] = posx_data[4] + (w_data[4] / 2);
+        centroidx_data[5] = posx_data[5] + (w_data[5] / 2);
+        centroidx_data[6] = posx_data[6] + (w_data[6] / 2);
+        centroidx_data[7] = posx_data[7] + (w_data[7] / 2);
+        centroidx_data[8] = posx_data[8] + (w_data[8] / 2);
+        centroidx_data[9] = posx_data[9] + (w_data[9] / 2);
+
+        centroidy_data[0] = posy_data[0] + (h_data[0] / 2);
+        centroidy_data[1] = posy_data[1] + (h_data[1] / 2);
+        centroidy_data[2] = posy_data[2] + (h_data[2] / 2);
+        centroidy_data[3] = posy_data[3] + (h_data[3] / 2);
+        centroidy_data[4] = posy_data[4] + (h_data[4] / 2);
+        centroidy_data[5] = posy_data[5] + (h_data[5] / 2);
+        centroidy_data[6] = posy_data[6] + (h_data[6] / 2);
+        centroidy_data[7] = posy_data[7] + (h_data[7] / 2);
+        centroidy_data[8] = posy_data[8] + (h_data[8] / 2);
+        centroidy_data[9] = posy_data[9] + (h_data[9] / 2);
+        #endregion
+
+
+        #region Standard data for testing 1
+
+        //w_data[0] = 10;
+        //w_data[1] = 10;
+        //w_data[2] = 10;
+        //w_data[3] = 10;
+
+        //h_data[0] = 10;
+        //h_data[1] = 10;
+        //h_data[2] = 10;
+        //h_data[3] = 10;
+
+        //posx_data[0] = 0;
+        //posx_data[1] = 12;
+        //posx_data[2] = 7;
+        //posx_data[3] = 30;
+
+        //posy_data[0] = 0;
+        //posy_data[1] = 12;
+        //posy_data[2] = 7;
+        //posy_data[3] = 30;
+
+        //centroidx_data[0] = posx_data[0] + (w_data[0] / 2);
+        //centroidx_data[1] = posx_data[1] + (w_data[1] / 2);
+        //centroidx_data[2] = posx_data[2] + (w_data[2] / 2);
+        //centroidx_data[3] = posx_data[3] + (w_data[3] / 2);
+
+        //centroidy_data[0] = posy_data[0] + (h_data[0] / 2);
+        //centroidy_data[1] = posy_data[1] + (h_data[1] / 2);
+        //centroidy_data[2] = posy_data[2] + (h_data[2] / 2);
+        //centroidy_data[3] = posy_data[3] + (h_data[3] / 2);
+        #endregion
+
+        #region Random rooms algorithm
+        ///// RANDOMIZE the floor areas
+        //// create floor areas borders
+        //for (int i = 0; i < numRooms; i++)
+        //{
+        //    int width = rng.RandiRange(minRoomWidth, maxRoomHeight);
+        //    int height = rng.RandiRange(minRoomHeight, maxRoomHeight);
+        //    int pos_x = rng.RandiRange(0, (int)2 * maxRoomWidth);
+        //    int pos_y = rng.RandiRange(0, (int)2 * maxRoomHeight);
+
+        //    // store the randomizd parameters
+        //    w_data[i] = width;
+        //    h_data[i] = height;
+        //    posx_data[i] = pos_x;
+        //    posy_data[i] = pos_y;
+
+        //    centroidx_data[i] = pos_x + (width / 2);
+        //    centroidy_data[i] = pos_y + (height / 2);
+
+        //    //GD.Print("Room (" + i + "):  w: " + width + "  h: " + height + " x: " + pos_x + " y: " + pos_y);
+        //}
+        #endregion
+
+        // Find the boundaries of our rooms areas
         // find the leftmost point of the areas
         int min_x = 0;
         int temp_min_x = 100000;
@@ -349,8 +474,255 @@ public partial class AreaProceduralGeneration : Node
         // Create the room areas
         for (int i = 0; i < numRooms; i++)
         {
-            CreateFloorAreas(w_data[i], h_data[i], posx_data[i], posy_data[i]);
+            CreateFloorAreas(w_data[i], h_data[i], posx_data[i], posy_data[i], i);
         }
+
+        // add the index numbers to a list to begin the island sort algorithm
+        List<int> listOfRooms = new List<int>();
+        for (int i = 0; i < numRooms; i++)
+        {
+            listOfRooms.Add(i);
+        }
+
+        FindIslands(listOfRooms);
+
+        ConnectIslands();
+
+        // print the island groups
+        int count = 1;
+        foreach(List<int> index in Islands)
+        {
+            string str = "";
+            foreach(int i in index)
+            {
+                str += i.ToString() + " ";
+            }
+            GD.Print("Island #" + count.ToString() + ": " + str);
+            count++;
+        }
+
+
+        // Connect any island rooms with a hallway to the nearest room
+        //ConnectIslandRooms(w_data, h_data, posx_data, posy_data, centroidx_data, centroidy_data);
+    }
+
+    private void ConnectIslands()
+    {
+        int num_islands = Islands.Count;
+        int island1_index = 0;
+        int island2_index = 0;
+
+        // if we only have one island, no need to connect anything
+        if(num_islands == 1)
+        {
+            return;
+        }
+
+        // otherwise, find the shortest distance between rooms of the two islands
+        for (int i = 0; i < num_islands; i++)
+        {
+            float min_dist = 10000000; // choose a huge number
+            List<int> island1 = Islands[i];
+            int island1_room_index = 0;
+            int island2_room_index = 0;
+
+            for (int j = 0; j < num_islands; j++)
+            {
+                // they are the same island, so no need to check
+                if(i == j)
+                {
+                    continue;  
+                }
+
+                // compute the shortest distance between the two islands by checking their rooms
+                List<int> island2 = Islands[j];
+
+                foreach(int index1 in island1)
+                {
+                    foreach(int index2 in island2)
+                    {
+                        float dist = (new Vector2(centroidx_data[index1], centroidy_data[index1])).DistanceTo(new Vector2(centroidx_data[index2], centroidy_data[index2]));
+                        GD.Print("-- distance between room " + index1.ToString() + " and room " + index2.ToString() + " is " + dist.ToString());
+
+                        if(dist < min_dist)
+                        {
+                            island1_room_index = index1;
+                            island2_room_index = index2;
+                            min_dist = dist;
+                        }
+                    }
+                }
+
+                island1_index = island1_room_index;
+                island2_index = island2_room_index;
+
+                GD.Print("shortest distance is from Island " + i.ToString() + " room " + island1_index.ToString() + " to Island " + j.ToString() + " room " + island2_index.ToString() + " is " + min_dist.ToString());
+
+                // now add the room floors to the map that connect these islands
+                AddHallways(island1_index, island2_index);
+
+            }
+        }
+    }
+
+    private void AddHallways(int island1_index, int island2_index)
+    {
+        float deltax = centroidx_data[island2_index] - centroidx_data[island1_index];
+        float deltay = centroidy_data[island2_index] - centroidy_data[island1_index];
+
+        // do the horizontal passage
+        int count_x = 0;
+        if(centroidx_data[island1_index] < centroidx_data[island2_index])
+        {
+            while(centroidx_data[island1_index] + count_x < centroidx_data[island2_index])
+            {
+                // Add a horizontal hallway that is three cells tall
+                room_map[(int)(centroidx_data[island1_index]) + count_x + (int)centroidy_data[island1_index] * total_width] = TileTypes.TITLETYPE_FLOOR;
+                room_map[(int)(centroidx_data[island1_index]) + count_x + (int)(centroidy_data[island1_index] + 1) * total_width] = TileTypes.TITLETYPE_FLOOR;
+                room_map[(int)(centroidx_data[island1_index]) + count_x + (int)(centroidy_data[island1_index] + 2) * total_width] = TileTypes.TITLETYPE_FLOOR;
+
+                count_x++;
+            }
+        }
+
+        count_x--;
+
+        // do the vertical passage
+        int count_y = 0;
+        if(centroidy_data[island1_index] < centroidy_data[island2_index])
+        {
+            while(centroidy_data[island1_index] + count_y < centroidy_data[island2_index])
+            {
+                // Add a vertical hallway that is two cells wide
+                room_map[(int)(centroidx_data[island1_index] + count_x) + (int)(centroidy_data[island1_index] + count_y) * total_width] = TileTypes.TITLETYPE_FLOOR;
+                room_map[(int)((centroidx_data[island1_index] - 1) + count_x) + (int)(centroidy_data[island1_index] + count_y) * total_width] = TileTypes.TITLETYPE_FLOOR;
+
+                count_y++;
+            }
+        }
+    }
+
+    private bool CheckRoomDoesOverlap(int posx1, int posy1, int width_1, int height_1, int posx2, int posy2, int width_2, int height_2)
+    {
+
+        Vector2 a1 = new Vector2(posx1, posy1);
+        Vector2 a2 = new Vector2(posx1 + width_1, posy1);
+        Vector2 a3 = new Vector2(posx1 + width_1, posy1 + height_1);
+        Vector2 a4 = new Vector2(posx1, posy1 + height_1);
+
+        Vector2 b1 = new Vector2(posx2, posy2);
+        Vector2 b2 = new Vector2(posx2 + width_2, posy2);
+        Vector2 b3 = new Vector2(posx2 + width_2, posy2 + height_2);
+        Vector2 b4 = new Vector2(posx2, posy2 + height_2);
+
+        float minX = Math.Min(Math.Min(Math.Min(b1.X, b2.X), b3.X), b4.X);
+        float maxX = Math.Max(Math.Max(Math.Max(b1.X, b2.X), b3.X), b4.X);
+        float minY = Math.Min(Math.Min(Math.Min(b1.Y, b2.Y), b3.Y), b4.Y);
+        float maxY = Math.Max(Math.Max(Math.Max(b1.Y, b2.Y), b3.Y), b4.Y);
+
+        if ((a1.X >= minX) && (a1.X <= maxX) && (a1.Y >= minY) && (a1.Y <= maxY)) return true;
+        if ((a2.X >= minX) && (a2.X <= maxX) && (a2.Y >= minY) && (a2.Y <= maxY)) return true;
+        if ((a3.X >= minX) && (a3.X <= maxX) && (a3.Y >= minY) && (a3.Y <= maxY)) return true;
+        if ((a4.X >= minX) && (a4.X <= maxX) && (a4.Y >= minY) && (a4.Y <= maxY)) return true;
+
+        // otherwise no overlap
+        return false;
+    }
+
+    private bool DoesOverlapIsland(List<int> index_data, int room_index)
+    {
+        for(int i = 0; i < index_data.Count; i++)
+        {
+            int current_index = index_data[i];
+            GD.Print("---- comparing room " + current_index.ToString() + " with room " + room_index.ToString());
+            // don't need to check ourselves
+            if (room_index == current_index)
+            {
+                GD.Print("------ same room, skipping");
+                continue;
+            }
+
+            bool result = false;
+            // check if current contains any points of the room_index room
+            if (CheckRoomDoesOverlap(posx_data[current_index], posy_data[current_index], w_data[current_index], h_data[current_index], posx_data[room_index], posy_data[room_index], w_data[room_index], h_data[room_index]))
+            {
+                GD.Print("------ overlap the current island!");
+                return true;
+            }
+
+            // check if room_index room contains any points of current by switching the indices
+            if (CheckRoomDoesOverlap(posx_data[room_index], posy_data[room_index], w_data[room_index], h_data[room_index], posx_data[current_index], posy_data[current_index], w_data[current_index], h_data[current_index]))
+            {
+                GD.Print("------ overlap the current island!");
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Finds groups of overlapping rooms.
+    /// </summary>
+    /// <param name="island_data"></param>
+    private void FindIslands(List<int> island_data)
+    {
+        if(island_data != null && island_data.Count <= 0)
+        {
+            return;  // we can exit now
+        }
+
+        // first element of the island_data start's the new list
+        List<int> this_islands = new List<int>();
+        List<int> other_islands = island_data;
+
+        this_islands.Add(other_islands[0]);
+        other_islands.RemoveAt(0);
+
+        // check if any elements of "this_island" overlap with "other"
+        bool should_repeat = true;
+        while (should_repeat is true)
+        {
+            GD.Print("starting find islands loop");
+
+            should_repeat = false;
+            for (int i = 0; i < island_data.Count; i++)
+            {
+                int current_index = island_data[i];
+                // does our island already contain this index?  If so, no need to proceed.
+                if (this_islands.Contains(current_index))
+                {
+                    GD.Print("-- index " + current_index + " is already in this island");
+                    continue;
+                }
+
+                if (DoesOverlapIsland(this_islands, current_index))
+                {
+                    // dont need to add since if its already in there
+                    if (this_islands.Contains(current_index) is false)
+                    {
+                        this_islands.Add(current_index);
+                        GD.Print("-- added " + current_index + " to this island");
+                    }
+
+                    // remove the index from the main list
+                    if (other_islands.Contains(current_index))
+                    {
+                        other_islands.Remove(current_index);
+                    }
+
+                    should_repeat = true;
+                    break;
+                }
+            }
+        }
+
+        // add the compiled list to our list of know islands
+        Islands.Add(this_islands);
+
+        // now recursively call on the other
+        FindIslands(other_islands);
     }
 
     /// <summary>
@@ -397,9 +769,9 @@ public partial class AreaProceduralGeneration : Node
     /// <param name="height"></param>
     /// <param name="pos_x"></param>
     /// <param name="pos_y"></param>
-    private void CreateFloorAreas(int width, int height, int pos_x, int pos_y)
+    private void CreateFloorAreas(int width, int height, int pos_x, int pos_y, int index)
     {
-        GD.Print("Creating room:  w: " + width + "  h: " + height + " x: " + pos_x + " y: " + pos_y);
+        GD.Print("Creating room #" + index.ToString() + ":  w: " + width + "  h: " + height + " x: " + pos_x + " y: " + pos_y);
         // create room 1
         for (int j = 0; j < total_height; j++)
         {
