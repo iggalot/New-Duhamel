@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using NewDuhamel.utilities;
 using System;
 using System.Collections.Generic;
 using static Godot.Time;
@@ -248,95 +249,95 @@ public partial class AreaProceduralGeneration : Node
 
 
 
-        //#region Standard data for testing 1
-        // numRooms = 10;
-
-        //// store our room data
-        //w_data = new int[numRooms];
-        //h_data = new int[numRooms];
-        //posx_data = new int[numRooms];
-        //posy_data = new int[numRooms];
-        //centroidx_data = new int[numRooms];  // for storing coordinates near the room center
-        //centroidy_data = new int[numRooms];  // for storing coordinate near the room center
-
-        //w_data[0] = 25;
-        //w_data[1] = 11;
-        //w_data[2] = 17;
-        //w_data[3] = 25;
-        //w_data[4] = 12;
-        //w_data[5] = 22;
-        //w_data[6] = 20;
-        //w_data[7] = 3;
-        //w_data[8] = 3;
-        //w_data[9] = 10;
-
-
-        //h_data[0] = 6;
-        //h_data[1] = 10;
-        //h_data[2] = 9;
-        //h_data[3] = 13;
-        //h_data[4] = 21;
-        //h_data[5] = 12;
-        //h_data[6] = 25;
-        //h_data[7] = 24;
-        //h_data[8] = 5;
-        //h_data[9] = 7;
-
-        //posx_data[0] = 33;
-        //posx_data[1] = 43;
-        //posx_data[2] = 45;
-        //posx_data[3] = 49;
-        //posx_data[4] = 14;
-        //posx_data[5] = 60;
-        //posx_data[6] = 50;
-        //posx_data[7] = 34;
-        //posx_data[8] = 54;
-        //posx_data[9] = 62;
-
-
-        //posy_data[0] = 16;
-        //posy_data[1] = 21;
-        //posy_data[2] = 32;
-        //posy_data[3] = 28;
-        //posy_data[4] = 50;
-        //posy_data[5] = 49;
-        //posy_data[6] = 17;
-        //posy_data[7] = 26;
-        //posy_data[8] = 14;
-        //posy_data[9] = 43;
-
-        //#endregion
-
-
         #region Standard data for testing 1
-        numRooms = 4; // remember to change this value to match the number of rooms in your level
+        numRooms = 10;
 
         // store our room data
         w_data = new int[numRooms];
         h_data = new int[numRooms];
         posx_data = new int[numRooms];
         posy_data = new int[numRooms];
+        centroidx_data = new int[numRooms];  // for storing coordinates near the room center
+        centroidy_data = new int[numRooms];  // for storing coordinate near the room center
+
+        w_data[0] = 25;
+        w_data[1] = 11;
+        w_data[2] = 17;
+        w_data[3] = 25;
+        w_data[4] = 12;
+        w_data[5] = 22;
+        w_data[6] = 20;
+        w_data[7] = 3;
+        w_data[8] = 3;
+        w_data[9] = 10;
 
 
-        w_data[0] = 10;
-        w_data[1] = 10;
-        w_data[2] = 10;
-        w_data[3] = 10;
-
-        h_data[0] = 10;
+        h_data[0] = 6;
         h_data[1] = 10;
-        h_data[2] = 10;
-        h_data[3] = 10;
+        h_data[2] = 9;
+        h_data[3] = 13;
+        h_data[4] = 21;
+        h_data[5] = 12;
+        h_data[6] = 25;
+        h_data[7] = 24;
+        h_data[8] = 5;
+        h_data[9] = 7;
 
-        posx_data[0] = 0;
-        posx_data[1] = 12;
-        posx_data[2] = 7;
-        posx_data[3] = 30;
+        posx_data[0] = 33;
+        posx_data[1] = 43;
+        posx_data[2] = 45;
+        posx_data[3] = 49;
+        posx_data[4] = 14;
+        posx_data[5] = 60;
+        posx_data[6] = 50;
+        posx_data[7] = 34;
+        posx_data[8] = 54;
+        posx_data[9] = 62;
 
-        posy_data[0] = 0;
-        posy_data[1] = 12;
-        posy_data[2] = 7;
-        posy_data[3] = 30;
+
+        posy_data[0] = 16;
+        posy_data[1] = 21;
+        posy_data[2] = 32;
+        posy_data[3] = 28;
+        posy_data[4] = 50;
+        posy_data[5] = 49;
+        posy_data[6] = 17;
+        posy_data[7] = 26;
+        posy_data[8] = 14;
+        posy_data[9] = 43;
+
+        #endregion
+
+
+        #region Standard data for testing 1
+        //numRooms = 4; // remember to change this value to match the number of rooms in your level
+
+        //// store our room data
+        //w_data = new int[numRooms];
+        //h_data = new int[numRooms];
+        //posx_data = new int[numRooms];
+        //posy_data = new int[numRooms];
+
+
+        //w_data[0] = 10;
+        //w_data[1] = 10;
+        //w_data[2] = 10;
+        //w_data[3] = 10;
+
+        //h_data[0] = 10;
+        //h_data[1] = 10;
+        //h_data[2] = 10;
+        //h_data[3] = 10;
+
+        //posx_data[0] = 0;
+        //posx_data[1] = 12;
+        //posx_data[2] = 7;
+        //posx_data[3] = 30;
+
+        //posy_data[0] = 0;
+        //posy_data[1] = 12;
+        //posy_data[2] = 7;
+        //posy_data[3] = 30;
         #endregion
 
         #region Random rooms algorithm
@@ -438,7 +439,7 @@ public partial class AreaProceduralGeneration : Node
         }
         max_y = temp_max_y;
 
-        ComputeCentroids();
+        ComputeRoomCentroids();
 
         //GD.Print("min_x: " + min_x);
         //GD.Print("max_x: " + max_x);
@@ -464,27 +465,28 @@ public partial class AreaProceduralGeneration : Node
         }
 
         // Test connections for rooms and indices
-        ConnectRooms(0, 3);
-        ConnectRooms(1, 3);
-        ConnectRooms(2, 3);
+        //ConnectRooms(0, 3);
+        //ConnectRooms(1, 3);
+        //ConnectRooms(2, 3);
 
-        ConnectRooms(7, 4);
-        ConnectRooms(7, 5);
-
-
-
-        //// add the index numbers to a list to begin the island sort algorithm
-        //List<int> listOfRooms = new List<int>();
-        //for (int i = 0; i < numRooms; i++)
-        //{
-        //    listOfRooms.Add(i);
-        //}
-
-        //FindIslands(listOfRooms);
+        //ConnectRooms(7, 4);
+        //ConnectRooms(7, 5);
 
 
 
-        //ConnectIslands();
+        // Determine the island groups in the map -- lists of island indices are stored in Islands.
+        // add the index numbers to a list to begin the island sort algorithm
+        List<int> listOfRooms = new List<int>();
+        for (int i = 0; i < numRooms; i++)
+        {
+            listOfRooms.Add(i);
+        }
+        FindIslands(listOfRooms);
+
+        FindMSTFromIslands();
+
+
+ //       ConnectIslands();
 
         // print the island groups
         int count = 1;
@@ -506,7 +508,7 @@ public partial class AreaProceduralGeneration : Node
 
 
     // Compute the centroid coordinates of the rooms
-    private void ComputeCentroids()
+    private void ComputeRoomCentroids()
     {
         // create the centroid array
         int num_x = posx_data.Length;
@@ -527,63 +529,99 @@ public partial class AreaProceduralGeneration : Node
     }
 
 
-    private void ConnectIslands()
+    // An algorithm to determine the shortest distances between islands.
+    private void FindMSTFromIslands()
     {
+        //MinSpanningTree mst = new MinSpanningTree();
+
+//        MinSpanningTree.Program.Main(null);
+
         int num_islands = Islands.Count;
-        int island1_index = 0;
-        int island2_index = 0;
+
+        //int island1_index = 0;
+        //int island2_index = 0;
 
         // if we only have one island, no need to connect anything
-        if(num_islands == 1)
+        if (num_islands == 1)
         {
             return;
         }
 
+        // A list to hold all of the edges between our rooms
+        List<MinSpanningTree.Graph.Edge> edges = new List<MinSpanningTree.Graph.Edge>();
+
+        // set to a default values...the algorithm below will determine and resize this
+        MinSpanningTree.Graph graph = new MinSpanningTree.Graph(numRooms, numRooms);
+        int num_edges = 0;
+        int num_vertices = numRooms;  // one vertex per room
+
+
         // otherwise, find the shortest distance between rooms of the two islands
         for (int i = 0; i < num_islands; i++)
         {
-            float min_dist = 10000000; // choose a huge number
-            List<int> island1 = Islands[i];
-            int island1_room_index = 0;
-            int island2_room_index = 0;
+            //    float min_dist = 10000000; // choose a huge number
+            //    List<int> island1 = Islands[i];
+            //    int island1_room_index = 0;
+            //    int island2_room_index = 0;
 
-            for (int j = i; j < num_islands; j++)
+
+            for (int j = i + 1; j < num_islands; j++)
             {
+
+
                 // they are the same island, so no need to check
-                if(i == j)
+                if (i == j)
                 {
-                    continue;  
+                    continue;
                 }
 
-                // compute the shortest distance between the two islands by checking their rooms
+                List<int> island1 = Islands[i];
                 List<int> island2 = Islands[j];
 
-                foreach(int index1 in island1)
+                foreach (int index1 in island1)
                 {
-                    foreach(int index2 in island2)
+                    foreach (int index2 in island2)
                     {
-                        float dist = (new Vector2(centroidx_data[index1], centroidy_data[index1])).DistanceTo(new Vector2(centroidx_data[index2], centroidy_data[index2]));
-                        GD.Print("-- distance between room " + index1.ToString() + " and room " + index2.ToString() + " is " + dist.ToString());
+                        num_edges++;
 
-                        if(dist < min_dist)
-                        {
-                            island1_room_index = index1;
-                            island2_room_index = index2;
-                            min_dist = dist;
-                        }
+                        float dist = (new Vector2(centroidx_data[index1], centroidy_data[index1])).DistanceTo(new Vector2(centroidx_data[index2], centroidy_data[index2]));
+
+                        MinSpanningTree.Graph.Edge edge = new MinSpanningTree.Graph.Edge();
+                        edge.src = index1;
+                        edge.dest = index2;
+                        edge.weight = (int)dist;
+                        edges.Add(edge);
                     }
                 }
-
-                island1_index = island1_room_index;
-                island2_index = island2_room_index;
-
-                GD.Print("shortest distance is from Island " + i.ToString() + " room " + island1_index.ToString() + " to Island " + j.ToString() + " room " + island2_index.ToString() + " is " + min_dist.ToString());
-
-                // now add the room floors to the map that connect these islands
-                ConnectRooms(island1_index, island2_index);
-
             }
+
+            // now construct the graph and load the edges (translate from a list to the format required by the algorithm)
+            graph = new MinSpanningTree.Graph(num_vertices, num_edges);
+
+            // translate to the array form required by the algorithm
+            for (int k = 0; k < edges.Count; k++)
+            {
+                //GD.Print("translating edge " + k.ToString());
+                MinSpanningTree.Graph.Edge temp = edges[k];
+                graph.edge[k].src = temp.src;
+                graph.edge[k].dest = temp.dest;
+                graph.edge[k].weight = temp.weight;
+            }
+
+            //GD.Print("----------------  MST results ----------------");
+            //foreach (MinSpanningTree.Edge edge in mst_edges)
+            //{
+            //    GD.Print(edge.Source + " - " + edge.Destination + " = " + edge.Weight);
+            //}
         }
+
+        // now run the algorithm
+        MinSpanningTree.Graph.Edge[] mst_edges = graph.KruskalMST();
+
+        // We have the minimum spanning tree based on room edges, now convert this to a minimum spanning tree based on our room islands
+
+        // And then verify that each island is connected to the main body in some way -- this ensures connectivity of all regions on our procedural generation
+
     }
 
     /// <summary>
