@@ -8,9 +8,9 @@ public partial class AreaProceduralGeneration : Node
 {
     // Constants for generating rooms in our generator
     private int numRooms = 10;
-    private int minRoomWidth = 3;
+    private int minRoomWidth = 10;
     private int maxRoomWidth = 25;
-    private int minRoomHeight = 3;
+    private int minRoomHeight = 10;
     private int maxRoomHeight = 25;
 
     int[] w_data;
@@ -91,7 +91,9 @@ public partial class AreaProceduralGeneration : Node
 
     }
 
-    // Dictionary of map symbols
+    /// <summary>
+    /// Dictionary of map symbols for displaying a text version of the created map
+    /// </summary>
     Godot.Collections.Dictionary<TileTypes, string> MapSymbols = new Godot.Collections.Dictionary<TileTypes, string>()
     {
         { TileTypes.TITLETYPE_UNDEFINED, "."},
@@ -184,7 +186,7 @@ public partial class AreaProceduralGeneration : Node
 
 
         // Create room area layout and fringe areas and impenetrable border
-        GD.Print("Generating room areas...");
+        GD.Print("Generating room areas and connector hallways...");
         ProceduralMapGenerate();
         PrintMap();
 
@@ -204,18 +206,15 @@ public partial class AreaProceduralGeneration : Node
             reentrant_corner_loop_counter = reentrant_corner_loop_counter_max;
             wall_corner_loop_counter = wall_corner_loop_counter_max;
             fill_extra_loop_counter = fill_extra_loop_counter_max;
-
-            //            PrintMap();
-
         }
 
         GD.Print("Map Generated");
 
+        // Display the map
         PrintMap();
 
-        // Now Render the map to the scene
+        // Now Render the map to the GODOT tilemap layers
         RenderMap();
-
 
         // Set the player spawn location -- find a random tile designated as a floor
         var rng = new RandomNumberGenerator();
@@ -233,10 +232,6 @@ public partial class AreaProceduralGeneration : Node
                 break;
             }
         }
-
-
-
-
     }
 
     public override void _Process(double delta)
@@ -251,123 +246,111 @@ public partial class AreaProceduralGeneration : Node
     {
         var rng = new RandomNumberGenerator();
 
+
+
+        //#region Standard data for testing 1
+        // numRooms = 10;
+
+        //// store our room data
+        //w_data = new int[numRooms];
+        //h_data = new int[numRooms];
+        //posx_data = new int[numRooms];
+        //posy_data = new int[numRooms];
+        //centroidx_data = new int[numRooms];  // for storing coordinates near the room center
+        //centroidy_data = new int[numRooms];  // for storing coordinate near the room center
+
+        //w_data[0] = 25;
+        //w_data[1] = 11;
+        //w_data[2] = 17;
+        //w_data[3] = 25;
+        //w_data[4] = 12;
+        //w_data[5] = 22;
+        //w_data[6] = 20;
+        //w_data[7] = 3;
+        //w_data[8] = 3;
+        //w_data[9] = 10;
+
+
+        //h_data[0] = 6;
+        //h_data[1] = 10;
+        //h_data[2] = 9;
+        //h_data[3] = 13;
+        //h_data[4] = 21;
+        //h_data[5] = 12;
+        //h_data[6] = 25;
+        //h_data[7] = 24;
+        //h_data[8] = 5;
+        //h_data[9] = 7;
+
+        //posx_data[0] = 33;
+        //posx_data[1] = 43;
+        //posx_data[2] = 45;
+        //posx_data[3] = 49;
+        //posx_data[4] = 14;
+        //posx_data[5] = 60;
+        //posx_data[6] = 50;
+        //posx_data[7] = 34;
+        //posx_data[8] = 54;
+        //posx_data[9] = 62;
+
+
+        //posy_data[0] = 16;
+        //posy_data[1] = 21;
+        //posy_data[2] = 32;
+        //posy_data[3] = 28;
+        //posy_data[4] = 50;
+        //posy_data[5] = 49;
+        //posy_data[6] = 17;
+        //posy_data[7] = 26;
+        //posy_data[8] = 14;
+        //posy_data[9] = 43;
+
+        //#endregion
+
+
+        #region Standard data for testing 1
+        numRooms = 4; // remember to change this value to match the number of rooms in your level
+
         // store our room data
         w_data = new int[numRooms];
         h_data = new int[numRooms];
         posx_data = new int[numRooms];
         posy_data = new int[numRooms];
-        centroidx_data = new int[numRooms];  // for storing coordinates near the room center
-        centroidy_data = new int[numRooms];  // for storing coordinate near the room center
 
 
-        #region Standard data for testing 1
-        w_data[0] = 25;
-        w_data[1] = 11;
-        w_data[2] = 17;
-        w_data[3] = 25;
-        w_data[4] = 12;
-        w_data[5] = 22;
-        w_data[6] = 20;
-        w_data[7] = 3;
-        w_data[8] = 3;
-        w_data[9] = 10;
+        w_data[0] = 10;
+        w_data[1] = 10;
+        w_data[2] = 10;
+        w_data[3] = 10;
 
-
-        h_data[0] = 6;
+        h_data[0] = 10;
         h_data[1] = 10;
-        h_data[2] = 9;
-        h_data[3] = 13;
-        h_data[4] = 21;
-        h_data[5] = 12;
-        h_data[6] = 25;
-        h_data[7] = 24;
-        h_data[8] = 5;
-        h_data[9] = 7;
+        h_data[2] = 10;
+        h_data[3] = 10;
 
-        posx_data[0] =33;
-        posx_data[1] = 43;
-        posx_data[2] = 45;
-        posx_data[3] = 49;
-        posx_data[4] = 14;
-        posx_data[5] = 60;
-        posx_data[6] = 50;
-        posx_data[7] = 34;
-        posx_data[8] = 54;
-        posx_data[9] = 62;
+        posx_data[0] = 0;
+        posx_data[1] = 12;
+        posx_data[2] = 7;
+        posx_data[3] = 30;
 
-
-        posy_data[0] = 16;
-        posy_data[1] = 21;
-        posy_data[2] = 32;
-        posy_data[3] = 28;
-        posy_data[4] = 50;
-        posy_data[5] = 49;
-        posy_data[6] = 17;
-        posy_data[7] = 26;
-        posy_data[8] = 14;
-        posy_data[9] = 43;
-
-
-        centroidx_data[0] = posx_data[0] + (w_data[0] / 2);
-        centroidx_data[1] = posx_data[1] + (w_data[1] / 2);
-        centroidx_data[2] = posx_data[2] + (w_data[2] / 2);
-        centroidx_data[3] = posx_data[3] + (w_data[3] / 2);
-        centroidx_data[4] = posx_data[4] + (w_data[4] / 2);
-        centroidx_data[5] = posx_data[5] + (w_data[5] / 2);
-        centroidx_data[6] = posx_data[6] + (w_data[6] / 2);
-        centroidx_data[7] = posx_data[7] + (w_data[7] / 2);
-        centroidx_data[8] = posx_data[8] + (w_data[8] / 2);
-        centroidx_data[9] = posx_data[9] + (w_data[9] / 2);
-
-        centroidy_data[0] = posy_data[0] + (h_data[0] / 2);
-        centroidy_data[1] = posy_data[1] + (h_data[1] / 2);
-        centroidy_data[2] = posy_data[2] + (h_data[2] / 2);
-        centroidy_data[3] = posy_data[3] + (h_data[3] / 2);
-        centroidy_data[4] = posy_data[4] + (h_data[4] / 2);
-        centroidy_data[5] = posy_data[5] + (h_data[5] / 2);
-        centroidy_data[6] = posy_data[6] + (h_data[6] / 2);
-        centroidy_data[7] = posy_data[7] + (h_data[7] / 2);
-        centroidy_data[8] = posy_data[8] + (h_data[8] / 2);
-        centroidy_data[9] = posy_data[9] + (h_data[9] / 2);
-        #endregion
-
-
-        #region Standard data for testing 1
-
-        //w_data[0] = 10;
-        //w_data[1] = 10;
-        //w_data[2] = 10;
-        //w_data[3] = 10;
-
-        //h_data[0] = 10;
-        //h_data[1] = 10;
-        //h_data[2] = 10;
-        //h_data[3] = 10;
-
-        //posx_data[0] = 0;
-        //posx_data[1] = 12;
-        //posx_data[2] = 7;
-        //posx_data[3] = 30;
-
-        //posy_data[0] = 0;
-        //posy_data[1] = 12;
-        //posy_data[2] = 7;
-        //posy_data[3] = 30;
-
-        //centroidx_data[0] = posx_data[0] + (w_data[0] / 2);
-        //centroidx_data[1] = posx_data[1] + (w_data[1] / 2);
-        //centroidx_data[2] = posx_data[2] + (w_data[2] / 2);
-        //centroidx_data[3] = posx_data[3] + (w_data[3] / 2);
-
-        //centroidy_data[0] = posy_data[0] + (h_data[0] / 2);
-        //centroidy_data[1] = posy_data[1] + (h_data[1] / 2);
-        //centroidy_data[2] = posy_data[2] + (h_data[2] / 2);
-        //centroidy_data[3] = posy_data[3] + (h_data[3] / 2);
+        posy_data[0] = 0;
+        posy_data[1] = 12;
+        posy_data[2] = 7;
+        posy_data[3] = 30;
         #endregion
 
         #region Random rooms algorithm
         ///// RANDOMIZE the floor areas
         //// create floor areas borders
+        ///
+        //        // store our room data
+        //w_data = new int[numRooms];
+        //h_data = new int[numRooms];
+        //posx_data = new int[numRooms];
+        //posy_data = new int[numRooms];
+        //centroidx_data = new int[numRooms];  // for storing coordinates near the room center
+        //centroidy_data = new int[numRooms];  // for storing coordinate near the room center
+
         //for (int i = 0; i < numRooms; i++)
         //{
         //    int width = rng.RandiRange(minRoomWidth, maxRoomHeight);
@@ -387,6 +370,8 @@ public partial class AreaProceduralGeneration : Node
         //    //GD.Print("Room (" + i + "):  w: " + width + "  h: " + height + " x: " + pos_x + " y: " + pos_y);
         //}
         #endregion
+
+
 
         // Find the boundaries of our rooms areas
         // find the leftmost point of the areas
@@ -453,6 +438,7 @@ public partial class AreaProceduralGeneration : Node
         }
         max_y = temp_max_y;
 
+        ComputeCentroids();
 
         //GD.Print("min_x: " + min_x);
         //GD.Print("max_x: " + max_x);
@@ -477,16 +463,28 @@ public partial class AreaProceduralGeneration : Node
             CreateFloorAreas(w_data[i], h_data[i], posx_data[i], posy_data[i], i);
         }
 
-        // add the index numbers to a list to begin the island sort algorithm
-        List<int> listOfRooms = new List<int>();
-        for (int i = 0; i < numRooms; i++)
-        {
-            listOfRooms.Add(i);
-        }
+        // Test connections for rooms and indices
+        ConnectRooms(0, 3);
+        ConnectRooms(1, 3);
+        ConnectRooms(2, 3);
 
-        FindIslands(listOfRooms);
+        ConnectRooms(7, 4);
+        ConnectRooms(7, 5);
 
-        ConnectIslands();
+
+
+        //// add the index numbers to a list to begin the island sort algorithm
+        //List<int> listOfRooms = new List<int>();
+        //for (int i = 0; i < numRooms; i++)
+        //{
+        //    listOfRooms.Add(i);
+        //}
+
+        //FindIslands(listOfRooms);
+
+
+
+        //ConnectIslands();
 
         // print the island groups
         int count = 1;
@@ -505,6 +503,29 @@ public partial class AreaProceduralGeneration : Node
         // Connect any island rooms with a hallway to the nearest room
         //ConnectIslandRooms(w_data, h_data, posx_data, posy_data, centroidx_data, centroidy_data);
     }
+
+
+    // Compute the centroid coordinates of the rooms
+    private void ComputeCentroids()
+    {
+        // create the centroid array
+        int num_x = posx_data.Length;
+        int num_y = posy_data.Length;
+
+        centroidx_data = new int[num_x];  // for storing coordinates near the room center
+        centroidy_data = new int[num_y];  // for storing coordinate near the room center
+
+        for (int i = 0; i < num_x; i++)
+        {
+            centroidx_data[i] = posx_data[i] + w_data[i] / 2;
+        }
+
+        for (int i = 0; i < num_y; i++)
+        {
+            centroidy_data[i] = posy_data[i] + h_data[i] / 2;
+        }
+    }
+
 
     private void ConnectIslands()
     {
@@ -526,7 +547,7 @@ public partial class AreaProceduralGeneration : Node
             int island1_room_index = 0;
             int island2_room_index = 0;
 
-            for (int j = 0; j < num_islands; j++)
+            for (int j = i; j < num_islands; j++)
             {
                 // they are the same island, so no need to check
                 if(i == j)
@@ -559,46 +580,55 @@ public partial class AreaProceduralGeneration : Node
                 GD.Print("shortest distance is from Island " + i.ToString() + " room " + island1_index.ToString() + " to Island " + j.ToString() + " room " + island2_index.ToString() + " is " + min_dist.ToString());
 
                 // now add the room floors to the map that connect these islands
-                AddHallways(island1_index, island2_index);
+                ConnectRooms(island1_index, island2_index);
 
             }
         }
     }
 
-    private void AddHallways(int island1_index, int island2_index)
+    /// <summary>
+    /// A functon to add hallways between two room indices.
+    /// </summary>
+    /// <param name="from_room"></param>
+    /// <param name="to_room"></param>
+    private void ConnectRooms(int from_room, int to_room)
     {
-        float deltax = centroidx_data[island2_index] - centroidx_data[island1_index];
-        float deltay = centroidy_data[island2_index] - centroidy_data[island1_index];
-
-        // do the horizontal passage
-        int count_x = 0;
-        if(centroidx_data[island1_index] < centroidx_data[island2_index])
+        GD.Print("In Connect rooms");
+        if(from_room >= centroidx_data.Length || to_room >= centroidx_data.Length || from_room >= centroidy_data.Length || to_room >= centroidy_data.Length)
         {
-            while(centroidx_data[island1_index] + count_x < centroidx_data[island2_index])
-            {
-                // Add a horizontal hallway that is three cells tall
-                room_map[(int)(centroidx_data[island1_index]) + count_x + (int)centroidy_data[island1_index] * total_width] = TileTypes.TITLETYPE_FLOOR;
-                room_map[(int)(centroidx_data[island1_index]) + count_x + (int)(centroidy_data[island1_index] + 1) * total_width] = TileTypes.TITLETYPE_FLOOR;
-                room_map[(int)(centroidx_data[island1_index]) + count_x + (int)(centroidy_data[island1_index] + 2) * total_width] = TileTypes.TITLETYPE_FLOOR;
-
-                count_x++;
-            }
+            GD.Print("-- Error:  In ConnectRooms:  from_room index: " + from_room.ToString() + " or to_room index: " + to_room.ToString() + " out of bounds in centroidx or centroidy arrays -- Skipping connection");
+            return;
         }
 
-        count_x--;
+        GD.Print("-- connecting from room " + from_room.ToString() + " to room " + to_room.ToString() + " --");
 
-        // do the vertical passage
-        int count_y = 0;
-        if(centroidy_data[island1_index] < centroidy_data[island2_index])
+        int from_x = (int)centroidx_data[from_room];
+        int from_y = (int)centroidy_data[from_room];
+
+        int to_x = (int)centroidx_data[to_room];
+        int to_y = (int)centroidy_data[to_room];
+
+        int start_x = (to_x < from_x) ? to_x : from_x;
+        int end_x = (to_x < from_x) ? from_x : to_x;
+        GD.Print("start_x: " + start_x.ToString() + " end_x: " + end_x.ToString());
+
+        int last_x = start_x;
+        // do the horizontal passage
+        for(int x = start_x; x <= end_x; x++)
         {
-            while(centroidy_data[island1_index] + count_y < centroidy_data[island2_index])
-            {
-                // Add a vertical hallway that is two cells wide
-                room_map[(int)(centroidx_data[island1_index] + count_x) + (int)(centroidy_data[island1_index] + count_y) * total_width] = TileTypes.TITLETYPE_FLOOR;
-                room_map[(int)((centroidx_data[island1_index] - 1) + count_x) + (int)(centroidy_data[island1_index] + count_y) * total_width] = TileTypes.TITLETYPE_FLOOR;
+            room_map[x + (from_y + 0) * total_width] = TileTypes.TITLETYPE_FLOOR;
+            room_map[x + (from_y + 1) * total_width] = TileTypes.TITLETYPE_FLOOR;
+            room_map[x + (from_y + 2) * total_width] = TileTypes.TITLETYPE_FLOOR;
+            last_x = x;
+        }
 
-                count_y++;
-            }
+        int start_y = (to_y < from_y) ? to_y : from_y;
+        int end_y = (to_y < from_y) ? from_y : to_y;
+
+        for (int y = start_y; y <= end_y; y++)
+        {
+            room_map[end_x + y * total_width] = TileTypes.TITLETYPE_FLOOR;
+            room_map[end_x + 1 + y * total_width] = TileTypes.TITLETYPE_FLOOR;
         }
     }
 

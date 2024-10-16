@@ -10,6 +10,7 @@ res://levels/Area00/00.tscn
 res://levels/Area01/01.tscn
 res://scenes/ui/player_hud.tscn
 res://levels/AreaProcedural/area_procedural.tscn
+res://levels/TileMapPlayground/playground.tscn
 res://enemies/scripts/states/MonsterFleeState.cs
 res://enemies/scripts/states/MonsterIdleState.cs
 res://scripts/interfaces/Pickable.cs
@@ -84,4 +85,3 @@ res://general_nodes/persistent_data_handler/PersistentDataHandler.cs
 res://scripts/interfaces/Interactable.cs
 res://items/item_effects/ItemEffect.cs
 res://utilities/Utilities.cs
-res://levels/TileMapPlayground/playground.tscn
