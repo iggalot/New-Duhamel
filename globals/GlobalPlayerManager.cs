@@ -52,10 +52,10 @@ public partial class GlobalPlayerManager : Node
         SetActiveSpell(new_spell);
 
         // subscribe to the element changed event in the element selector
-        var element_selector = playerHud.GetNode<ElementSelector>("VBoxContainer") as ElementSelector;
-        element_selector.ElementSelectorLoaded += OnElementSelectorLoaded;
-        //GD.Print("GPM: Connecting to OnElementSelectorLoaded for first time...");
-        OnElementSelectorLoaded(element_selector);
+//        var element_selector = playerHud.GetNode<ElementSelector>("VBoxContainer") as ElementSelector;
+//        element_selector.ElementSelectorLoaded += OnElementSelectorLoaded;
+//        //GD.Print("GPM: Connecting to OnElementSelectorLoaded for first time...");
+//        OnElementSelectorLoaded(element_selector);
     }
 
     private void OnElementSelectorLoaded(ElementSelector element_selector)

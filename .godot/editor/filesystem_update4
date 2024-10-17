@@ -85,3 +85,5 @@ res://general_nodes/persistent_data_handler/PersistentDataHandler.cs
 res://scripts/interfaces/Interactable.cs
 res://items/item_effects/ItemEffect.cs
 res://utilities/Utilities.cs
+res://props/torches/torch1.tscn
+res://props/torches/fire_light.cs

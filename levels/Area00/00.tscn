@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://di8f5mdx72br1"]
+[gd_scene load_steps=34 format=4 uid="uid://di8f5mdx72br1"]
 
 [ext_resource type="Texture2D" uid="uid://byq1wt0drml5y" path="res://resources/graphics/Dungeon_Tileset.png" id="1_dc8fm"]
 [ext_resource type="Script" path="res://levels/scripts/Level.cs" id="1_f66at"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://csfjpehfksl0v" path="res://general_nodes/enemy_counter/enemy_counter.tscn" id="21_ng4oj"]
 [ext_resource type="PackedScene" uid="uid://i3n7xxy4ma06" path="res://enemies/_boss2/monster_controller_boss2.tscn" id="24_5vd6y"]
 [ext_resource type="PackedScene" uid="uid://bmsskt6riwlxf" path="res://spells/base_spell_controller.tscn" id="25_342gl"]
+[ext_resource type="PackedScene" uid="uid://cxntyc7ux8qjv" path="res://props/torches/torch1.tscn" id="26_ft6p1"]
 [ext_resource type="PackedScene" uid="uid://bvql6ho6fkha2" path="res://enemies/_basic_mob/monster_controller.tscn" id="26_pqmyg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsq5f"]
@@ -216,7 +217,7 @@ scale = Vector2(0.632162, 0.486654)
 energy = 2.0
 shadow_enabled = true
 texture = ExtResource("2_hjhl1")
-texture_scale = 3.0
+texture_scale = 1.5
 
 [node name="Sprite2D" type="Sprite2D" parent="Lights/PointLight2D"]
 scale = Vector2(0.1, 0.1)
@@ -305,6 +306,10 @@ position = Vector2(845, 252)
 
 [node name="MonsterController4" parent="." instance=ExtResource("26_pqmyg")]
 position = Vector2(819, 129)
+
+[node name="Torch" parent="." instance=ExtResource("26_ft6p1")]
+z_index = 1
+position = Vector2(773, 11)
 
 [connection signal="Activated" from="PressurePlate" to="BarredDoor" method="OnOpenDoor"]
 [connection signal="Deactivated" from="PressurePlate" to="BarredDoor" method="OnCloseDoor"]

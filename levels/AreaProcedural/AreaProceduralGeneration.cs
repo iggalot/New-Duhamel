@@ -607,19 +607,14 @@ public partial class AreaProceduralGeneration : Node
                 graph.edge[k].dest = temp.dest;
                 graph.edge[k].weight = temp.weight;
             }
-
-            //GD.Print("----------------  MST results ----------------");
-            //foreach (MinSpanningTree.Edge edge in mst_edges)
-            //{
-            //    GD.Print(edge.Source + " - " + edge.Destination + " = " + edge.Weight);
-            //}
         }
 
         // now run the algorithm
         MinSpanningTree.Graph.Edge[] mst_edges = graph.KruskalMST();
 
         // We have the minimum spanning tree based on room edges, now convert this to a minimum spanning tree based on our room islands
-
+        int isle_count = Islands.Count;
+        
         // And then verify that each island is connected to the main body in some way -- this ensures connectivity of all regions on our procedural generation
 
     }

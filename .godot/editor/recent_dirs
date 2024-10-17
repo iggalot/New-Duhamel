@@ -1,3 +1,4 @@
+res://props/torches
 res://levels/AreaProcedural
 res://levels/Area00
 res://scenes
@@ -19,4 +20,3 @@ res://scenes/ui
 res://resources/graphics
 res://scripts/states
 res://scripts/ui/inventory
-res://resources/fonts/kirifont
