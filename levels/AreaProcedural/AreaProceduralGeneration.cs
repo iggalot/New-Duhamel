@@ -151,6 +151,9 @@ public partial class AreaProceduralGeneration : Node
     TileMapLayer walls;
     PlayerSpawn playerSpawn;
 
+    PackedScene torch_scene { get; set; }
+    String torch_scene_path = "res://props/torches/torch1.tscn";
+
     TileTypes[] room_map;
 
     // Remember to change the TML layer TileSize parameter in the GODOT inspector
@@ -179,6 +182,8 @@ public partial class AreaProceduralGeneration : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        torch_scene = GD.Load<PackedScene>(torch_scene_path);
+
         floors = GetNode<TileMapLayer>("TML_Floors");
         walls = GetNode<TileMapLayer>("TML_Walls");
         playerSpawn = GetNode<PlayerSpawn>("PlayerSpawn");
@@ -232,6 +237,136 @@ public partial class AreaProceduralGeneration : Node
                 playerSpawn.Position = new Vector2(rand_x * tile_size, rand_y * tile_size);
                 break;
             }
+        }
+
+        AddLighting();
+    }
+
+    private void AddLighting()
+    {
+        float min_torch_spacing = 175.0f;
+        List<Node2D> torches = new List<Node2D>();
+
+        for (int j = 0; j < total_height; j++)
+        {
+            for (int i = 0; i < total_width; i++)
+            {
+                if (IsFloorTile(i, j))
+                {
+                    if (!IsFloorTile(i, j - 1))
+                    {
+                        var rng = new RandomNumberGenerator();
+                        if(rng.RandfRange(0,1) > 0.15f)
+                        {
+                            Node2D child = torch_scene.Instantiate() as Node2D;
+                            child.Position = new Vector2(i * tile_size, j * tile_size);
+
+                            bool is_too_close = false;
+                            foreach(var torch in torches)
+                            {
+                                if(torch.Position.DistanceTo(child.Position) < min_torch_spacing)
+                                {
+                                    is_too_close = true;
+                                    break;
+                                }
+                            }
+
+                            if(is_too_close is false)
+                            {
+                                torches.Add(child);
+                            }
+                        }
+                        continue;
+                    }
+
+                    if (!IsFloorTile(i, j + 1))
+                    {
+                        var rng = new RandomNumberGenerator();
+                        if (rng.RandfRange(0, 1) > 0.05f)
+                        {
+                            Node2D child = torch_scene.Instantiate() as Node2D;
+                            child.Position = new Vector2(i * tile_size, (j+1) * tile_size + 4);
+                            child.ZIndex = 0;
+
+                            bool is_too_close = false;
+                            foreach (var torch in torches)
+                            {
+                                if (torch.Position.DistanceTo(child.Position) < min_torch_spacing)
+                                {
+                                    is_too_close = true;
+                                    break;
+                                }
+                            }
+
+                            if (is_too_close is false)
+                            {
+                                torches.Add(child);
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    if (!IsFloorTile(i - 1, j))
+                    {
+                        var rng = new RandomNumberGenerator();
+                        if (rng.RandfRange(0, 1) > 0.05f)
+                        {
+                            Node2D child = torch_scene.Instantiate() as Node2D;
+                            child.Position = new Vector2(i * tile_size + 4, j * tile_size);
+
+                            bool is_too_close = false;
+                            foreach (var torch in torches)
+                            {
+                                if (torch.Position.DistanceTo(child.Position) < min_torch_spacing)
+                                {
+                                    is_too_close = true;
+                                    break;
+                                }
+                            }
+
+                            if (is_too_close is false)
+                            {
+                                torches.Add(child);
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    if (!IsFloorTile(i + 1, j))
+                    {
+                        var rng = new RandomNumberGenerator();
+                        if (rng.RandfRange(0, 1) > 0.05f)
+                        {
+                            Node2D child = torch_scene.Instantiate() as Node2D;
+                            child.Position = new Vector2((i + 1) * tile_size - 4, j * tile_size);
+
+                            bool is_too_close = false;
+                            foreach (var torch in torches)
+                            {
+                                if (torch.Position.DistanceTo(child.Position) < min_torch_spacing)
+                                {
+                                    is_too_close = true;
+                                    break;
+                                }
+                            }
+
+                            if (is_too_close is false)
+                            {
+                                torches.Add(child);
+                            }
+                        }
+
+                        continue;
+                    }
+                }
+            }
+        }
+
+        foreach(var torch in torches)
+        {
+            AddChild(torch);
         }
     }
 
@@ -469,8 +604,11 @@ public partial class AreaProceduralGeneration : Node
         //ConnectRooms(1, 3);
         //ConnectRooms(2, 3);
 
-        //ConnectRooms(7, 4);
-        //ConnectRooms(7, 5);
+        ConnectRooms(4, 5);
+        ConnectRooms(7, 4);
+        ConnectRooms(7, 3);
+        ConnectRooms(7, 0);
+        ConnectRooms(6, 9);
 
 
 

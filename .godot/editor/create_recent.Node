@@ -1,3 +1,5 @@
+ColorRect
+CanvasLayer
 TileMapLayer
 DirectionalLight2D
 PointLight2D
@@ -11,4 +13,3 @@ MeshInstance2D
 AnimationPlayer
 Sprite2D
 Node
-TextureRect

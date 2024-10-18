@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxntyc7ux8qjv"]
+[gd_scene load_steps=7 format=3 uid="uid://cxntyc7ux8qjv"]
 
 [ext_resource type="Texture2D" uid="uid://ei667r4b0lv8" path="res://resources/graphics/light.png" id="1_eh7nu"]
 [ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="1_ywdm0"]
+[ext_resource type="Script" path="res://props/torches/fire_light.cs" id="3_g31bo"]
 
 [sub_resource type="Gradient" id="Gradient_5t138"]
 offsets = PackedFloat32Array(0, 0.747967, 0.987805)
@@ -26,7 +27,8 @@ scale_max = 2.25
 color_ramp = SubResource("GradientTexture1D_nirc4")
 
 [node name="Torch" type="Node2D"]
-z_index = -1
+z_index = 2
+script = ExtResource("3_g31bo")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.07, 0.07)
