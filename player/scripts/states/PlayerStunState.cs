@@ -80,7 +80,7 @@ public partial class PlayerStunState : State
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        GD.Print("player is stunned -- " + (decelerateSpeed * delta).ToString() );
+        //GD.Print("player is stunned -- " + (decelerateSpeed * delta).ToString() );
         controllerOwner.Velocity -= controllerOwner.Velocity * (float)(decelerateSpeed * delta );
         return nextState;
     }

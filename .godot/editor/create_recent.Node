@@ -1,3 +1,7 @@
+CollisionShape2D
+Node
+CharacterBody2D
+Sprite2D
 ColorRect
 CanvasLayer
 TileMapLayer
@@ -8,8 +12,3 @@ Node2D
 Camera3D
 OmniLight3D
 MeshInstance3D
-Node3D
-MeshInstance2D
-AnimationPlayer
-Sprite2D
-Node

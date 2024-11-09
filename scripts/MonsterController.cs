@@ -14,6 +14,7 @@ public partial class MonsterController : CharacterBody2D
 
     PackedScene monsterScene;
     private static string monsterScenePath = "res://scenes/monster_controller.tscn";
+    private static string rangeAttackScenePath = "res://enemies/scripts/abilities/range_attack/range_attack.tscn";
 
     // the state machine for this monster -- requires state node defintions (if other than the default set).
     private PlayerController player; // store the reference to the player in the scene tree
@@ -36,6 +37,7 @@ public partial class MonsterController : CharacterBody2D
     public Sprite2D sprite;
     public HitBox hitBox;
     public SpellHitBox spellHitBox;
+    public Node abilities;
 
     private const float default_speed = 100.0f;
     private float friction = 0.25f;
@@ -75,6 +77,10 @@ public partial class MonsterController : CharacterBody2D
 
     [Export] public bool ShouldFlee { get; set; } = false;
 
+    bool CanRangeAttack { get; set; } = false;
+    float rangeAttackTimer { get; set; } = 2.0f;
+    float rangeAttackTimerMax { get; set; } = 2.0f;
+
     public override void _Input(InputEvent @event)
     {
         if (Input.IsActionJustPressed("monster_alert"))
@@ -93,7 +99,16 @@ public partial class MonsterController : CharacterBody2D
         sprite = GetNode<Sprite2D>("Sprite2D");
         hitBox = GetNode<HitBox>("HitBox");
         spellHitBox = GetNode<SpellHitBox>("SpellHitBox");
+        abilities = GetNode<Node>("Abilities");
 
+        foreach (var Child in abilities.GetChildren())
+        {
+            if(Child is RangeAttack)
+            {
+                CanRangeAttack = true;
+                break;
+            }
+        }
 
         // set our Godot node and then intialize the state machine with this as the owner.
         stateMachine = GetNode<StateMachine>("StateMachine");
@@ -128,6 +143,22 @@ public partial class MonsterController : CharacterBody2D
 
         // set up the collision layers and masks
         SetCollisionLayerAndMasks();
+    }
+
+    public override void _Process(double delta)
+    {
+        if (CanRangeAttack)
+        {
+            rangeAttackTimer -= (float)delta;
+
+            if (rangeAttackTimer <= 0.0f)
+            {
+                rangeAttackTimer = rangeAttackTimerMax;
+                PackedScene range_scene = GD.Load<PackedScene>(rangeAttackScenePath);
+                RangeAttack node = range_scene.Instantiate<RangeAttack>();
+                abilities.AddChild(node);
+            }
+        }
     }
 
     public override void _PhysicsProcess(double delta)

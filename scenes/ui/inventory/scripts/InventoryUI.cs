@@ -80,7 +80,7 @@ public partial class InventoryUI : Control
 
     public override void _UnhandledInput(InputEvent this_event)
     {
-        GD.Print("trying to use inventory item");
+        //GD.Print("trying to use inventory item");
         // an action for the gamepad controller to use an inventory item
         if (this_event.IsActionPressed("use_inventory_item"))
         {

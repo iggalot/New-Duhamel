@@ -88,6 +88,7 @@ public partial class PlayerIdleState : State
         if (input_event.IsActionPressed("interact"))
         {
             // emit our global player interaction signal
+            GD.Print("interacting from idle state");
             GlobalPlayerManager.Instance.EmitInteractPressedSignal();
         }
 
