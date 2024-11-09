@@ -250,9 +250,6 @@ level = "res://levels/Area01/01.tscn"
 size = 4
 side = 1
 
-[node name="Boss2" parent="." instance=ExtResource("24_5vd6y")]
-position = Vector2(585, -159)
-
 [node name="Boss1" parent="." instance=ExtResource("18_b5r4g")]
 position = Vector2(254, -236)
 
@@ -310,6 +307,9 @@ position = Vector2(819, 129)
 [node name="Torch" parent="." instance=ExtResource("26_ft6p1")]
 z_index = 1
 position = Vector2(773, 11)
+
+[node name="Boss2" parent="." instance=ExtResource("24_5vd6y")]
+position = Vector2(726, -209)
 
 [connection signal="Activated" from="PressurePlate" to="BarredDoor" method="OnOpenDoor"]
 [connection signal="Deactivated" from="PressurePlate" to="BarredDoor" method="OnCloseDoor"]

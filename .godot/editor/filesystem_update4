@@ -93,3 +93,5 @@ res://enemies/scripts/abilities/range_attack/RangeAttack.cs
 res://enemies/_boss2/monster_controller_boss2.tscn
 res://enemies/_basic_mob/monster_controller.tscn
 res://enemies/_boss1/monster_controller_boss1.tscn
+res://enemies/scripts/abilities/detonation_attack/DetonationAttack.cs
+res://enemies/scripts/abilities/detonation_attack/detonation_attack.tscn

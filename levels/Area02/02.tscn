@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ctv8m3ld3irys" path="res://scenes/item_controller.tscn" id="5_atst8"]
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="6_odl4g"]
 [ext_resource type="PackedScene" uid="uid://bpqiml3cwfeh6" path="res://levels/level_transition.tscn" id="7_aoju6"]
-[ext_resource type="PackedScene" uid="uid://bvql6ho6fkha2" path="res://enemies/_basic_mob/monster_controller.tscn" id="7_vl28b"]
+[ext_resource type="PackedScene" uid="uid://i3n7xxy4ma06" path="res://enemies/_boss2/monster_controller_boss2.tscn" id="7_fq8qw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3hvvb"]
 texture = ExtResource("2_ptiub")
@@ -134,7 +134,7 @@ position = Vector2(179, 99)
 position = Vector2(261, 285)
 
 [node name="PlayerSpawn" parent="." instance=ExtResource("6_odl4g")]
-position = Vector2(579, 372)
+position = Vector2(368, 90)
 
 [node name="LevelTransition" parent="." instance=ExtResource("7_aoju6")]
 position = Vector2(368, 64)
@@ -142,8 +142,5 @@ level = "res://levels/Area00/00.tscn"
 size = 4
 side = 2
 
-[node name="MonsterController" parent="." instance=ExtResource("7_vl28b")]
-position = Vector2(408, 234)
-
-[node name="MonsterController2" parent="." instance=ExtResource("7_vl28b")]
-position = Vector2(607, 150)
+[node name="MonsterController" parent="." instance=ExtResource("7_fq8qw")]
+position = Vector2(636, 356)

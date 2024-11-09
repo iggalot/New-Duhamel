@@ -1,8 +1,9 @@
-[gd_scene load_steps=83 format=3 uid="uid://byyjaay07k25i"]
+[gd_scene load_steps=84 format=3 uid="uid://byyjaay07k25i"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_de4jf"]
 [ext_resource type="PackedScene" uid="uid://bwhr62mwukbtq" path="res://enemies/scripts/abilities/range_attack/range_attack.tscn" id="2_atwe0"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="2_n8ptp"]
+[ext_resource type="PackedScene" uid="uid://blg04p03hp3io" path="res://enemies/scripts/abilities/detonation_attack/detonation_attack.tscn" id="3_7ob7e"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="3_vvmyy"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="4_ug065"]
 [ext_resource type="Texture2D" uid="uid://imm8d47rqvpy" path="res://resources/graphics/enemies/64x64_boss1.png" id="5_10edv"]
@@ -1151,6 +1152,8 @@ script = ExtResource("1_de4jf")
 [node name="Abilities" type="Node" parent="."]
 
 [node name="RangeAttack" parent="Abilities" instance=ExtResource("2_atwe0")]
+
+[node name="DetonationAttack" parent="Abilities" instance=ExtResource("3_7ob7e")]
 
 [node name="VisionArea" parent="." instance=ExtResource("25_jffmq")]
 

@@ -81,6 +81,10 @@ public partial class MonsterController : CharacterBody2D
     float rangeAttackTimer { get; set; } = 2.0f;
     float rangeAttackTimerMax { get; set; } = 2.0f;
 
+    bool CanDetonate { get; set; } = false;
+    float detonateTimer { get; set; } = 2.0f;
+    float detonateTimerMax { get; set; } = 2.0f;
+
     public override void _Input(InputEvent @event)
     {
         if (Input.IsActionJustPressed("monster_alert"))
@@ -103,11 +107,16 @@ public partial class MonsterController : CharacterBody2D
 
         foreach (var Child in abilities.GetChildren())
         {
-            if(Child is RangeAttack)
+            if (Child is RangeAttack)
             {
                 CanRangeAttack = true;
-                break;
             }
+
+            if (Child is DetonationAttack)
+            {
+                CanDetonate = true;
+            }
+
         }
 
         // set our Godot node and then intialize the state machine with this as the owner.
