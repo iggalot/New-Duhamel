@@ -246,10 +246,11 @@ public partial class AreaProceduralGeneration : Node
 
         AddLighting();
 
-        int spawn_edge_clear = 6;
-        PlaceMonsters(spawn_edge_clear);
+        eligible_spawn_map = CreateEligibleSpawnMap(0);   //need to create an initial eligible spawn map from the room map.
+        PlaceMonsters();
         GD.Print("Spawnable Map Area");
         PrintBoolMap(eligible_spawn_map);
+
     }
 
     /// <summary>
@@ -298,27 +299,40 @@ public partial class AreaProceduralGeneration : Node
         }
         return true;
     }
-    /// <summary>
-    /// Algorithm to place monsters within our map
-    /// </summary>
-    /// <param name="n">Number of floor cells around a cell to be eligible for monster placement</param>
-    private void PlaceMonsters(int n)
+
+    private bool[] CreateEligibleSpawnMap(int buffer_width = 0)
     {
+        bool[] eligible_map = new bool[total_width * total_height];
+
         // find the eligible floor tile cells with at least 'n' floor cell border around the map.
         for (int j = 0; j < total_height; j++)
         {
             for (int i = 0; i < total_width; i++)
             {
-                if(IsEligibleForSpawn(i, j, n))
+                if (IsEligibleForSpawn(i, j, buffer_width))
                 {
-                    eligible_spawn_map[j * total_width + i] = true;
+                    eligible_map[j * total_width + i] = true;
                 }
             }
         }
 
+        return eligible_map;
+    }
+
+    /// <summary>
+    /// Algorithm to place monsters within our map
+    /// </summary>
+    /// <param name="n">Number of floor cells around a cell to be eligible for monster placement</param>
+    private void PlaceMonsters()
+    {
+        int boss_border_tile_buffer = 3;
+
+        // create our eligibility map -- for bosses give a three tile buffer
+        eligible_spawn_map = CreateEligibleSpawnMap(3);
         /// Spawn the boss mobs
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 50; i++)
         {
+            //GD.Print("- boss1 spawning #: " + i.ToString()); ;
 
             //Get eligible positions for boss
             RandomNumberGenerator rnd = new RandomNumberGenerator();
@@ -327,51 +341,46 @@ public partial class AreaProceduralGeneration : Node
             int boss_spawn_count = 0;
             int boss_spawn_count_max = 50;
 
-            // instantiate the boss monster
-            string boss1_scene_path = "res://enemies/_boss1/monster_controller_boss1.tscn";
-            PackedScene boss1_scene = ResourceLoader.Load<PackedScene>(boss1_scene_path);
-            MonsterController boss1 = boss1_scene.Instantiate() as MonsterController;
-            monsters.AddChild(boss1);
-            boss1.char_data.SpawnTileBorderBuffer = 3;  /// set a large value for boss monsters
-
-            while (eligible_spawn_map[boss_spawn_index_y * total_width + boss_spawn_index_x] == false)
+            bool should_repeat = true;
+            while(should_repeat)
             {
                 if (boss_spawn_count > boss_spawn_count_max)
                 {
-                    GD.Print("-- Unable to spawn boss1.  Max attempts reached.");
-                    boss1.QueueFree(); // delete it from the scene since it's not legitimately spawned
-                    break;
+                    //GD.Print("---- Unable to spawn boss1.  Max attempts reached.");
+                    should_repeat = false;
+                    continue; ;
                 }
 
                 // Is the cell eligible as a spawn point?
-                if (IsEligibleForSpawn(boss_spawn_index_x, boss_spawn_index_y, boss1.char_data.SpawnTileBorderBuffer) == false)
+                if (IsEligibleForSpawn(boss_spawn_index_x, boss_spawn_index_y, boss_border_tile_buffer) == false)
                 {
+                    //GD.Print("-- ineligible spawn location at " + boss_spawn_index_x + " , " + boss_spawn_index_y);
                     // try again
                     boss_spawn_index_x = rnd.RandiRange(0, total_width - 1);
                     boss_spawn_index_y = rnd.RandiRange(0, total_height - 1);
                     boss_spawn_count++; // increment boss spawn count
                     continue;
-
                 }
-                else
-                {
-                    if(IsFloorTile(boss_spawn_index_x, boss_spawn_index_y) == false)
-                    {
-                        boss1.QueueFree();
-                        GD.Print("--Invalid Spawn location");
-                    }
-                    boss1.Position = new Vector2(boss_spawn_index_x * tile_size, boss_spawn_index_y * tile_size);
-                    boss1.char_data.PositionIsSet = true;   // indicate that we have set the position...so that attacks can be used
+                
+                //GD.Print("---- spawning boss at " + boss_spawn_index_x + " , " + boss_spawn_index_y);
 
-                    // update the eligible rooms for spawning
-                    RemoveEligibleSpawnFromMap(boss_spawn_index_x, boss_spawn_index_y, boss1.char_data.SpawnTileBorderBuffer);
+                // instantiate the boss monster
+                string boss1_scene_path = "res://enemies/_boss1/monster_controller_boss1.tscn";
+                PackedScene boss1_scene = ResourceLoader.Load<PackedScene>(boss1_scene_path);
+                MonsterController boss1 = boss1_scene.Instantiate() as MonsterController;
+                monsters.AddChild(boss1);
+                boss1.char_data.SpawnTileBorderBuffer = boss_border_tile_buffer;  /// set a large value for boss monsters
+                        
+                boss1.Position = new Vector2(boss_spawn_index_x * tile_size, boss_spawn_index_y * tile_size);
+                boss1.char_data.PositionIsSet = true;   // indicate that we have set the position...so that attacks can be used
 
-                    break;
-                }
+                // update the eligible rooms for spawning
+                RemoveEligibleSpawnFromMap(boss_spawn_index_x, boss_spawn_index_y, boss1.char_data.SpawnTileBorderBuffer);
+                should_repeat = false;  // we are loaded and set so continue to next mob
             }
+            //GD.Print("- boss1 #" + i.ToString() + "loading complete");
         }
 
-        // remove boss monster spawn point and a size border from the eligible spawn map
 
         // place lesser monsters in eligible cells
     }
