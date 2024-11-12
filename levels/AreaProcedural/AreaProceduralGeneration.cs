@@ -1,9 +1,7 @@
 using Godot;
-using Godot.Collections;
 using NewDuhamel.utilities;
 using System;
 using System.Collections.Generic;
-using static Godot.Time;
 
 public partial class AreaProceduralGeneration : Node
 {
@@ -154,11 +152,13 @@ public partial class AreaProceduralGeneration : Node
     PackedScene torch_scene { get; set; }
     String torch_scene_path = "res://props/torches/torch1.tscn";
 
+    // Maps needed for procedural generation
     TileTypes[] room_map;
+    bool[] eligible_spawn_map;
 
     // Remember to change the TML layer TileSize parameter in the GODOT inspector
     //int tile_size = 16; // for the purple dungeon tileset
-    int tile_size = 32; // for the custon Duhamel ungeon tileset
+    int tile_size = 32; // for the custon Duhamel dungeon tileset
 
     // number of dead cells beyond room walls -- includes impenetrable width amount
     // need to make sure it's at least 1 more than impenetrable border so we can fit the wall tiles
@@ -194,7 +194,7 @@ public partial class AreaProceduralGeneration : Node
         // Create room area layout and fringe areas and impenetrable border
         GD.Print("Generating room areas and connector hallways...");
         ProceduralMapGenerate();
-        PrintMap();
+        PrintTileMapMap(room_map);
 
         GD.Print("Adding map border...");
         AddMapBorder();
@@ -217,7 +217,7 @@ public partial class AreaProceduralGeneration : Node
         GD.Print("Map Generated");
 
         // Display the map
-        PrintMap();
+        PrintTileMapMap(room_map);
 
         // Now Render the map to the GODOT tilemap layers
         RenderMap();
@@ -230,16 +230,63 @@ public partial class AreaProceduralGeneration : Node
             var rand_y = rng.RandiRange(0, total_height - 1);
             if (room_map[rand_y * total_width + rand_x] == TileTypes.TITLETYPE_FLOOR)
             {
-                // set the player
-                GlobalPlayerManager.Instance.player.GlobalPosition = new Vector2(rand_x * tile_size, rand_y * tile_size);
+                if(IsEligibleForSpawn(rand_x, rand_y, 1) == true)
+                {
+                    // set the player
+                    GlobalPlayerManager.Instance.player.GlobalPosition = new Vector2(rand_x * tile_size, rand_y * tile_size);
 
-                // set the player spawn -- for future reloads
-                playerSpawn.Position = new Vector2(rand_x * tile_size, rand_y * tile_size);
-                break;
+                    // set the player spawn -- for future reloads
+                    playerSpawn.Position = new Vector2(rand_x * tile_size, rand_y * tile_size);
+                    break;
+                }
             }
         }
 
         AddLighting();
+
+        int spawn_edge_clear = 6;
+        PlaceMonsters(spawn_edge_clear);
+        GD.Print("Spawnable Map Area");
+        PrintBoolMap(eligible_spawn_map);
+    }
+
+    /// <summary>
+    /// Algorithm to determine if a cell is eligible for object placement placement
+    /// </summary>
+    /// <param name="x">x-position of spawn point</param>
+    /// <param name="y">y-position of spawn point</param>
+    /// <param name="n">border required around a cell to be eligible for spawn -- for larger items</param>
+    private bool IsEligibleForSpawn(int x, int y, int n)
+    {
+        for (int i = -n; i <= n; i++)
+        {
+            for (int j = -n; j <= n; j++)
+            {
+                if (IsFloorTile(x + i, y + j) == false)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    /// <summary>
+    /// Algorithm to place monsters within our map
+    /// </summary>
+    /// <param name="n">Number of floor cells around a cell to be eligible for monster placement</param>
+    private void PlaceMonsters(int n)
+    {
+        // find room cells with at least 'n' floor cell border around the map.
+        for (int j = 0; j < total_height; j++)
+        {
+            for (int i = 0; i < total_width; i++)
+            {
+                if(IsEligibleForSpawn(i, j, n))
+                {
+                    eligible_spawn_map[j * total_width + i] = true;
+                }
+            }
+        }
     }
 
     private void AddLighting()
@@ -381,9 +428,7 @@ public partial class AreaProceduralGeneration : Node
     public void ProceduralMapGenerate()
     {
         var rng = new RandomNumberGenerator();
-
-
-
+        
         #region Standard data for testing 1
         numRooms = 10;
 
@@ -587,6 +632,7 @@ public partial class AreaProceduralGeneration : Node
         //GD.Print("total_map_height: " + total_height);
 
         // Set all cells to undefined type
+        eligible_spawn_map = new bool[total_width * total_height];
         room_map = new TileTypes[total_width * total_height];
         for (int i = 0; i < total_width * total_height; i++)
         {
@@ -948,15 +994,38 @@ public partial class AreaProceduralGeneration : Node
     /// <summary>
     /// Prints an ascii representation of the map based on the map symbol dictionary
     /// </summary>
-    private void PrintMap()
+    private void PrintTileMapMap(TileTypes[] map)
     {
         for (int j = 0; j < total_height; j++)
         {
             string str = "";
             for (int i = 0; i < total_width; i++)
             {
-                var val = room_map[j * total_width + i];
+                var val = map[j * total_width + i];
                 str += MapSymbols[val].ToString();
+            }
+            GD.Print(str);
+        }
+    }
+
+    /// <summary>
+    /// Prints an ascii representation of the map based on bool values
+    /// </summary>
+    private void PrintBoolMap(bool[] map)
+    {
+        for (int j = 0; j < total_height; j++)
+        {
+            string str = "";
+            for (int i = 0; i < total_width; i++)
+            {
+                var val = map[j * total_width + i];
+                if (val == false)
+                {
+                    str += ".";
+                } else
+                {
+                    str += "O";
+                }
             }
             GD.Print(str);
         }
@@ -1328,14 +1397,20 @@ public partial class AreaProceduralGeneration : Node
     /// <returns></returns>
     private bool IsFloorTile(int x, int y)
     {
-        TileTypes tile_type = room_map[y * total_width + x];
-
         bool is_floor = false;
 
-        is_floor = (tile_type == TileTypes.TITLETYPE_FLOOR);
+        // is our point out of bounds? if so this isn't a floor tile
+        if (x < 0 || y < 0 || x >= total_width || y >= total_height)
+        {
+            is_floor = false;
+        }
+        else
+        {
+            TileTypes tile_type = room_map[y * total_width + x];
 
+            is_floor = (tile_type == TileTypes.TITLETYPE_FLOOR);
+        }
         return is_floor;
-
     }
 
     /// <summary>
@@ -1442,15 +1517,6 @@ public partial class AreaProceduralGeneration : Node
 
         return is_floor_above;
     }
-
-
-
-
-
-
-
-
-
 
     private void RenderMap()
     {
