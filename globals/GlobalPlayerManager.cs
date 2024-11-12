@@ -118,7 +118,9 @@ public partial class GlobalPlayerManager : Node
 
     public void SetPlayerPosition(Vector2 new_pos)
     {
+        CharacterData char_data = player.GetNode<CharacterData>("CharacterData") as CharacterData;
         player.GlobalPosition = new_pos;
+        char_data.PositionIsSet = true;
         return;
     }
 

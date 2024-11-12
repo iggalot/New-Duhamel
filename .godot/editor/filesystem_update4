@@ -90,6 +90,4 @@ res://utilities/Utilities.cs
 res://general_nodes/enemy_counter/EnemyCounter.cs
 res://general_nodes/hurtbox/HurtBox.cs
 res://scripts/ui/HealthBar.cs
-res://enemies/_boss1/monster_controller_boss1.tscn
-res://enemies/_boss2/monster_controller_boss2.tscn
 res://enemies/_basic_mob/monster_controller.tscn

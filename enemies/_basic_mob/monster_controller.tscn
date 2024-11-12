@@ -1,7 +1,6 @@
-[gd_scene load_steps=84 format=3 uid="uid://bvql6ho6fkha2"]
+[gd_scene load_steps=83 format=3 uid="uid://bvql6ho6fkha2"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_3p8su"]
-[ext_resource type="PackedScene" uid="uid://bwhr62mwukbtq" path="res://enemies/scripts/abilities/range_attack/range_attack.tscn" id="2_e2k5u"]
 [ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="2_ysn56"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="3_x6kmn"]
 [ext_resource type="Script" path="res://resources/data/CharacterData.cs" id="3_xdgml"]
@@ -1658,8 +1657,6 @@ script = ExtResource("1_3p8su")
 script = ExtResource("3_xdgml")
 
 [node name="Abilities" type="Node" parent="."]
-
-[node name="RangeAttack" parent="Abilities" instance=ExtResource("2_e2k5u")]
 
 [node name="VisionArea" parent="." instance=ExtResource("2_ysn56")]
 
