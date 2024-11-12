@@ -1,10 +1,11 @@
-[gd_scene load_steps=83 format=3 uid="uid://i3n7xxy4ma06"]
+[gd_scene load_steps=84 format=3 uid="uid://i3n7xxy4ma06"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_6d1x5"]
 [ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="2_htda1"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="3_e8elk"]
 [ext_resource type="PackedScene" uid="uid://blg04p03hp3io" path="res://enemies/scripts/abilities/detonation_attack/detonation_attack.tscn" id="3_k477t"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="4_pixwq"]
+[ext_resource type="Script" path="res://resources/data/CharacterData.cs" id="4_u0u70"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="5_cdhq0"]
 [ext_resource type="PackedScene" uid="uid://ccbgc31hq2tma" path="res://general_nodes/hitbox/spell_hit_box.tscn" id="5_gqm1i"]
 [ext_resource type="Texture2D" uid="uid://37nx2f3thrqx" path="res://resources/graphics/enemies/64x64_boss2.png" id="6_7p0mu"]
@@ -1152,6 +1153,9 @@ script = ExtResource("1_6d1x5")
 
 [node name="DetonationAttack" parent="Abilities" instance=ExtResource("3_k477t")]
 
+[node name="CharacterData" parent="." instance=ExtResource("23_gy2p8")]
+script = ExtResource("4_u0u70")
+
 [node name="VisionArea" parent="." instance=ExtResource("2_htda1")]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionArea"]
@@ -1266,8 +1270,6 @@ libraries = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 shape = SubResource("CircleShape2D_83uyf")
-
-[node name="CharacterData" parent="." instance=ExtResource("23_gy2p8")]
 
 [node name="MonsterSpawnArea" type="Area2D" parent="."]
 

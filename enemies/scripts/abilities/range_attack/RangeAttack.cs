@@ -16,12 +16,21 @@ public partial class RangeAttack : CharacterBody2D
 
     public override void _Ready()
     {
+        Node abilities_node = GetParent<Node>();  // The abilities directory
+        owner = abilities_node.GetParent<MonsterController>();
+
+        // In the event that the character hasn't been positioned or fully instantiated and the range attack fires, delete this attack
+        if ((owner == null) || (owner.char_data == null) || (owner.char_data.PositionIsSet == false))
+        {
+            QueueFree();
+            return;
+        }
+
+        // Otherwise, we can continue
         player = GlobalPlayerManager.Instance.player;
         hurt_box = GetNode<HurtBox>("HurtBox");
         hurt_box.damage = damage;
 
-        Node node = GetParent<Node>();  // The abilities directory
-        owner = node.GetParent<MonsterController>();
 
         direction = (player.GlobalPosition - owner.GlobalPosition).Normalized();
 

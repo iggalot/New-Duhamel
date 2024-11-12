@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 public partial class CharacterData : Node
 {
+    public bool PositionIsSet { get; set; } = false;  // is the owner position set and ready to be used?
+    [Export] public int SpawnTileBorderBuffer { get; set; } = 0;  // required number of empty floor tile around a character when it spawns.
+
     // Base info
     [Export] public string CharacterName;
     [Export] public string CharacterDescription;

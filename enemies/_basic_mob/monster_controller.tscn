@@ -1,9 +1,10 @@
-[gd_scene load_steps=83 format=3 uid="uid://bvql6ho6fkha2"]
+[gd_scene load_steps=84 format=3 uid="uid://bvql6ho6fkha2"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_3p8su"]
 [ext_resource type="PackedScene" uid="uid://bwhr62mwukbtq" path="res://enemies/scripts/abilities/range_attack/range_attack.tscn" id="2_e2k5u"]
 [ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="2_ysn56"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="3_x6kmn"]
+[ext_resource type="Script" path="res://resources/data/CharacterData.cs" id="3_xdgml"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="4_bvgtv"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="5_ebdw3"]
 [ext_resource type="PackedScene" uid="uid://ccbgc31hq2tma" path="res://general_nodes/hitbox/spell_hit_box.tscn" id="6_3pcxd"]
@@ -1653,6 +1654,9 @@ collision_layer = 256
 collision_mask = 218710289
 script = ExtResource("1_3p8su")
 
+[node name="CharacterData" parent="." instance=ExtResource("23_4qcn2")]
+script = ExtResource("3_xdgml")
+
 [node name="Abilities" type="Node" parent="."]
 
 [node name="RangeAttack" parent="Abilities" instance=ExtResource("2_e2k5u")]
@@ -1760,8 +1764,6 @@ libraries = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_83uyf")
-
-[node name="CharacterData" parent="." instance=ExtResource("23_4qcn2")]
 
 [node name="MonsterSpawnArea" type="Area2D" parent="."]
 

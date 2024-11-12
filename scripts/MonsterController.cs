@@ -37,7 +37,9 @@ public partial class MonsterController : CharacterBody2D
     public Sprite2D sprite;
     public HitBox hitBox;
     public SpellHitBox spellHitBox;
-    public Node abilities;
+    public Node abilities { get; set; }
+    public CharacterData char_data { get; set; }
+    public Node projectiles { get; set; }
 
     private const float default_speed = 100.0f;
     private float friction = 0.25f;
@@ -104,8 +106,10 @@ public partial class MonsterController : CharacterBody2D
         hitBox = GetNode<HitBox>("HitBox");
         spellHitBox = GetNode<SpellHitBox>("SpellHitBox");
         abilities = GetNode<Node>("Abilities");
+        char_data = GetNode<Node>("CharacterData") as CharacterData;
+        projectiles = GetNode<Node>("Projectiles");
 
-        foreach (var Child in abilities.GetChildren())
+        foreach (Node Child in abilities.GetChildren())
         {
             if (Child is RangeAttack)
             {
@@ -165,7 +169,7 @@ public partial class MonsterController : CharacterBody2D
                 rangeAttackTimer = rangeAttackTimerMax;
                 PackedScene range_scene = GD.Load<PackedScene>(rangeAttackScenePath);
                 RangeAttack node = range_scene.Instantiate<RangeAttack>();
-                abilities.AddChild(node);
+                projectiles.AddChild(node);
             }
         }
     }

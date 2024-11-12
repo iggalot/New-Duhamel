@@ -148,6 +148,7 @@ public partial class AreaProceduralGeneration : Node
     TileMapLayer floors;
     TileMapLayer walls;
     PlayerSpawn playerSpawn;
+    Node monsters;
 
     PackedScene torch_scene { get; set; }
     String torch_scene_path = "res://props/torches/torch1.tscn";
@@ -187,6 +188,7 @@ public partial class AreaProceduralGeneration : Node
         floors = GetNode<TileMapLayer>("TML_Floors");
         walls = GetNode<TileMapLayer>("TML_Walls");
         playerSpawn = GetNode<PlayerSpawn>("PlayerSpawn");
+        monsters = GetNode<Node>("Monsters");
 
         ImportData data = new ImportData();
 
@@ -251,6 +253,32 @@ public partial class AreaProceduralGeneration : Node
     }
 
     /// <summary>
+    /// Remove the eligible floor tiles from the eligible spawn map
+    /// </summary>
+    /// <param name="x">x-pos of spawn point</param>
+    /// <param name="y">y-pos of spawn point</param>
+    /// <param name="n">border around spawn point (+/-) to also be removed</param>
+    private void RemoveEligibleSpawnFromMap(int x, int y, int n=0)
+    {
+        for (int i = -n; i <= n; i++)
+        {
+            for (int j = -n; j <= n; j++)
+            {
+                // is our point out of bounds? if so, don't do anything
+                if (x + i < 0 || y + j < 0 || x + i >= total_width || y + j >= total_height)
+                {
+                    return;
+                }
+
+                if (IsFloorTile(x + i, y + j) == false)
+                {
+                    eligible_spawn_map[y + j * total_width + x + i] = false;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Algorithm to determine if a cell is eligible for object placement placement
     /// </summary>
     /// <param name="x">x-position of spawn point</param>
@@ -276,7 +304,7 @@ public partial class AreaProceduralGeneration : Node
     /// <param name="n">Number of floor cells around a cell to be eligible for monster placement</param>
     private void PlaceMonsters(int n)
     {
-        // find room cells with at least 'n' floor cell border around the map.
+        // find the eligible floor tile cells with at least 'n' floor cell border around the map.
         for (int j = 0; j < total_height; j++)
         {
             for (int i = 0; i < total_width; i++)
@@ -287,6 +315,65 @@ public partial class AreaProceduralGeneration : Node
                 }
             }
         }
+
+        /// Spawn the boss mobs
+        for (int i = 0; i < 1; i++)
+        {
+
+            //Get eligible positions for boss
+            RandomNumberGenerator rnd = new RandomNumberGenerator();
+            int boss_spawn_index_x = rnd.RandiRange(0, total_width - 1);
+            int boss_spawn_index_y = rnd.RandiRange(0, total_height - 1);
+            int boss_spawn_count = 0;
+            int boss_spawn_count_max = 50;
+
+            // instantiate the boss monster
+            string boss1_scene_path = "res://enemies/_boss1/monster_controller_boss1.tscn";
+            PackedScene boss1_scene = ResourceLoader.Load<PackedScene>(boss1_scene_path);
+            MonsterController boss1 = boss1_scene.Instantiate() as MonsterController;
+            monsters.AddChild(boss1);
+            boss1.char_data.SpawnTileBorderBuffer = 3;  /// set a large value for boss monsters
+
+            while (eligible_spawn_map[boss_spawn_index_y * total_width + boss_spawn_index_x] == false)
+            {
+                if (boss_spawn_count > boss_spawn_count_max)
+                {
+                    GD.Print("-- Unable to spawn boss1.  Max attempts reached.");
+                    boss1.QueueFree(); // delete it from the scene since it's not legitimately spawned
+                    break;
+                }
+
+                // Is the cell eligible as a spawn point?
+                if (IsEligibleForSpawn(boss_spawn_index_x, boss_spawn_index_y, boss1.char_data.SpawnTileBorderBuffer) == false)
+                {
+                    // try again
+                    boss_spawn_index_x = rnd.RandiRange(0, total_width - 1);
+                    boss_spawn_index_y = rnd.RandiRange(0, total_height - 1);
+                    boss_spawn_count++; // increment boss spawn count
+                    continue;
+
+                }
+                else
+                {
+                    if(IsFloorTile(boss_spawn_index_x, boss_spawn_index_y) == false)
+                    {
+                        boss1.QueueFree();
+                        GD.Print("--Invalid Spawn location");
+                    }
+                    boss1.Position = new Vector2(boss_spawn_index_x * tile_size, boss_spawn_index_y * tile_size);
+                    boss1.char_data.PositionIsSet = true;   // indicate that we have set the position...so that attacks can be used
+
+                    // update the eligible rooms for spawning
+                    RemoveEligibleSpawnFromMap(boss_spawn_index_x, boss_spawn_index_y, boss1.char_data.SpawnTileBorderBuffer);
+
+                    break;
+                }
+            }
+        }
+
+        // remove boss monster spawn point and a size border from the eligible spawn map
+
+        // place lesser monsters in eligible cells
     }
 
     private void AddLighting()
