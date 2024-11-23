@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=4 uid="uid://dgqw5tf236jhd"]
+[gd_scene load_steps=12 format=4 uid="uid://dgqw5tf236jhd"]
 
 [ext_resource type="PackedScene" uid="uid://rot1hyfthcov" path="res://levels/player_spawn.tscn" id="1_m05cx"]
 [ext_resource type="Texture2D" uid="uid://bsjy3ln5xttjt" path="res://resources/graphics/duhamel_dungeonwalls_1_32x160.png" id="2_ru015"]
 [ext_resource type="PackedScene" uid="uid://j302rqwol1ll" path="res://scenes/ui/player_hud.tscn" id="3_mkgqh"]
 [ext_resource type="PackedScene" uid="uid://cxntyc7ux8qjv" path="res://props/torches/torch1.tscn" id="4_sx6gs"]
+[ext_resource type="PackedScene" uid="uid://byyjaay07k25i" path="res://enemies/_boss1/monster_controller_boss1.tscn" id="5_rlh88"]
+[ext_resource type="PackedScene" uid="uid://bvql6ho6fkha2" path="res://enemies/_basic_mob/monster_controller.tscn" id="6_mmwo8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rqs4n"]
 texture = ExtResource("2_ru015")
@@ -210,3 +212,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.121569, 0.121569, 0.121569, 0.360784)
+
+[node name="MonsterController" parent="." instance=ExtResource("5_rlh88")]
+position = Vector2(150, -66)
+
+[node name="MonsterController2" parent="." instance=ExtResource("6_mmwo8")]
+position = Vector2(-303, 28)

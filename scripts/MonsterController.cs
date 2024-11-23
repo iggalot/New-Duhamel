@@ -79,11 +79,15 @@ public partial class MonsterController : CharacterBody2D
 
     [Export] public bool ShouldFlee { get; set; } = false;
 
-    bool CanRangeAttack { get; set; } = false;
+    public bool CanRangeAttack { get; set; } = false;
     float rangeAttackTimer { get; set; } = 2.0f;
     float rangeAttackTimerMax { get; set; } = 2.0f;
 
-    bool CanDetonate { get; set; } = false;
+    public bool CanRadialArcAttack { get; set; } = false;
+    float radialArcAttackTimer { get; set; } = 2.0f;
+    float radialArcAttackTimerMax { get; set; } = 2.0f;
+
+    public bool CanDetonate { get; set; } = false;
     float detonateTimer { get; set; } = 2.0f;
     float detonateTimerMax { get; set; } = 2.0f;
 
@@ -111,15 +115,19 @@ public partial class MonsterController : CharacterBody2D
 
         foreach (Node Child in abilities.GetChildren())
         {
-            if (Child is RangeAttack)
-            {
-                CanRangeAttack = true;
-            }
+            //if (Child is RangeAttack)
+            //{
+            //    CanRangeAttack = true;
+            //}
 
-            if (Child is DetonationAttack)
-            {
-                CanDetonate = true;
-            }
+            //if (Child is DetonationAttack)
+            //{
+            //    CanDetonate = true;
+            //}
+            //if(Child is RadialArcAttack)
+            //{
+            //    CanRadialArcAttack = true;
+            //}
 
         }
 
@@ -160,18 +168,18 @@ public partial class MonsterController : CharacterBody2D
 
     public override void _Process(double delta)
     {
-        if (CanRangeAttack)
-        {
-            rangeAttackTimer -= (float)delta;
+        //if (CanRangeAttack)
+        //{
+        //    rangeAttackTimer -= (float)delta;
 
-            if (rangeAttackTimer <= 0.0f)
-            {
-                rangeAttackTimer = rangeAttackTimerMax;
-                PackedScene range_scene = GD.Load<PackedScene>(rangeAttackScenePath);
-                RangeAttack node = range_scene.Instantiate<RangeAttack>();
-                projectiles.AddChild(node);
-            }
-        }
+        //    if (rangeAttackTimer <= 0.0f)
+        //    {
+        //        rangeAttackTimer = rangeAttackTimerMax;
+        //        PackedScene range_scene = GD.Load<PackedScene>(rangeAttackScenePath);
+        //        RangeAttack node = range_scene.Instantiate<RangeAttack>();
+        //        projectiles.AddChild(node);
+        //    }
+        //}
     }
 
     public override void _PhysicsProcess(double delta)

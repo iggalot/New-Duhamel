@@ -1153,6 +1153,8 @@ script = ExtResource("1_6d1x5")
 
 [node name="DetonationAttack" parent="Abilities" instance=ExtResource("3_k477t")]
 
+[node name="Projectiles" type="Node" parent="."]
+
 [node name="CharacterData" parent="." instance=ExtResource("23_gy2p8")]
 script = ExtResource("4_u0u70")
 

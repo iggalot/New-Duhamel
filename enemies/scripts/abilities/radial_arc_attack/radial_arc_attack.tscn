@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7t4g4bgtl0fk"]
+
+[ext_resource type="Script" path="res://enemies/scripts/abilities/radial_arc_attack/RadialArcAttack.cs" id="1_0eois"]
+
+[node name="RadialArcAttack" type="Node2D"]
+script = ExtResource("1_0eois")

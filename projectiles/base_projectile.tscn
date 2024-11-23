@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://db4d7y3iv6ggy"]
+
+[ext_resource type="Script" path="res://projectiles/BaseProjectile.cs" id="1_jm0gh"]
+[ext_resource type="Texture2D" uid="uid://bofurrov8se4w" path="res://icon.svg" id="2_2wlih"]
+[ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="3_ycn5b"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6ahcj"]
+radius = 8.06226
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fqqgv"]
+radius = 8.0
+
+[node name="BaseProjectile" type="CharacterBody2D"]
+collision_layer = 32768
+collision_mask = 2
+script = ExtResource("1_jm0gh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6ahcj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("2_2wlih")
+
+[node name="HurtBox" parent="." instance=ExtResource("3_ycn5b")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("CircleShape2D_fqqgv")

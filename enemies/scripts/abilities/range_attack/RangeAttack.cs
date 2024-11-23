@@ -1,72 +1,66 @@
 using Godot;
 using System;
 
-public partial class RangeAttack : CharacterBody2D
+public partial class RangeAttack : Node
 {
-    private float duration = 2000.0f;
-    private float timer = 500.0f;
-    private float timerMax = 500.0f;
+    private static string projectile_scene_path = "res://projectiles/base_projectile.tscn";
+
     private PlayerController player;
     private MonsterController owner;
-    private HurtBox hurt_box;
+    private Node abilities_node;
+    private Node projectiles_node;
 
-    Vector2 direction = Vector2.Zero;
+    //private HurtBox hurt_box;
+
+    public Vector2 direction { get; set; } = Vector2.Zero;
     float speed = 100.0f;
     float damage = 10.0f;
+    private float duration = 300.0f;  // 60 frames per second...so 300 frames = 5 seconds
+    private float timer = 1.0f;
+    private float timerMax = 1.0f;
+
+    private bool wasSet { get; set; } = false;
 
     public override void _Ready()
     {
-        Node abilities_node = GetParent<Node>();  // The abilities directory
+        abilities_node = GetParent<Node>();  // The abilities directory
+        MonsterController owner_node = (MonsterController)abilities_node.GetParent<Node>();
+        projectiles_node = owner_node.GetNode<Node>("Projectiles");
+
         owner = abilities_node.GetParent<MonsterController>();
+        player = GlobalPlayerManager.Instance.player;
+
 
         // In the event that the character hasn't been positioned or fully instantiated and the range attack fires, delete this attack
         if ((owner == null) || (owner.char_data == null) || (owner.char_data.PositionIsSet == false))
         {
-            QueueFree();
             return;
+        } else
+        {
+            wasSet = true;
         }
-
-        // Otherwise, we can continue
-        player = GlobalPlayerManager.Instance.player;
-        hurt_box = GetNode<HurtBox>("HurtBox");
-        hurt_box.damage = damage;
-
-
-        direction = (player.GlobalPosition - owner.GlobalPosition).Normalized();
-
-        Position = owner.GlobalPosition;
-
     }
 
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
     {
-        float dist = GlobalPosition.DistanceTo(player.GlobalPosition);
-        // if position is close to the player, queue free
-        if(dist < 16.0f)
+        if (timer <= 0.0f)
         {
-            //player.TakeDamage(hurt_box);
-            GD.Print("--- damage...so delete the object");
-            QueueFree();
-            GD.Print("--- deleting object");
+            //GD.Print("spawining projectile");
+            // Create a new single projectile
+            PackedScene projectile_scene = GD.Load<PackedScene>(projectile_scene_path);
+            BaseProjectile projectile = projectile_scene.Instantiate<BaseProjectile>();
 
+            Vector2 projectile_direction = (player.GlobalPosition - owner.GlobalPosition).Normalized();
+            projectile.GlobalPosition = owner.GlobalPosition;
 
-            return;
-        } 
+            projectile.direction = projectile_direction;
+            projectile.damage = damage;
+            projectile.speed = 200.0f;
+            projectile.duration = 300.0f;
 
+            projectiles_node.AddChild(projectile);
 
-        Velocity = direction.Normalized() * (float)(speed);
-
-        // The life span of ranged attack as a timer -- delete the object after this timer expires
-        if(duration <= 0.0f)
-        {
-            QueueFree();
-            return;
+            timer = timerMax;
         }
-
-        Position += Velocity * (float)delta;
-
-        // update the timers
-        duration--;
-        timer--;
     }
 }
