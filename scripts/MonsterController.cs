@@ -16,6 +16,8 @@ public partial class MonsterController : CharacterBody2D
     private static string monsterScenePath = "res://scenes/monster_controller.tscn";
     private static string rangeAttackScenePath = "res://enemies/scripts/abilities/range_attack/range_attack.tscn";
 
+    public RayCast2D line_of_sight { get; set; }
+
     // the state machine for this monster -- requires state node defintions (if other than the default set).
     private PlayerController player; // store the reference to the player in the scene tree
     private bool isInvulnerable = false;
@@ -91,6 +93,8 @@ public partial class MonsterController : CharacterBody2D
     float detonateTimer { get; set; } = 2.0f;
     float detonateTimerMax { get; set; } = 2.0f;
 
+    public bool CanSeePlayer { get; set; } = false;
+
     public override void _Input(InputEvent @event)
     {
         if (Input.IsActionJustPressed("monster_alert"))
@@ -164,6 +168,14 @@ public partial class MonsterController : CharacterBody2D
 
         // set up the collision layers and masks
         SetCollisionLayerAndMasks();
+
+
+        // set up the line of sight
+        line_of_sight = new RayCast2D();
+        line_of_sight.Enabled = true;
+        line_of_sight.Name = "Line-of-Sight";
+        line_of_sight.SetCollisionMaskValue((int)LayerMasks.WallsAndDoors, true);
+        AddChild(line_of_sight);
     }
 
     public override void _Process(double delta)
@@ -180,6 +192,21 @@ public partial class MonsterController : CharacterBody2D
         //        projectiles.AddChild(node);
         //    }
         //}
+
+        line_of_sight.TargetPosition = player.GlobalPosition - GlobalPosition;
+        line_of_sight.ForceRaycastUpdate();
+        if (line_of_sight.IsColliding() is true)
+        {
+            if(line_of_sight.GetCollider() is TileMapLayer)
+            {
+                CanSeePlayer = false;
+                GD.Print("Where are you?");
+            } else if (line_of_sight.GetCollider() is PlayerController)
+            {
+                GD.Print("I see you!");
+                CanSeePlayer = true;
+            }
+        } 
     }
 
     public override void _PhysicsProcess(double delta)

@@ -74,6 +74,12 @@ public partial class RadialArcAttack : Node2D
             {
                 if(owner != null)
                 {
+                    if (owner.CanSeePlayer is false)
+                    {
+                        // cant see the player so dont attack
+                        return;
+                    }
+
                     // now rotate the vector that targets the player by the ray_direction offset.
                     float angle = this.ray_angles[i] * (float)Math.PI / 180.0f;
                     Vector2 projectile_direction = ((player.GlobalPosition - owner.GlobalPosition).Normalized()).Rotated(angle);

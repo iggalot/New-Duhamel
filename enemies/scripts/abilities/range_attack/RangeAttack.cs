@@ -43,8 +43,15 @@ public partial class RangeAttack : Node
 
     public override void _PhysicsProcess(double delta)
     {
+        timer -= (float)delta;
         if (timer <= 0.0f)
         {
+            if (owner.CanSeePlayer is false)
+            {
+                // cant see the player so dont attack
+                return;
+            }
+
             //GD.Print("spawining projectile");
             // Create a new single projectile
             PackedScene projectile_scene = GD.Load<PackedScene>(projectile_scene_path);

@@ -14,6 +14,7 @@ res://enemies/scripts/abilities/range_attack/range_attack.tscn
 res://enemies/scripts/abilities/radial_arc_attack/radial_arc_attack.tscn
 res://enemies/_boss1/monster_controller_boss1.tscn
 res://projectiles/base_projectile.tscn
+res://enemies/_basic_mob/monster_controller.tscn
 res://enemies/scripts/states/MonsterChaseState.cs
 res://enemies/scripts/states/MonsterDeadState.cs
 res://scripts/ImportData.cs
@@ -93,4 +94,3 @@ res://general_nodes/hitbox/SpellHitBox.cs
 res://scripts/ui/HealthBar.cs
 res://scripts/MonsterSpawnerController.cs
 res://items/scripts/ItemData.cs
-res://enemies/_basic_mob/monster_controller.tscn
