@@ -133,7 +133,8 @@ public partial class PlayerController : CharacterBody2D
             ((State)state).InitializeOwner();
         }
 
-        // Set our collision masks
+        // Set our coll
+        // masks
         SetCollisionLayerAndMasks();
 
         // set up our attributes

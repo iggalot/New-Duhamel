@@ -7,22 +7,28 @@ using System;
 /// </summary>
 public partial class MonsterChaseState : State
 {
+    const string pathfinder_scene_path = "res://enemies/scripts/abilities/pathfinding/pathfinding.tscn";
+    public PackedScene PATHFINDER = GD.Load<PackedScene>(pathfinder_scene_path);
+
     // the stateOwner from the State class cast into the appropriate controller type -- 
     // in this case to distinguish between player states and monster states
+    // who owns this specific state machine
+
     private MonsterController controllerOwner;
     private PlayerController player;
-    // who owns this specific state machine
+
+    private Pathfinding pathfinder;
 
     [Export] string animName = "chase"; // name of the animation to use while in this state
     [Export] string spriteStatusName = "chase"; // name of the sprite animation to use while in this state
 
     [Export] float chaseSpeed = 50.0f; // how fast the monster moves towards the player when chasing
-    [Export] float turnRate = 0.15f;  // how quickly the monster turns to face the player
+    [Export] float turnRate = 0.5f;  // how quickly the monster turns to face the player
 
     [ExportCategory("AI")]
     [Export] public VisionArea visionArea { get; set; }
     [Export] public HurtBox attackArea { get; set; }
-    [Export] private float stateAggroDuration { get; set; } = 3.5f;
+    [Export] private float stateAggroDuration { get; set; } = 0.5f;
 
     [Export] private float stateAnimationDuration { get; set; } = 0.7f; // this needs to match duration of the animation clip
 
@@ -35,6 +41,8 @@ public partial class MonsterChaseState : State
     private State idleState;
     private State stunState;
     private State destroyState;
+
+    bool canSeePlayer = false;
 
     // Constructor
     public MonsterChaseState()
@@ -72,6 +80,10 @@ public partial class MonsterChaseState : State
     // What happens when the player enters this State?
     public override void EnterState()
     {
+        pathfinder = PATHFINDER.Instantiate() as Pathfinding;
+        controllerOwner.AddChild(pathfinder);
+
+
         //GD.Print("monster is chasing -- before linking signals");
         if (visionArea != null)
         {
@@ -90,6 +102,8 @@ public partial class MonsterChaseState : State
         controllerOwner.UpdateAnimation(animName);
         controllerOwner.UpdateStatusSpriteAnimation(spriteStatusName);
 
+        canSeePlayer = true;
+
         // turn on the monitoring for the attack area
         if(attackArea != null)
         {
@@ -102,29 +116,39 @@ public partial class MonsterChaseState : State
     // What happens when the player exits this State?
     public override void ExitState()
     {
-        visionArea.canSeePlayer = false;
-        //GD.Print("exiting chase state");
+        pathfinder.QueueFree();
 
-        if (visionArea != null)
+        //visionArea.canSeePlayer = false;
+        ////GD.Print("exiting chase state");
+
+        //if (visionArea != null)
+        //{
+        //    //GD.Print("-- signals unlinked");
+
+        //    visionArea.PlayerEntered -= OnPlayerEnter;
+        //    visionArea.PlayerExited -= OnPlayerExit;
+        //}
+        if(attackArea != null)
         {
-            //GD.Print("-- signals unlinked");
-
-            visionArea.PlayerEntered -= OnPlayerEnter;
-            visionArea.PlayerExited -= OnPlayerExit;
+            attackArea.Monitoring = false;
         }
+
+        canSeePlayer = false;
+
         return;
     }
 
     // What happens during the _Process() update in this State?
     public override State Process(double delta)
     {
-        timer -= (float)delta;
+        //Vector2 new_dir = controllerOwner.GlobalPosition.DirectionTo(GlobalPlayerManager.Instance.player.GlobalPosition);
+        //float x = Mathf.Lerp(direction.X, new_dir.X, turnRate);
+        //float y = Mathf.Lerp(direction.Y, new_dir.Y, turnRate);
+        //direction = new Vector2(x, y);
+        float direction_x = Mathf.Lerp(direction.X, pathfinder.move_dir.X, turnRate);
+        float direction_y = Mathf.Lerp(direction.Y, pathfinder.move_dir.Y, turnRate);
+        direction = new Vector2(direction_x, direction_y);
 
-
-        Vector2 new_dir = controllerOwner.GlobalPosition.DirectionTo(GlobalPlayerManager.Instance.player.GlobalPosition);
-        float x = Mathf.Lerp(direction.X, new_dir.X, turnRate);
-        float y = Mathf.Lerp(direction.Y, new_dir.Y, turnRate);
-        direction = new Vector2(x, y);
         controllerOwner.Velocity = direction * chaseSpeed;
 
         if (controllerOwner.SetDirection(direction) is true)
@@ -133,21 +157,30 @@ public partial class MonsterChaseState : State
             controllerOwner.UpdateStatusSpriteAnimation(spriteStatusName);
         }
 
-        if (visionArea != null)
+        if(canSeePlayer == false)
         {
-            if (visionArea.canSeePlayer == true)
+            timer -= (float)delta;
+
+            if (timer < 0)
             {
-                timer = stateAggroDuration; // reset the aggro timer
-                return this;
+                return nextState;
             }
-        }
-
-        if (timer < 0)
+        } else
         {
-            return nextState;
+            timer = stateAggroDuration;
         }
+        //if (visionArea != null)
+        //{
+        //    if (visionArea.canSeePlayer == true)
+        //    {
+        //        timer = stateAggroDuration; // reset the aggro timer
+        //        return this;
+        //    }
+        //}
 
-        return this;
+
+
+        return null;
     }
 
     // What happens during the _PhysicsProcess() update in this State?
@@ -164,8 +197,9 @@ public partial class MonsterChaseState : State
 
     private void OnPlayerEnter(Area2D area)
     {
-        //GD.Print("in chase state -- player entered");
-        visionArea.canSeePlayer = true;
+        canSeePlayer = true;
+        ////GD.Print("in chase state -- player entered");
+        //visionArea.canSeePlayer = true;
 
         if((stateMachine.currentState == stunState) || (stateMachine.currentState == destroyState))
         {
@@ -178,9 +212,10 @@ public partial class MonsterChaseState : State
 
     private void OnPlayerExit(Area2D area)
     {
+        canSeePlayer = false;
         //GD.Print("in chase state -- player entered");
 
-        visionArea.canSeePlayer = false;
+        //visionArea.canSeePlayer = false;
         return;
     }
 

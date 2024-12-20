@@ -1,9 +1,7 @@
-[gd_scene load_steps=85 format=3 uid="uid://byyjaay07k25i"]
+[gd_scene load_steps=84 format=3 uid="uid://byyjaay07k25i"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_de4jf"]
 [ext_resource type="PackedScene" uid="uid://cngf2m40cvc5j" path="res://general_nodes/hurtbox/hurt_box.tscn" id="2_n8ptp"]
-[ext_resource type="PackedScene" uid="uid://bwhr62mwukbtq" path="res://enemies/scripts/abilities/range_attack/range_attack.tscn" id="2_x5ako"]
-[ext_resource type="PackedScene" uid="uid://b7t4g4bgtl0fk" path="res://enemies/scripts/abilities/radial_arc_attack/radial_arc_attack.tscn" id="3_fh1sc"]
 [ext_resource type="PackedScene" uid="uid://dpgyjhpcpir6s" path="res://general_nodes/hitbox/hit_box.tscn" id="3_vvmyy"]
 [ext_resource type="Script" path="res://resources/data/CharacterData.cs" id="4_2tf3e"]
 [ext_resource type="Texture2D" uid="uid://dfkvkgjn3j14v" path="res://resources/graphics/player/michael_games/Shadow.png" id="4_ug065"]
@@ -29,18 +27,19 @@
 [ext_resource type="PackedScene" uid="uid://d4bxcy4uq47dk" path="res://scenes/ui/health_bar.tscn" id="23_t5iel"]
 [ext_resource type="Texture2D" uid="uid://db05e5y0m7b1g" path="res://resources/graphics/DestroySmoke (1).png" id="24_axekl"]
 [ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="25_jffmq"]
+[ext_resource type="PackedScene" uid="uid://hcs38ioaglxy" path="res://enemies/scripts/abilities/pathfinding/pathfinding.tscn" id="30_ckclo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lt8og"]
-radius = 88.5664
+radius = 63.0079
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gkyvb"]
-radius = 73.0274
+radius = 52.0865
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wsfgd"]
-radius = 52.0384
+radius = 56.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_av4x5"]
-radius = 99.0454
+radius = 56.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0v7yi"]
 size = Vector2(58, 41)
@@ -1150,16 +1149,11 @@ collision_layer = 256
 collision_mask = 218710288
 script = ExtResource("1_de4jf")
 
+[node name="Pathfinding" parent="." instance=ExtResource("30_ckclo")]
+position = Vector2(0, 1)
+scale = Vector2(2.1, 2.1)
+
 [node name="Abilities" type="Node" parent="."]
-
-[node name="RangeAttack" parent="Abilities" instance=ExtResource("2_x5ako")]
-
-[node name="RadialArcAttack" parent="Abilities" instance=ExtResource("3_fh1sc")]
-arc_begin_angle = -45.0
-arc_end_angle = 45.0
-number_of_rays = 5
-speed = 400.0
-timerMax = 2.0
 
 [node name="CharacterData" parent="." instance=ExtResource("22_r4u7k")]
 script = ExtResource("4_2tf3e")
@@ -1200,6 +1194,7 @@ texture = ExtResource("4_ug065")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+position = Vector2(8, -21)
 scale = Vector2(2, 2)
 texture = ExtResource("5_10edv")
 hframes = 5
@@ -1269,7 +1264,7 @@ drops = Array[Resource]([ExtResource("18_dsjc1"), ExtResource("19_25rs6"), ExtRe
 texture_filter = 1
 position = Vector2(-1, -42)
 sprite_frames = SubResource("SpriteFrames_l373r")
-animation = &"destroy"
+animation = &"wander"
 centered = false
 
 [node name="StatusAnimationPlayer" type="AnimationPlayer" parent="StatusAnimatedSprite2D"]

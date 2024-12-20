@@ -22,14 +22,14 @@ public partial class VisionArea : Area2D
 
     public override void _Ready()
     {
-        BodyEntered += OnBodyEnter;
-        BodyExited += OnBodyExit;
+        //BodyEntered += OnBodyEnter;
+        //BodyExited += OnBodyExit;
 
-        var p = GetParent();
-        if(p is MonsterController)
-        {
-            ((MonsterController)p).DirectionChanged += OnDirectionChanged;
-        }
+        //var p = GetParent();
+        //if(p is MonsterController)
+        //{
+        //    ((MonsterController)p).DirectionChanged += OnDirectionChanged;
+        //}
     }
 
     public override void _Process(double delta)

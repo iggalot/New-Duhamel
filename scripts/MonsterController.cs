@@ -170,7 +170,7 @@ public partial class MonsterController : CharacterBody2D
         SetCollisionLayerAndMasks();
 
 
-        // set up the line of sight
+        // set up the line of sight ray
         line_of_sight = new RayCast2D();
         line_of_sight.Enabled = true;
         line_of_sight.Name = "Line-of-Sight";
@@ -200,10 +200,10 @@ public partial class MonsterController : CharacterBody2D
             if(line_of_sight.GetCollider() is TileMapLayer)
             {
                 CanSeePlayer = false;
-                GD.Print("Where are you?");
+                //GD.Print("Where are you?");
             } else if (line_of_sight.GetCollider() is PlayerController)
             {
-                GD.Print("I see you!");
+                //GD.Print("I see you!");
                 CanSeePlayer = true;
             }
         } 

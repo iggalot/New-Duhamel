@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://bvql6ho6fkha2"]
+[gd_scene load_steps=85 format=3 uid="uid://bvql6ho6fkha2"]
 
 [ext_resource type="Script" path="res://scripts/MonsterController.cs" id="1_3p8su"]
 [ext_resource type="PackedScene" uid="uid://54pr0o0wca7k" path="res://enemies/vision_area.tscn" id="2_ysn56"]
@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://dgqraaf12cfmn" path="res://scenes/data/character_data.tscn" id="23_4qcn2"]
 [ext_resource type="PackedScene" uid="uid://d4bxcy4uq47dk" path="res://scenes/ui/health_bar.tscn" id="24_2kr6w"]
 [ext_resource type="Texture2D" uid="uid://db05e5y0m7b1g" path="res://resources/graphics/DestroySmoke (1).png" id="25_qu6rs"]
+[ext_resource type="PackedScene" uid="uid://hcs38ioaglxy" path="res://enemies/scripts/abilities/pathfinding/pathfinding.tscn" id="29_w2lnd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lt8og"]
 radius = 21.587
@@ -1797,5 +1798,7 @@ hframes = 6
 libraries = {
 "": SubResource("AnimationLibrary_d3kix")
 }
+
+[node name="Pathfinding" parent="." instance=ExtResource("29_w2lnd")]
 
 [connection signal="UpdateHealthBar" from="." to="HealthBar" method="OnUpdateHealthBar"]
